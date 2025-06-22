@@ -1,7 +1,7 @@
 {
   "name": "DARK-KNIGHT-XMD",
   "description": "Javascript WhatsApp bot made by DARK-KNIGHT",
-  "logo": "https://files.catbox.moe/z62ts0.jpg",
+  "logo": "https://files.catbox.moe/lbde9t.jpg",
   "keywords": ["DARK-KNIGHT-XMD"],
   "success_url": "/",
 
@@ -132,7 +132,7 @@
     "MENU_IMAGE_URL": {
       "description": "add url for mention reply and menu if want.",
       "required": false,
-      "value": "https://files.catbox.moe/z62ts0.jpg"
+      "value": "https://files.catbox.moe/lbde9t.jpg"
     },
     
      "DESCRIPTION": {
