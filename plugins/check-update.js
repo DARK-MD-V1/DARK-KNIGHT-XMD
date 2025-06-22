@@ -27,7 +27,7 @@ cmd({
     }
 
     // Fetch latest version data from GitHub
-    const rawVersionUrl = 'https://raw.githubusercontent.com/KNIGHT-MD-V1/DARK-KNIGHT-XMD/main/data/version.json';
+    const rawVersionUrl = 'https://raw.githubusercontent.com/bot-deploy-main/DARK-KNIGHT-XMD/main/data/version.json';
     let latestVersion = 'Unknown';
     let latestChangelog = 'No changelog available.';
     try {
@@ -53,7 +53,7 @@ cmd({
     const lastUpdate = fs.statSync(localVersionPath).mtime.toLocaleString();
 
     // GitHub stats
-    const githubRepo = 'https://github.com/KNIGHT-MD-V1/DARK-KNIGHT-XMD';
+    const githubRepo = 'https://github.com/bot-deploy-main/DARK-KNIGHT-XMD';
 
     // Check update status
     let updateMessage = `✅ Your 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 bot is up-to-date!`;
@@ -73,7 +73,7 @@ Use *.update* to update.`;
 
     // Send the status message with an image
     await conn.sendMessage(from, {
-      image: { url: 'https://files.catbox.moe/ug8w1x.jpg' },
+      image: { url: 'https://files.catbox.moe/lbde9t.jpg' },
       caption: statusMessage,
       contextInfo: {
         mentionedJid: [m.sender],
