@@ -5,7 +5,7 @@ function convertToBool(text, fault = 'true') {
     return text === fault ? true : false;
 }
 module.exports = {
-SESSION_ID: process.env.SESSION_ID || "dark~km1llSAa#ZXK0BvWpjH5DiQl-8BpssKmCzTdKvf3xGUDBYVj_3yo",
+SESSION_ID: process.env.SESSION_ID || "",
 // add your Session Id 
 AUTO_STATUS_SEEN: process.env.AUTO_STATUS_SEEN || "true",
 // make true or false status auto seen
@@ -23,7 +23,7 @@ ANTI_LINK: process.env.ANTI_LINK || "true",
 // make anti link true,false for groups 
 MENTION_REPLY: process.env.MENTION_REPLY || "false",
 // make true if want auto voice reply if someone menetion you 
-MENU_IMAGE_URL: process.env.MENU_IMAGE_URL || "https://files.catbox.moe/z62ts0.jpg",
+MENU_IMAGE_URL: process.env.MENU_IMAGE_URL || "https://files.catbox.moe/lbde9t.jpg",
 // add custom menu and mention reply image url
 PREFIX: process.env.PREFIX || ".",
 // add your prifix for bot   
@@ -43,7 +43,7 @@ OWNER_NAME: process.env.OWNER_NAME || "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃
 // add bot owner name
 DESCRIPTION: process.env.DESCRIPTION || "*© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*",
 // add bot owner name    
-ALIVE_IMG: process.env.ALIVE_IMG || "https://files.catbox.moe/z62ts0.jpg",
+ALIVE_IMG: process.env.ALIVE_IMG || "https://files.catbox.moe/lbde9t.jpg",
 // add img for alive msg
 LIVE_MSG: process.env.LIVE_MSG || "> I'm Live Now *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*⚡",
 // add alive msg here 
