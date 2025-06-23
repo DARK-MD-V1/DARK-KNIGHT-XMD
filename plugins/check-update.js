@@ -53,7 +53,7 @@ cmd({
     const lastUpdate = fs.statSync(localVersionPath).mtime.toLocaleString();
 
     // GitHub stats
-    const githubRepo = 'https://github.com/bot-deploy-main/DARK-KNIGHT-XMD';
+    const githubRepo = 'https://github.com/DARK-KNIGHT/DARK-KNIGHT-XMD';
 
     // Check update status
     let updateMessage = `✅ Your 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 bot is up-to-date!`;
