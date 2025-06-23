@@ -2,8 +2,8 @@ const { cmd } = require("../command");
 const fetch = require("node-fetch");
 
 cmd({
-  pattern: 'gitclone2',
-  alias: ["git2"],
+  pattern: 'gitclone',
+  alias: ["git"],
   desc: "Download GitHub repository as a zip file.",
   react: '📦',
   category: "downloader",
