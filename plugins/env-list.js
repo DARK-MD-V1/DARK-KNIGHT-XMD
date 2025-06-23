@@ -87,8 +87,7 @@ async (conn, mek, m, { from, quoted, reply, isCreator }) => {
                     isForwarded: true
                 }
             },
-            { quoted: mek }
-        );
+            { quoted: mek });
 
     } catch (error) {
         console.error('Env command error:', error);
