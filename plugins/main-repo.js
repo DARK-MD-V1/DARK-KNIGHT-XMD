@@ -186,18 +186,6 @@ ${repoData.description || 'No description provided'}
             }
         }, { quoted: mek });
 
-        // Send audio
-        await conn.sendMessage(from, {
-            audio: { url: 'https://files.catbox.moe/6j2z63.mp3' },
-            mimetype: 'audio/mp4',
-            ptt: true,
-            contextInfo: { 
-                mentionedJid: [m.sender],
-                forwardingScore: 999,
-                isForwarded: true
-            }
-        }, { quoted: mek });
-
     } catch (error) {
         console.error("Repo command error:", error);
         reply(`❌ Error: ${error.message}`);
