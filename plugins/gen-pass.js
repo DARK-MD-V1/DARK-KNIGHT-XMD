@@ -2,7 +2,7 @@ const crypto = require("crypto");
 const { cmd } = require("../command");
 
 cmd({
-  pattern: "gpass2",
+  pattern: "gpass",
   desc: "Generate a strong password with customizable options.",
   category: "other",
   react: '🔐',
