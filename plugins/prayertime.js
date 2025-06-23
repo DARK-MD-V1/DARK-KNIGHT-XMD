@@ -53,7 +53,7 @@ async(conn, mek, m, {from, l, quoted, body, isCmd, command, args, q, isGroup, se
         await conn.sendMessage(
             from,
             {
-                image: { url: `https://files.catbox.moe/ug8w1x.jpg` }, // Image URL here
+                image: { url: `https://files.catbox.moe/lbde9t.jpg` }, // Image URL here
                 caption: dec,
                 contextInfo: {
                     mentionedJid: [m.sender],
@@ -66,15 +66,7 @@ async(conn, mek, m, {from, l, quoted, body, isCmd, command, args, q, isGroup, se
                     }
                 }
             },
-            { quoted: mek }
-        );
-
-        // Optionally, send an audio file related to the prayer time
-        await conn.sendMessage(from, {
-            audio: { url: 'https://files.catbox.moe/6j2z63.mp3' },
-            mimetype: 'audio/mp4',
-            ptt: false
-        }, { quoted: mek });
+            { quoted: mek });
 
     } catch (e) {
         console.log(e);
