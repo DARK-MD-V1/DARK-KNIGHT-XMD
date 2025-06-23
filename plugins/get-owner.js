@@ -51,13 +51,6 @@ async (conn, mek, m, { from }) => {
             }
         }, { quoted: mek });
 
-        // Send audio as per your request
-        await conn.sendMessage(from, {
-            audio: { url: 'https://files.catbox.moe/6j2z63.mp3' }, // Audio URL
-            mimetype: 'audio/mp4',
-            ptt: true
-        }, { quoted: mek });
-
     } catch (error) {
         console.error(error);
         reply(`An error occurred: ${error.message}`);
