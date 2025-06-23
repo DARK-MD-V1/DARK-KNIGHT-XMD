@@ -50,7 +50,7 @@ wa.me/+94771825192 ?text=Support!
 await conn.sendMessage(
             from,
             {
-                image: { url: `https://i.ibb.co/W4xhtdW8/nexus-xmd.jpg` },
+                image: { url: `https://files.catbox.moe/lbde9t.jpg` },
                 caption: dec,
                 contextInfo: {
                     mentionedJid: [m.sender],
@@ -63,15 +63,7 @@ await conn.sendMessage(
                     }
                 }
             },
-            { quoted: mek }
-        );
-
-        // Send audio
-        await conn.sendMessage(from, {
-            audio: { url: 'https://files.catbox.moe/wify3q.mp3' },
-            mimetype: 'audio/mp4',
-            ptt: true
-        }, { quoted: mek });
+            { quoted: mek });
         
     } catch (e) {
         console.log(e);
