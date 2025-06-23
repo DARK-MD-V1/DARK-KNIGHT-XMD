@@ -90,17 +90,6 @@ async (conn, mek, m, { from, quoted, reply, isCreator }) => {
             { quoted: mek }
         );
 
-        // Optional audio message
-        await conn.sendMessage(
-            from,
-            {
-                audio: { url: 'https://files.catbox.moe/6j2z63.mp3' },
-                mimetype: 'audio/mp4',
-                ptt: true
-            },
-            { quoted: mek }
-        );
-
     } catch (error) {
         console.error('Env command error:', error);
         reply(`❌ Error displaying config: ${error.message}`);
