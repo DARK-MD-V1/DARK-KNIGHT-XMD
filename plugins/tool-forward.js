@@ -11,8 +11,8 @@ const SAFETY = {
 };
 
 cmd({
-  pattern: "forward2",
-  alias: ["fwd2"],
+  pattern: "forward",
+  alias: ["fwd"],
   desc: "Bulk forward media to groups",
   category: "owner",
   filename: __filename
