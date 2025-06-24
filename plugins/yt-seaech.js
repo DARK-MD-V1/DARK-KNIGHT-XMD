@@ -7,9 +7,9 @@ const fs = require('fs-extra')
 var videotime = 60000 // 1000 min
 const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson} = require('../lib/functions')
 cmd({
-    pattern: "yts",
+    pattern: "yts2",
     alias: ["ytsearch"],
-    use: '.yts jawad',
+    use: '.yts2 tech',
     react: "🔎",
     desc: "Search and get details from youtube.",
     category: "search",
