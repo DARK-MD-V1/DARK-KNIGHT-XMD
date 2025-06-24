@@ -68,7 +68,7 @@ ${index + 1}. *${video.title}*
 
 cmd({
   pattern: "ytstalk2",
-  alias: ["ytinfo"],
+  alias: ["ytinfo2"],
   desc: "Get details about a YouTube channel.",
   react: "🔍",
   category: "search",
