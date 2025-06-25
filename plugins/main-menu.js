@@ -8,7 +8,7 @@ cmd({
     pattern: "menu",
     desc: "Show interactive menu system",
     category: "menu",
-    react: "🧾",
+    react: "🚀",
     filename: __filename
 }, async (conn, mek, m, { from, reply }) => {
     try {
@@ -388,11 +388,11 @@ cmd({
                 content: `╭━━━〔 *Adult Zone* 〕━━━┈⊷
 ┃★╭──────────────      
 ┃★│ 💦 *Adult Zone*
-┃★│ • mpesa menu
+┃★│ • xnxx
+┃★│ • xvideo
 ┃★│ • porn
-┃★│ • xvideos
-┃★│ • randomxvideo 
-┃★│ • randomporn
+┃★│ • xporn 
+┃★│ • 
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━━┈⊷
 > ${config.DESCRIPTION}`,
