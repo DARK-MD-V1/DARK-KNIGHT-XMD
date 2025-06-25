@@ -5,7 +5,7 @@ const path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 
 
-malvin({
+cmd({
     pattern: "video2",
     alias: ["ytvideo2"],
     react: "📽",
