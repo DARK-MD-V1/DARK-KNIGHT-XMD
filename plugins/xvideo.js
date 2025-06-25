@@ -141,7 +141,7 @@ async (conn, mek, m, { from, quoted, q, reply }) => {
                                         body: "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 XVideo",
                                         mediaType: 2,
                                         sourceUrl: selectedVideo.url,
-                                        thumbnailUrl: xv_info.result.image || "https://files.catbox.moe/qumhu4.jpg",
+                                        thumbnailUrl: xv_info.result.image || "https://files.catbox.moe/lbde9t.jpg",
                                         renderLargerThumbnail: true,
                                         showAdAttribution: true
                                     }
