@@ -1,41 +1,40 @@
-const axios = require("axios");
-const { cmd } = require("../command");
+const { cmd } = require('../command');
+const axios = require('axios');
 
 cmd({
-  pattern: "fb",
-  alias: ["facebook", "fbdl"],
-  desc: "Download Facebook videos",
-  category: "download",
-  filename: __filename,
-  use: "<Facebook URL>",
-}, async (conn, m, store, { from, args, q, reply }) => {
-  try {
-    // Check if a URL is provided
-    if (!q || !q.startsWith("http")) {
-      return reply("*`Need a valid Facebook URL`*\n\nExample: `.fb https://www.facebook.com/...`");
+    pattern: "fb",
+    alias: ["facebook"],
+    desc: "Download Facebook videos (HD only)",
+    category: "downloader",
+    react: "🎞️",
+    filename: __filename
+},
+async (conn, mek, m, { from, args, q, reply }) => {
+    try {
+        if (!q) return reply("📌 Please provide a Facebook video link.");
+        if (!q.includes("facebook.com")) return reply("❌ Invalid Facebook link.");
+
+        reply("🔍 Fetching HD video, please wait...");
+
+        const apiUrl = `https://api-aswin-sparky.koyeb.app/api/downloader/fbdl?url=${encodeURIComponent(q)}`;
+        const { data } = await axios.get(apiUrl);
+
+        if (!data.status || !data.data || !data.data.high) {
+            return reply("❌ Failed to fetch Facebook video. Try another link.");
+        }
+
+        const { title, thumbnail, high } = data.data;
+
+        const caption = `🎬 *Facebook Video Downloader*\n\n📖 *Title:* ${title}\n\n🔰 *by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*`;
+
+        await conn.sendMessage(from, {
+            video: { url: high },
+            caption: caption,
+            contextInfo: { mentionedJid: [m.sender] }
+        }, { quoted: mek });
+
+    } catch (e) {
+        console.error("Facebook HD Downloader Error:", e);
+        reply(`❌ Error occurred: ${e.message}`);
     }
-
-    // Add a loading react
-    await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
-
-    // Fetch video URL from the API
-    const apiUrl = `https://api-aswin-sparky.koyeb.app/api/downloader/fbdl?url=${encodeURIComponent(q)}`;
-    const { data } = await axios.get(apiUrl);
-
-    // Check if the API response is valid
-    if (!data.status || !data.data || !data.data.url) {
-      return reply("❌ Failed to fetch the video. Please try another link.");
-    }
-
-    // Send the video to the user
-    const videoUrl = data.data.url;
-    await conn.sendMessage(from, {
-      video: { url: videoUrl },
-      caption: "📥 *Facebook Video Downloaded*\n\n- Powered By 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ✅",
-    }, { quoted: m });
-
-  } catch (error) {
-    console.error("Error:", error); // Log the error for debugging
-    reply("❌ Error fetching the video. Please try again.");
-  }
 });
