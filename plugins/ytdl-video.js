@@ -6,8 +6,8 @@ const ffmpeg = require('fluent-ffmpeg');
 
 
 cmd({
-    pattern: "video2",
-    alias: ["ytvideo2"],
+    pattern: "video",
+    alias: ["ytvideo", "mp4"],
     react: "📽",
     desc: "Download YouTube video (MP4)",
     category: "download",
@@ -27,7 +27,7 @@ cmd({
 
         // Try primary API
         const api1 = `https://apis-keith.vercel.app/download/dlmp4?url=${videoUrl}`;
-        const api2 = `https://api.nexoracle.com/downloader/yt-video2?url=${videoUrl}`;
+        const api2 = `https://apis.davidcyriltech.my.id/download/ytmp4?url=${videoUrl}`;
 
         let data;
 
