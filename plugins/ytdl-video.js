@@ -27,7 +27,7 @@ cmd({
 
         // Try primary API
         const api1 = `https://www.dark-yasiya-api.site/download/ytmp4?url=${videoUrl}`;
-        const api2 = `https://apis.davidcyriltech.my.id/download/ytmp4?url=${videoUrl}`;
+        const api2 = `https://www.dark-yasiya-api.site/download/ytmp4?url==${videoUrl}`;
 
         let data;
 
