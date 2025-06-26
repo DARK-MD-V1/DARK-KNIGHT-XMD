@@ -27,7 +27,7 @@ cmd({
 
         // Try primary API
         const api1 = `https://apis-keith.vercel.app/download/dlmp4?url=${videoUrl}`;
-        const api2 = `https://www.dark-yasiya-api.site/download/ytmp4?url=${videoUrl}`;
+        const api2 = `https://api.siputzx.my.id/api/d/ytmp4?url=${videoUrl}`;
 
         let data;
 
