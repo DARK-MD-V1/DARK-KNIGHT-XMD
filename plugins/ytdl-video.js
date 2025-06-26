@@ -27,7 +27,7 @@ cmd({
 
         // Try primary API
         const api1 = `https://apis-keith.vercel.app/download/dlmp4?url=${videoUrl}`;
-        const api2 = `https://api.nexoracle.com/downloader/yt-video?url=${videoUrl}`;
+        const api2 = `https://api.nexoracle.com/downloader/yt-video2?url=${videoUrl}`;
 
         let data;
 
