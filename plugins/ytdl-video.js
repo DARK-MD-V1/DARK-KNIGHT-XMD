@@ -6,8 +6,8 @@ const ffmpeg = require('fluent-ffmpeg');
 
 
 cmd({
-    pattern: "video",
-    alias: ["ytvideo", "mp4"],
+    pattern: "video2",
+    alias: ["ytvideo2"],
     react: "📽",
     desc: "Download YouTube video (MP4)",
     category: "download",
