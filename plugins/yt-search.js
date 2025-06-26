@@ -6,10 +6,11 @@ const ytdl = require('yt-search');
 const fs = require('fs-extra')
 var videotime = 60000 // 1000 min
 const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson} = require('../lib/functions')
+
 cmd({
-    pattern: "yts2",
-    alias: ["ytsearch2"],
-    use: '.yts2 tech',
+    pattern: "yts",
+    alias: ["ytsearch"],
+    use: '.yts tech',
     react: "🔎",
     desc: "Search and get details from youtube.",
     category: "search",
