@@ -192,21 +192,5 @@ cmd({
 ╰───『 *${config.DESCRIPTION}* 』───❏
 `;
 
-         await conn.sendMessage(
-              from,
-              {
-                  image: { url: config.MENU_IMAGE_URL },
-                  caption: envSettings,
-                  contextInfo: {
-                      mentionedJid: [m.sender],
-                      forwardingScore: 999,
-                      isForwarded: true
-                  }
-              },
-              { quoted: mek });
-
-      } catch (error) {
-          console.error('Env command error:', error);
-          reply(`❌ Error displaying config: ${error.message}`);
-      }
-  });
+    return reply(cmdlist);
+});
