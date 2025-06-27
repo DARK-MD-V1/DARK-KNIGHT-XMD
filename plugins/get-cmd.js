@@ -43,7 +43,7 @@ Powered By *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* ☣️`;
 
         // Send image with truncated source code
         await conn.sendMessage(from, { 
-            image: { url: `https://files.catbox.moe/lbde9t.jpg` },  // Image URL
+            image: { url: `https://files.catbox.moe/brlkte.jpg` },  // Image URL
             caption: formattedCode,
             contextInfo: {
                 mentionedJid: [m.sender],
