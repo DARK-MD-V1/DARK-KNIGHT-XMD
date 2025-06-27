@@ -50,7 +50,7 @@ wa.me/+94771825192 ?text=Support!
 await conn.sendMessage(
             from,
             {
-                image: { url: `https://files.catbox.moe/lbde9t.jpg` },
+                image: { url: `https://files.catbox.moe/brlkte.jpg` },
                 caption: dec,
                 contextInfo: {
                     mentionedJid: [m.sender],
