@@ -95,7 +95,7 @@ cmd({
     alias: ["envvar", "cmdlist"],
     react: "📜",
     desc: "List all commands and their current status.",
-    category: "settings",
+    category: "system",
     filename: __filename,
 }, async (conn, mek, m, { from, isOwner, reply }) => {
     if (!isOwner) return reply("*📛 Only the owner can use this command!*");
