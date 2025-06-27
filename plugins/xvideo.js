@@ -41,7 +41,7 @@ async (conn, mek, m, { from, quoted, q, reply }) => {
 
         // Send the list
         const sentMsg = await conn.sendMessage(from, {
-            image: { url: videos[0].image || 'https://files.catbox.moe/lbde9t.jpg' },
+            image: { url: videos[0].image || 'https://files.catbox.moe/brlkte.jpg' },
             caption: listText,
             contextInfo: {
                 forwardingScore: 999,
@@ -101,7 +101,7 @@ async (conn, mek, m, { from, quoted, q, reply }) => {
 
 
                 const optionMsg = await conn.sendMessage(from, {
-                    image: { url: xv_info.result.image || 'https://files.catbox.moe/lbde9t.jpg' },
+                    image: { url: xv_info.result.image || 'https://files.catbox.moe/brlkte.jpg' },
                     caption: desc,
                     contextInfo: {
                         forwardingScore: 999,
