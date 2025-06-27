@@ -22,12 +22,12 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┆ ◦ • 👑 Owner : *${config.OWNER_NAME}*
 ┆ ◦ • ⚙️ Prefix : *[${config.PREFIX}]*
 ┆ ◦ • 🌐 Platform : *Heroku*
-┆ ◦ • 📦 Version : ${config.version}
+┆ ◦ • 📦 Version : *2.0.0 Bᴇᴛᴀ*
 ┆ ◦ • ⏱️ Runtime : *_${runtime(process.uptime())}_*
 ┆ ◦ 
 ╰────────────────┈⊷
 
-> ᴍᴀʟᴠɪɴ xᴅ ᴄᴍᴅs ᴍᴇɴᴜ
+> 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ᴄᴍᴅs ᴍᴇɴᴜ
      
 ╭──·๏[📥 *ᴅᴏᴡɴʟᴏᴀᴅ ᴍᴇɴᴜ*📥]
 ┆ ◦ 
