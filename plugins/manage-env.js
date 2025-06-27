@@ -556,24 +556,3 @@ cmd({
         return reply("*🔥 Example: .heartreact on* or *[.heartreact off]*");
     }
 });
-
-
-cmd({
-    pattern: "antibot",
-    alias: ["antibot"],
-    desc: "Enable Antibot and set action (off/warn/delete/kick)",
-    category: "group",
-    filename: __filename
-}, async (conn, mek, m, { q, reply }) => {
-    if (!q) {
-        return reply(`*Current Antibot Action:* ${antibotAction.toUpperCase()}\n\nUse *antibot off/warn/delete/kick* to change it.`);
-    }
-
-    const action = q.toLowerCase();
-    if (["off", "warn", "delete", "kick"].includes(action)) {
-        antibotAction = action;
-        return reply(`*Antibot action set to:* ${action.toUpperCase()}`);
-    } else {
-        return reply("*🫟 ᴇxᴀᴍᴘʟᴇ: . ᴀɴᴛɪʙᴏᴛ ᴏғғ/ᴡᴀʀɴ/ᴅᴇʟᴇᴛᴇ/ᴋɪᴄᴋ*");
-    }
-});
