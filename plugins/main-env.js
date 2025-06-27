@@ -54,33 +54,29 @@ async (conn, mek, m, { from, quoted, reply, isCreator }) => {
 │       - Current Status: ${config.ANTI_BAD_WORD || "off"}
 │       - Usage: ${config.PREFIX}antibad on/off
 │
-├─∘ 🗑️ *#. Anti Delete*
+├─∘ 🗑️ *7. Anti Delete*
 │       - Current Status: ${config.ANTI_BAD_WORD || "off"}
 │       - Usage: ${config.PREFIX}antidelete on/off
 │
-├─∘ 🖼️ *7. Auto Sticker*
+├─∘ 🖼️ *8. Auto Sticker*
 │       - Current Status: ${config.AUTO_STICKER || "off"}
 │       - Usage: ${config.PREFIX}autosticker on/off
 │
-├─∘ 💬 *8. Auto Reply*
+├─∘ 💬 *9. Auto Reply*
 │       - Current Status: ${config.AUTO_REPLY || "off"}
 │       - Usage: ${config.PREFIX}autoreply on/off
 │
-├─∘ ❤️ *9. Auto React*
+├─∘ ❤️ *10. Auto React*
 │       - Current Status: ${config.AUTO_REACT || "off"}
 │       - Usage: ${config.PREFIX}autoreact on/off
 │
-├─∘ 📢 *10. Status Reply*
+├─∘ 📢 *11. Status Reply*
 │       - Current Status: ${config.AUTO_STATUS_REPLY || "off"}
 │       - Usage: ${config.PREFIX}autostatusreply on/off
 │
-├─∘ 🔗 *11. Anti Link*
+├─∘ 🔗 *12. Anti Link*
 │        - Current Status: ${config.ANTI_LINK || "off"}
 │        - Usage: ${config.PREFIX}antilink on/off
-│
-├─∘ 🤖 *12. Anti Bot*
-│        - Current Status: ${antibotAction || "off"}
-│        - Usage: ${config.PREFIX}antibot off/warn/delete/kick
 │
 ├─∘ 💖 *13. Heart React*
 │        - Current Status: ${config.HEART_REACT || "off"}
