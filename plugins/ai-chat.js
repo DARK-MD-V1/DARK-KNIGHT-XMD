@@ -104,4 +104,4 @@ return reply(`${data.data}\n\n> ꜰᴏʀᴡᴀʀᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺�
 console.log(e)
 reply(`${e}`)
 }
-});
+})
