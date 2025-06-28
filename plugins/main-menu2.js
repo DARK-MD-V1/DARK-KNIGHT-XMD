@@ -32,15 +32,19 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ╭──·๏[📥 *ᴅᴏᴡɴʟᴏᴀᴅ ᴍᴇɴᴜ*📥]
 ┆ ◦ 
 ┆ ◦  🟦 facebook
+┆ ◦  🔵 fb2
 ┆ ◦  📁 mediafire
+┆ ◦  📁 mfire2
 ┆ ◦  🎵 tiktok
+┆ ◦  ▶️ tt2
 ┆ ◦  🐦 twitter
 ┆ ◦  📷 insta
+┆ ◦  📷 insta2
 ┆ ◦  📦 apk
+┆ ◦  📦 apk2
 ┆ ◦  🖼️ img
-┆ ◦  ▶️ tt2
 ┆ ◦  📌 pins
-┆ ◦  🔵 fb2
+┆ ◦  📌 pins2
 ┆ ◦  📍 pinterest
 ┆ ◦  🎶 spotify
 ┆ ◦  🎧 play
@@ -49,11 +53,16 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┆ ◦  🎬 video
 ┆ ◦  🎵 ytmp3
 ┆ ◦  📹 ytmp4
-┆ ◦  🎶 song
+┆ ◦  🎶 song2
+┆ ◦  🎬 video2
 ┆ ◦  🎬 darama
 ┆ ◦  ☁️ gdrive
 ┆ ◦  🌐 ssweb
 ┆ ◦  🎵 tiks
+┆ ◦  🔞 xvideo
+┆ ◦  🔞 xnxx
+┆ ◦  🔞 porn
+┆ ◦  🔞 xporn
 ┆ ◦ 
 ╰────┈⊷
 
@@ -66,6 +75,8 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┆ ◦  ➕ add
 ┆ ◦  ➖ remove
 ┆ ◦  👢 kick
+┆ ◦  👢 out
+┆ ◦  🖼️ fullpo
 ┆ ◦  ⬆️ promote
 ┆ ◦  ⬇️ demote
 ┆ ◦  🚮 dismiss
@@ -77,7 +88,6 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┆ ◦  ℹ️ ginfo
 ┆ ◦  ⏳ disappear on
 ┆ ◦  ⏳ disappear off
-┆ ◦  ⏳ disappear 7D,24H
 ┆ ◦  📝 allreq
 ┆ ◦  ✏️ updategname
 ┆ ◦  📝 updategdesc
@@ -88,6 +98,8 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┆ ◦  🔊 unmute
 ┆ ◦  🔒 lockgc
 ┆ ◦  🔓 unlockgc
+┆ ◦  🚷 antilink kick
+┆ ◦  🚫 out country code
 ┆ ◦  📩 invite
 ┆ ◦  #️⃣ tag
 ┆ ◦  🏷️ hidetag
@@ -197,6 +209,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┆ ◦  🎭 character
 ┆ ◦  💌 pickup
 ┆ ◦  😆 joke
+┆ ◦  🎭 blur
 ┆ ◦  ❤️ hrt
 ┆ ◦  😊 hpy
 ┆ ◦  😔 syd
@@ -289,6 +302,9 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┆ ◦  👗 maid
 ┆ ◦  👧 loli
 ┆ ◦  📰 animenews
+┆ ◦  👧 animegirl
+┆ ◦  👧 animegirl 1-5
+┆ ◦  👧 animegirl 5
 ┆ ◦  🦊 foxgirl
 ┆ ◦  🍥 naruto
 ┆ ◦ 
