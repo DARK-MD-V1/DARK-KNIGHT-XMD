@@ -23,7 +23,7 @@ reply(`${e}`)
 })
 
 cmd({
-    pattern: "gemini",
+    pattern: "gemini2",
     react: "📑",
     desc: "ai chat.",
     category: "main",
