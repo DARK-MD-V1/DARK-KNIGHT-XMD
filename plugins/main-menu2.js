@@ -245,20 +245,16 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ╭──·๏[🤖 *ᴀɪ ᴍᴇɴᴜ*🤖]
 ┆ ◦ 
 ┆ ◦  🧠 ai
-┆ ◦  🤖 gpt3
-┆ ◦  🤖 gpt2
-┆ ◦  🤖 gptmini
+┆ ◦  🤖 bot
 ┆ ◦  🤖 gpt
-┆ ◦  🔵 meta
-┆ ◦  📦 blackbox
-┆ ◦  🌈 luma
-┆ ◦  🎧 dj
-┆ ◦  👑 dark
-┆ ◦  🧠 gpt4
-┆ ◦  🔍 bing
+┆ ◦  🤖 openai
+┆ ◦  🤖 chatgpt
+┆ ◦  👑 deepseek
+┆ ◦  🧠 seekai
 ┆ ◦  🎨 imagine
 ┆ ◦  🖼️ imagine2
-┆ ◦  🤖 copilot
+┆ ◦  🤖 gemini
+┆ ◦  🤖 gemini2
 ┆ ◦ 
 ╰─┈⊷
 
