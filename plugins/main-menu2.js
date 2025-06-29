@@ -48,17 +48,20 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┆ ◦  📍 pinterest
 ┆ ◦  🎶 spotify
 ┆ ◦  🎧 play
+┆ ◦  🎧 play2
 ┆ ◦  🎧 song
+┆ ◦  🎶 song2
 ┆ ◦  🔉 audio
 ┆ ◦  🎬 video
+┆ ◦  🎬 video1
+┆ ◦  🎬 video2
 ┆ ◦  🎵 ytmp3
 ┆ ◦  📹 ytmp4
-┆ ◦  🎶 song2
-┆ ◦  🎬 video2
 ┆ ◦  🎬 darama
 ┆ ◦  ☁️ gdrive
 ┆ ◦  🌐 ssweb
 ┆ ◦  🎵 tiks
+┆ ◦  
 ┆ ◦  🔞 xvideo
 ┆ ◦  🔞 xnxx
 ┆ ◦  🔞 porn
