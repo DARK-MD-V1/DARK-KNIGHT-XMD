@@ -263,7 +263,8 @@ cmd({
 ┃★│ • bible
 ┃★│ • biblelist
 ┃★│ • owner
-┃★│ • vv / vv6
+┃★│ • vv / vv1
+┃★│ • vv3
 ┃★│ • repo
 ┃★│ • alive
 ┃★│ • ping
