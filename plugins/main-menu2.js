@@ -17,13 +17,13 @@ cmd({
 async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
     try {
         let dec = ` 
-╭──⭘🤖 *${config.BOT_NAME}* 🤖─·⭘
+╭──⭘🚀 *${config.BOT_NAME}* 🤖─·⭘
 ┆ ◦ 
-┆ ◦ • 👑 Owner : *${config.OWNER_NAME}*
-┆ ◦ • ⚙️ Prefix : *[${config.PREFIX}]*
-┆ ◦ • 🌐 Platform : *Heroku*
-┆ ◦ • 📦 Version : *2.0.0 Bᴇᴛᴀ*
-┆ ◦ • ⏱️ Runtime : *_${runtime(process.uptime())}_*
+┆◦┆• 👑 Owner : *${config.OWNER_NAME}*
+┆◦┆• ⚙️ Prefix : *[${config.PREFIX}]*
+┆◦┆• 🌐 Platform : *Heroku*
+┆◦┆• 📦 Version : *2.0.0 Bᴇᴛᴀ*
+┆◦┆• ⏱️ Runtime : *_${runtime(process.uptime())}_*
 ┆ ◦ 
 ╰────────────────┈⊷
 
@@ -280,6 +280,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ╭──·๏[⚡*ᴍᴀɪɴ ᴍᴇɴᴜ* ⚡]
 ┆ ◦ 
 ┆ ◦  🏓 ping
+┆ ◦  🏓 ping2
 ┆ ◦  🚀 speed
 ┆ ◦  📡 live
 ┆ ◦  💚 alive
@@ -310,7 +311,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┆ ◦  📰 animenews
 ┆ ◦  👧 animegirl
 ┆ ◦  👧 animegirl 1-5
-┆ ◦  👧 animegirl 5
+┆ ◦  👧 anime 1-5
 ┆ ◦  🦊 foxgirl
 ┆ ◦  🍥 naruto
 ┆ ◦ 
