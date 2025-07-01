@@ -182,7 +182,8 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┆ ◦  👑 owner
 ┆ ◦  📜 menu
 ┆ ◦  📜 menu2
-┆ ◦  📊 vv
+┆ ◦  📊 vv / vv1
+┆ ◦  📊 vv3
 ┆ ◦  📋 listcmd
 ┆ ◦  📚 allmenu
 ┆ ◦  📦 repo
