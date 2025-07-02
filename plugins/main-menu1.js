@@ -200,6 +200,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃◈┃• alive
 ┃◈┃• ping
 ┃◈┃• ping2
+┃◈┃• version
 ┃◈┃• gjid
 ┃◈┃• jid
 ┃◈┃• id
@@ -326,6 +327,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃◈┃• alive
 ┃◈┃• runtime
 ┃◈┃• uptime
+┃◈┃• version
 ┃◈┃• repo
 ┃◈┃• owner
 ┃◈┃• menu
