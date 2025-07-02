@@ -95,6 +95,7 @@ async (conn, mek, m, { from, isOwner, reply }) => {
     }
 });
 
+
 cmd({
     pattern: "getbio",
     desc: "Displays the user's bio.",
@@ -111,6 +112,8 @@ cmd({
         reply("No bio found.");
     }
 });
+
+
 cmd({
     pattern: "setppall",
     desc: "Update Profile Picture Privacy",
@@ -135,6 +138,8 @@ async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, 
         return reply(`*An error occurred while processing your request.*\n\n_Error:_ ${e.message}`);
     }
 });
+
+
 cmd({
     pattern: "setonline",
     desc: "Update Online Privacy",
@@ -159,6 +164,7 @@ async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, 
         return reply(`*An error occurred while processing your request.*\n\n_Error:_ ${e.message}`);
     }
 });
+
 
 cmd({
     pattern: "setpp",
@@ -188,6 +194,7 @@ async (conn, mek, m, { from, isOwner, quoted, reply }) => {
         reply(`❌ Error updating profile picture: ${error.message}`);
     }
 });
+
 
 cmd({
     pattern: "setmyname",
@@ -222,6 +229,7 @@ async (conn, mek, m, { from, isOwner, reply, args }) => {
     }
 });
 
+
 cmd({
     pattern: "updatebio",
     react: "🥏",
@@ -242,6 +250,8 @@ async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, 
         l(e);
     }
 });
+
+
 cmd({
     pattern: "groupsprivacy",
     desc: "Update Group Add Privacy",
@@ -266,6 +276,7 @@ async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, 
         return reply(`*An error occurred while processing your request.*\n\n_Error:_ ${e.message}`);
     }
 });
+
 
 cmd({
     pattern: "getprivacy",
@@ -296,6 +307,8 @@ async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, 
         l(e);
     }
 });
+
+
 cmd({
     pattern: "getpp",
     desc: "Fetch the profile picture of a tagged or replied user.",
