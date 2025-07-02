@@ -28,9 +28,8 @@ async (conn, mek, m, { from, quoted, reply, isCreator }) => {
         let envSettings = `
 ╭──『 *${config.BOT_NAME}* 』──❏
 │
-│ ----------------------------
-│   𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 SETTINGS 
-│ ----------------------------
+│𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 SETTINGS 
+│-------------------------
 │
 ├─❏ *🤖 BOT INFO*
 │  ├─∘ *Name:* ${config.BOT_NAME}
@@ -71,7 +70,7 @@ async (conn, mek, m, { from, quoted, reply, isCreator }) => {
 │  ├─∘ *Anti-Del Path:* ${config.ANTI_DEL_PATH}
 │  └─∘ *Dev Number:* ${config.DEV}
 │
-│---------------------
+│-----------------------
 │
 ├─❏ *⚙️ CHANGE SETTINGS*
 │
