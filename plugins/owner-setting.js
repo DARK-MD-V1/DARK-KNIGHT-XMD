@@ -2,7 +2,9 @@ const { cmd ,commands } = require('../command');
 const { exec } = require('child_process');
 const config = require('../config');
 const {sleep} = require('../lib/functions')
+
 // 1. Shutdown Bot
+
 cmd({
     pattern: "shutdown",
     desc: "Shutdown the bot.",
@@ -14,7 +16,9 @@ async (conn, mek, m, { from, isOwner, reply }) => {
     if (!isOwner) return reply("❌ You are not the owner!");
     reply("🛑 Shutting down...").then(() => process.exit());
 });
+
 // 2. Broadcast Message to All Groups
+
 cmd({
     pattern: "broadcast",
     desc: "Broadcast a message to all groups.",
@@ -32,7 +36,9 @@ async (conn, mek, m, { from, isOwner, args, reply }) => {
     }
     reply("📢 Message broadcasted to all groups.");
 });
+
 // 3. Set Profile Picture
+
 cmd({
     pattern: "setpp",
     desc: "Set bot profile picture.",
@@ -53,6 +59,7 @@ async (conn, mek, m, { from, isOwner, quoted, reply }) => {
 });
 
 // 6. Clear All Chats
+
 cmd({
     pattern: "clearchats",
     desc: "Clear all chats from the bot.",
@@ -74,6 +81,7 @@ async (conn, mek, m, { from, isOwner, reply }) => {
 });
 
 // 8. Group JIDs List
+
 cmd({
     pattern: "gjid",
     desc: "Get the list of JIDs for all groups the bot is part of.",
@@ -87,7 +95,6 @@ async (conn, mek, m, { from, isOwner, reply }) => {
     const groupJids = Object.keys(groups).join('\n');
     reply(`📝 *Group JIDs:*\n\n${groupJids}`);
 });
-
 
 // delete 
 
