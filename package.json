@@ -10,8 +10,8 @@
     "restart": "pm2 restart DARK-KNIGHT-XMD"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "npm:asitha-new-v99",
-    "@adiwajshing/keyed-db": "^0.2.4",
+    "@whiskeysockets/baileys": "npm:baileys-pro@latest",
+    "@adiwajshing/keyed-db": "latest",
     "@dark-yasiya/yt-dl.js": "1.0.5",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@vitalets/google-translate-api": "^9.2.0",
@@ -22,7 +22,7 @@
     "jimp": "^0.16.1",
     "express": "latest",
     "moment-timezone": "^0.5.45",
-    "axios": "^1.2.5",
+    "axios": "^1.7.9",
     "crypto-digest-sync": "^1.0.0",
     "crypto-js": "latest",
     "file_size_url": "1.0.4",
