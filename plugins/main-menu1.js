@@ -46,13 +46,17 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃◈┃• pinterest
 ┃◈┃• spotify
 ┃◈┃• play
+┃◈┃• play1
 ┃◈┃• play2
 ┃◈┃• song
+┃◈┃• song1
 ┃◈┃• song2
 ┃◈┃• audio
+┃◈┃• audio2
 ┃◈┃• video
 ┃◈┃• video1
 ┃◈┃• video2
+┃◈┃• video3
 ┃◈┃• ytmp3
 ┃◈┃• ytmp4
 ┃◈┃• darama
