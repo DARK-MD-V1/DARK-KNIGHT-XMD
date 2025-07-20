@@ -6,12 +6,12 @@ const ffmpeg = require('fluent-ffmpeg');
 
 
 cmd({
-    pattern: "video2",
-    alias: ["ytvideo2"],
+    pattern: "video1",
+    alias: ["ytvideo1"],
     react: "📽",
     desc: "Download YouTube video (MP4)",
     category: "download",
-    use: ".video <query>",
+    use: ".video1 <query>",
     filename: __filename
 }, async (conn, mek, m, { from, reply, q }) => {
     try {
