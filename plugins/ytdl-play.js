@@ -7,7 +7,7 @@ const path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 
 cmd({
-    pattern: "play2",
+    pattern: "play1",
     alias: ["ytplay", "ytmp3"],
     react: "📲",
     desc: "Download YouTube song or video",
