@@ -1,84 +1,106 @@
-const config = require('../config');
+const axios = require("axios");
+const yts = require("yt-search");
+const { youtube } = require("btch-downloader");
 const { cmd } = require('../command');
-const axios = require('axios');
 
 cmd({
-    pattern: "spotify",
-    alias: ["spot", "spotdl"],
-    use: '.spotify <song name>',
-    desc: "Search and download Spotify song as MP3",
-    category: "downloaders",
-    react: "🎵",
-    filename: __filename
-},
-async (conn, mek, m, { from, sender, args, reply }) => {
-    try {
-        if (!args[0]) return reply("🎧 *Please provide a song name!*\n\nExample: `.spotify calm down`");
+  pattern: 'audio',
+  alias: ['spotify',"music"],
+  react: '🎵',
+  desc: "Fetch audio from Spotify or YouTube",
+  category: "media",
+  filename: __filename
+}, async (client, message, details, context) => {
+  const { q, from, reply } = context;
 
-        const query = args.join(" ");
-        const emoji = ['🎶', '🎧', '🎤', '🎼', '🎹'][Math.floor(Math.random() * 5)];
+  if (!q) {
+    return reply("Please provide a title or link (Spotify/YouTube)!");
+  }
 
-        await conn.sendMessage(from, {
-            react: { text: emoji, key: mek.key }
-        });
+  reply("> 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ɪs ғᴇᴛᴄʜɪɴɢ ᴀᴜᴅɪᴏ... 🎧");
 
-        // 1. Search song
-        const search = await axios.get(`https://api.safone.dev/spotifysearch?q=${encodeURIComponent(query)}`);
-        const result = search.data?.data[0];
+  let spotifySent = false;
+  let youtubeSent = false;
 
-        if (!result) return reply("❌ Song not found!");
+  try {
+    // Fetch from Spotify
+    const spotifyResponse = await axios.get(
+      `https://apis-keith.vercel.app/download/spotify?q=${encodeURIComponent(q)}`
+    );
+    const spotifyTrack = spotifyResponse.data?.[0]; // Safely access first track
 
-        const songTitle = result.title;
-        const artist = result.artist;
-        const trackUrl = result.url;
+    if (spotifyTrack) {
+      const trackStream = await axios({
+        url: `https://apis-keith.vercel.app/download/spotify?q=${encodeURIComponent(spotifyTrack.url)}`,
+        method: "GET",
+        responseType: 'stream'
+      });
 
-        // 2. Get download URL
-        const dl = await axios.get(`https://api.safone.dev/spotify?url=${trackUrl}`);
-        const { download_url, thumbnail, album, duration } = dl.data;
-
-        if (!download_url) return reply("⚠️ Couldn't get download link. Try again.");
-
-        // 4. Send image with metadata
-        await conn.sendMessage(from, {
-            image: { url: thumbnail },
-            caption: `
-🎧 *Title:* ${songTitle}
-🎤 *Artist:* ${artist}
-💽 *Album:* ${album}
-🕒 *Duration:* ${duration}
-🔗 *Link:* ${trackUrl}
-            `.trim(),
-            contextInfo: {
-                mentionedJid: [sender],
-                forwardingScore: 999,
-                isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363400240662312@newsletter',
-                    newsletterName: "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳",
-                    serverMessageId: 166
-                }
+      if (trackStream.headers["content-type"]?.includes("audio/mpeg")) {
+        await client.sendMessage(from, {
+          audio: trackStream.data,
+          mimetype: "audio/mpeg",
+          contextInfo: {
+            externalAdReply: {
+              title: spotifyTrack.title,
+              body: "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳: sᴘᴏᴛɪғʏ",
+              mediaType: 1,
+              sourceUrl: spotifyTrack.url,
+              renderLargerThumbnail: true
             }
-        }, { quoted: fakeContact });
-
-        // 5. Send audio file
-        await conn.sendMessage(from, {
-            audio: { url: download_url },
-            mimetype: 'audio/mp4',
-            ptt: false,
-            contextInfo: {
-                forwardingScore: 999,
-                isForwarded: true,
-                mentionedJid: [sender],
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363400240662312@newsletter',
-                    newsletterName: "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳",
-                    serverMessageId: 166
-                }
-            }
+          }
         });
-
-    } catch (e) {
-        console.error("Spotify Search Error:", e);
-        reply(`❌ Error: ${e.message}`);
+        spotifySent = true;
+      } else {
+        console.log("Spotify stream not in audio/mpeg format.");
+      }
+    } else {
+      console.log("No Spotify track found.");
     }
+  } catch (error) {
+    console.error("Spotify Error:", error.message);
+  }
+
+  try {
+    // Fetch from YouTube
+    const youtubeSearchResults = await yts(q);
+    const youtubeVideo = youtubeSearchResults.videos[0];
+
+    if (youtubeVideo && youtubeVideo.seconds < 3600) { // Video duration < 1 hour
+      const youtubeAudio = await youtube(youtubeVideo.url);
+
+      if (youtubeAudio?.mp3) {
+        await client.sendMessage(from, {
+          audio: { url: youtubeAudio.mp3 },
+          mimetype: "audio/mpeg",
+          contextInfo: {
+            externalAdReply: {
+              title: youtubeVideo.title,
+              body: "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳: ʏᴏᴜᴛᴜʙᴇ",
+              mediaType: 1,
+              sourceUrl: youtubeVideo.url,
+              renderLargerThumbnail: true
+            }
+          }
+        });
+        youtubeSent = true;
+      } else {
+        console.log("Failed to fetch YouTube audio.");
+      }
+    } else {
+      console.log("No suitable YouTube results found.");
+    }
+  } catch (error) {
+    console.error("YouTube Error:", error.message);
+  }
+
+  if (!spotifySent && !youtubeSent) {
+    reply("Failed to fetch audio from both Spotify and YouTube.");
+  } else if (spotifySent && youtubeSent) {
+    reply("Both Spotify and YouTube audio sent successfully.");
+  } else if (spotifySent) {
+    reply("𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳: sᴘᴏᴛɪғʏ ᴀᴜᴅɪᴏ sᴇɴᴛ sᴜᴄᴄᴇsғᴜʟʟʏ.");
+  } else if (youtubeSent) {
+    reply("𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳: ʏᴏᴜᴛᴜʙᴇ ᴀᴜᴅɪᴏ sᴇɴᴛ sᴜᴄᴄᴇsғᴜʟʟʏ.");
+  }
 });
