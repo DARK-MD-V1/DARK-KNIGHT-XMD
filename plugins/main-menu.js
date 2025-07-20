@@ -129,14 +129,19 @@ cmd({
 ┃★╭──────────────
 ┃★│ 🎵 *Music/Video*
 ┃★│ • spotify [query]
-┃★│ • play [song]
-┃★│ • play2 [song]
-┃★│ • song [url]
-┃★│ • song2 [url]
+┃★│ • play [url]
+┃★│ • play1 [song]
+┃★│ • play2 [name]
+┃★│ • song [name]
+┃★│ • song1 [name]
+┃★│ • song2 [name]
 ┃★│ • audio [url]
-┃★│ • video [url]
+┃★│ • audio2 [name]
+┃★│ • music [url]
+┃★│ • video [name]
 ┃★│ • video1 [name]
 ┃★│ • video2 [name]
+┃★│ • video3 [name]
 ┃★│ • ytmp3 [url]
 ┃★│ • ytmp4 [url]
 ┃★│ • darama [name]
@@ -255,7 +260,7 @@ cmd({
 ┃★│ • broadcast
 ┃★│ • join
 ┃★│ • leave
-┃★│ • fullpp [img]
+┃★│ • fullpp/pp [img]
 ┃★│ • setpp [img]
 ┃★│ • restart
 ┃★│ • shutdown
