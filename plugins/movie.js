@@ -47,6 +47,15 @@ async (conn, mek, m, { from, reply, sender, args }) => {
 🏆 *Awards:* ${movie.awards || 'None'}
 
 [View on IMDb](${movie.imdbUrl})
+
+👆 this detail card. 📄
+
+🎬 your movie search for 🔎
+
+🔅 .pirate (movie name)
+🔅 .pirate2 (movie name)
+🔅 .sinhalasub (movie name)
+🔅 .sinhalasub2 (movie name)
 `;
 
         // Send message with the requested format
