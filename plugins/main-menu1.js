@@ -64,10 +64,18 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃◈┃• ssweb
 ┃◈┃• tiks
 ┃◈┃•
+┃◈┃• 🔞 *Adult Zone*
 ┃◈┃• xnxx
 ┃◈┃• xvideo
 ┃◈┃• xporn
 ┃◈┃• porn
+┃◈┃•
+┃◈┃• 🎬 *Movie Menu*
+┃◈┃• movie
+┃◈┃• pirate
+┃◈┃• pirate2
+┃◈┃• sinhalasub
+┃◈┃• sinhalasub2
 ┃◈╰────────────┈⊷
 ╰━━━━━━━━━━━━━━┈⊷
 
