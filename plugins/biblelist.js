@@ -5,7 +5,6 @@ const { cmd } = require("../command");
 // Command: biblelist
 cmd({
     pattern: "biblelist",
-    alias: ["biblebooks", "listbible", "blist"], // Ajout des alias
     desc: "Get the complete list of books in the Bible.",
     category: "fun",
     react: "📜",
