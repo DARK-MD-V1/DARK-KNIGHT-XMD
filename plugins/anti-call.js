@@ -3,7 +3,6 @@ const { cmd } = require('../command'); // Adjust path as needed to your command 
 
 cmd({
     pattern: "anticall",
-    alias: ["callblock", "togglecall"],
     desc: "Manages the anti-call feature. Use: .anticall [on/off]", // Updated description
     category: "owner",
     react: "📞",
