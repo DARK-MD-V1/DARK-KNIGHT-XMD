@@ -2,8 +2,7 @@ const { cmd } = require("../command");
 
 // Command for random boy selection
 cmd({
-  pattern: "bacha",
-  alias: ["boy", "larka"],
+  pattern: "boy",
   desc: "Randomly selects a boy from the group",
   react: "👦",
   category: "fun",
@@ -31,15 +30,14 @@ cmd({
     );
 
   } catch (error) {
-    console.error("Error in .bacha command:", error);
+    console.error("Error in .boy command:", error);
     reply(`❌ Error: ${error.message}`);
   }
 });
 
 // Command for random girl selection
 cmd({
-  pattern: "bachi",
-  alias: ["girl", "kuri", "larki"],
+  pattern: "girl",
   desc: "Randomly selects a girl from the group",
   react: "👧",
   category: "fun",
@@ -67,7 +65,7 @@ cmd({
     );
 
   } catch (error) {
-    console.error("Error in .bachi command:", error);
+    console.error("Error in .girl command:", error);
     reply(`❌ Error: ${error.message}`);
   }
 });
