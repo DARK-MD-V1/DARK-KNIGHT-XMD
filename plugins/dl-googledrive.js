@@ -3,7 +3,6 @@ const { cmd } = require("../command");
 
 cmd({
   pattern: "gdrive",
-  alias: ["gdrivedownload", "gdownloader"],
   react: '📥',
   desc: "Download files from Google Drive.",
   category: "download",
