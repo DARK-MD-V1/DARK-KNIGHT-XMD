@@ -3,7 +3,6 @@ const axios = require('axios');
 
 cmd({
     pattern: "ai",
-    alias: ["bot", "dj", "gpt", "gpt4", "bing"],
     desc: "Chat with an AI model",
     category: "ai",
     react: "🤖",
@@ -32,7 +31,6 @@ async (conn, mek, m, { from, args, q, reply, react }) => {
 
 cmd({
     pattern: "openai",
-    alias: ["chatgpt", "gpt3", "open-gpt"],
     desc: "Chat with OpenAI",
     category: "ai",
     react: "🧠",
@@ -61,7 +59,6 @@ async (conn, mek, m, { from, args, q, reply, react }) => {
 
 cmd({
     pattern: "deepseek",
-    alias: ["deep", "seekai"],
     desc: "Chat with DeepSeek AI",
     category: "ai",
     react: "🧠",
