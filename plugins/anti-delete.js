@@ -3,7 +3,6 @@ const { getAnti, setAnti } = require('../data/antidel');
 
 cmd({
     pattern: "antidelete",
-    alias: ['antidel', 'del'],
     desc: "Toggle anti-delete feature",
     category: "misc",
     filename: __filename
