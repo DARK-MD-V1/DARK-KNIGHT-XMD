@@ -5,7 +5,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 cmd({
     pattern: "removemembers",
-    alias: ["kickall", "endgc", "endgroup"],
+    alias: ["kickall"],
     desc: "Remove all non-admin members from the group.",
     react: "🎉",
     category: "group",
@@ -59,7 +59,7 @@ async (conn, mek, m, {
  
 cmd({
     pattern: "removeadmins",
-    alias: ["kickadmins", "kickall3", "deladmins"],
+    alias: ["kickall1"],
     desc: "Remove all admin members from the group, excluding the bot and bot owner.",
     react: "🎉",
     category: "group",
@@ -113,7 +113,7 @@ async (conn, mek, m, {
 
 cmd({
     pattern: "removeall2",
-    alias: ["kickall2", "endgc2", "endgroup2"],
+    alias: ["kickall2"],
     desc: "Remove all members and admins from the group, excluding the bot and bot owner.",
     react: "🎉",
     category: "group",
