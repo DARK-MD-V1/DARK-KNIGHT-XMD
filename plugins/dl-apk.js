@@ -3,7 +3,6 @@ const { cmd } = require("../command");
 
 cmd({
   pattern: "apk",
-  alias: ["modapk", "apkdownload"],
   react: '📦',
   desc: "Download APK files using NexOracle API.",
   category: "download",
