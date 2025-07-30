@@ -4,7 +4,6 @@ const { fetchJson } = require('../lib/functions')
 
 cmd({
     pattern: "gemini",
-    alias: ["gemini"], 
     react: "📑",
     desc: "ai chat.",
     category: "main",
@@ -27,8 +26,7 @@ const GEMINI_API_KEY = "AIzaSyAkryCMMe0mh9TyyUUOBgzLhm2OXdomrEU";
 
 cmd(
   {
-    pattern: "ask",
-    alias: ["gemini2"],
+    pattern: "gemini2",
     react: "🤖",
     desc: "Ask Gemini AI anything",
     category: "ai",
