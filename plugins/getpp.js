@@ -32,6 +32,21 @@ async (conn, mek, m, { from, sender, reply, isGroup }) => {
       imageUrl = "https://files.catbox.moe/ntqtnt.jpg";
     }
 
+    const fakeVCard = {
+      key: {
+        fromMe: false,
+        participant: '0@s.whatsapp.net',
+        remoteJid: "status@broadcast"
+      },
+      message: {
+        contactMessage: {
+          displayName: "PKDRILLER ✅",
+          vcard: "BEGIN:VCARD\nVERSION:3.0\nFN:PKDRILLER ✅\nORG:PK-XMD;\nTEL;type=CELL;type=VOICE;waid=254700000000:+254 700 000000\nEND:VCARD",
+          jpegThumbnail: Buffer.from([])
+        }
+      }
+    };
+  
     await conn.sendMessage(from, {
       image: { url: imageUrl },
       caption: `🖼️ Profile Picture of @${targetJid.split('@')[0]}`,
