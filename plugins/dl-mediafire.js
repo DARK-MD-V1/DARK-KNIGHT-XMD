@@ -3,7 +3,7 @@ const { cmd } = require("../command");
 
 cmd({
   pattern: "mediafire",
-  alias: ["mfire", "media"],
+  alias: ["mfire"],
   react: '📂',
   desc: "Download files from MediaFire using Keith's API.",
   category: "download",
