@@ -3,7 +3,7 @@ const { cmd } = require("../command");
 
 cmd({
   pattern: "igimagedl",
-  alias: ["instagramimages", "igimages","igimage"],
+  alias: ["igimage"],
   react: '📥',
   desc: "Download Instagram posts (images or videos).",
   category: "download",
@@ -105,7 +105,7 @@ cmd({
 
 cmd({
   pattern: "igvid",
-  alias: ["igvideo","ig","instagram", "igdl"],
+  alias: ["ig"],
   react: '📥',
   desc: "Download Instagram videos.",
   category: "download",
@@ -183,7 +183,7 @@ cmd({
 
 cmd({
   pattern: "ig2",
-  alias: ["insta2", "Instagram2"],
+  alias: ["igvid2"],
   desc: "To download Instagram videos.",
   react: "🎥",
   category: "download",
