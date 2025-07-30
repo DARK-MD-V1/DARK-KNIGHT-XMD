@@ -1,7 +1,7 @@
 const { cmd } = require("../command");
 
 cmd({
-  pattern: "getpp",
+  pattern: "getpp2",
   alias: [],
   use: "pp",
   desc: "Get profile picture of a user (replied user in group, or DM user)",
@@ -32,21 +32,6 @@ async (conn, mek, m, { from, sender, reply, isGroup }) => {
       imageUrl = "https://files.catbox.moe/ntqtnt.jpg";
     }
 
-    const fakeVCard = {
-      key: {
-        fromMe: false,
-        participant: '0@s.whatsapp.net',
-        remoteJid: "status@broadcast"
-      },
-      message: {
-        contactMessage: {
-          displayName: "PKDRILLER ✅",
-          vcard: "BEGIN:VCARD\nVERSION:3.0\nFN:PKDRILLER ✅\nORG:PK-XMD;\nTEL;type=CELL;type=VOICE;waid=254700000000:+254 700 000000\nEND:VCARD",
-          jpegThumbnail: Buffer.from([])
-        }
-      }
-    };
-
     await conn.sendMessage(from, {
       image: { url: imageUrl },
       caption: `🖼️ Profile Picture of @${targetJid.split('@')[0]}`,
@@ -55,8 +40,8 @@ async (conn, mek, m, { from, sender, reply, isGroup }) => {
         forwardingScore: 5,
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
-          newsletterName: "PK-XMD",
-          newsletterJid: "120363288304618280@newsletter"
+          newsletterName: "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳",
+          newsletterJid: "120363400240662312@newsletter"
         }
       }
     }, { quoted: fakeVCard });
