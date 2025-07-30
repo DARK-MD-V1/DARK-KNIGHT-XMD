@@ -433,63 +433,108 @@ cmd({
                 title: "👑 *Owner Menu* 👑",
                 content: `╭━━━〔 👑 *Owner Menu* 〕━━━┈⊷
 ┃★╭──────────────
-┃★│ ℹ️ *Bot Info*
-┃★│ • ping
-┃★│ • ping2
-┃★│ • speed
-┃★│ • live
-┃★│ • alive
-┃★│ • runtime
-┃★│ • uptime
-┃★│ • version
-┃★│ • repo
-┃★│ • owner
-┃★╰──────────────
-┃★╭──────────────
-┃★│ 🛠️ *Controls*
-┃★│ • menu
-┃★│ • menu2
-┃★│ • restart
+┃★│ • anticall
+┃★│ • antilink
+┃★│ • antidelete
+┃★│ • block
+┃★│ • unblock
+┃★│ • broadcast
+┃★│ • bug
+┃★│ • spam
+┃★│ • creact
+┃★│ • setsudo
+┃★│ • delsudo
+┃★│ • vv
+┃★│ • vv1
+┃★│ • vv3
+┃★│ • fullpp
+┃★│ • fullpp2
+┃★│ • setpp
+┃★│ • getpp
+┃★│ • getpp2
+┃★│ • update 
+┃★│ • shutdown
+┃★│ • clearchats
+┃★│ • delete
+┃★│ • poststates
+┃★│ • privacy
+┃★│ • blocklist
+┃★│ • getbio
+┃★│ • setppall
+┃★│ • setonline
+┃★│ • setmyname
+┃★│ • updatebio
+┃★│ • groupsprivacy
+┃★│ • getprivacy
+┃★│ • savecontact
+┃★│ • setting
+┃★│ • jid
+┃★│ • gjid
+┃★│ • forward
+┃★│ • send
+┃★│ • persion
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 > ${config.DESCRIPTION}`,
                 image: true
             },
             '11': {
-                title: "🎨 *Logo Menu* 🎨",
-                content: `╭━━━〔 *Logo Menu* 〕━━━┈⊷
+                title: "🔍 *Search Menu* 🔍",
+                content: `╭━━━〔 🔍 *Search Menu* 〕━━━┈⊷
 ┃★╭──────────────      
-┃★│ 🎨 *Logo Menu*
-┃★│ • neonlight
-┃★│ • blackpink
-┃★│ • 3dcomic
-┃★│ • america
-┃★│ • naruto
-┃★│ • sadgirl
-┃★│ • clouds
-┃★│ • futuristic
-┃★│ • 3dpaper
-┃★│ • eraser
-┃★│ • sunset
-┃★│ • leaf
-┃★│ • galaxy
-┃★│ • sans
-┃★│ • boom
-┃★│ • hacker
-┃★│ • devilwings
-┃★│ • nigeria
-┃★│ • bulb
-┃★│ • angelwings
-┃★│ • zodiac
-┃★│ • luxury
-┃★│ • paint
-┃★│ • frozen
-┃★│ • castle
-┃★│ • tatoo
-┃★│ • valorant
-┃★│ • bear
-┃★│ • typography
-┃★│ • birthday
+┃★│ • check
+┃★│ • cid
+┃★│ • country
+┃★│ • chinfo
+┃★│ • define
+┃★│ • fancy 
+┃★│ • githubstalk
+┃★│ • npm
+┃★│ • news
+┃★│ • praytime
+┃★│ • sss
+┃★│ • srepo
+┃★│ • ttstalk
+┃★│ • twtstalk
+┃★│ • yts
+┃★│ • ytpost
+┃★│ • ytstalk
+┃★│ • weather
+┃★╰──────────────
+╰━━━━━━━━━━━━━━┈⊷
+> ${config.DESCRIPTION}`,
+                image: true
+            },
+            '12': {
+                title: "⚙️ *Setting Menu* ⚙️",
+                content: `╭━━━〔 ⚙️ *Setting Menu* 〕━━━┈⊷
+┃★╭──────────────      
+┃★│ • mode pravite/inbox/public
+┃★│ • setprefix !,@,#,$,/ 
+┃★│ • admin-events on/off
+┃★│ • welcome on/off
+┃★│ • auto-typing on/off
+┃★│ • mention-reply on/off
+┃★│ • always-online on/off
+┃★│ • auto-recoding on/off
+┃★│ • auto-seen on/off
+┃★│ • status-react on/off
+┃★│ • read-messages on/off 
+┃★│ • auto-voice on/off
+┃★│ • auto-reply on/off
+┃★│ • auto-sticker on/off
+┃★│ • auto-react on/off
+┃★│ • status-reply on/off
+┃★│ • anti-bad on/off
+┃★│ • antilink on/off
+┃★│ • antikick on/off
+┃★│ • kicklink on/off
+┃★│ • deletelink on/off
+┃★│ • antibad on/off
+┃★│ • antidelete on/off
+┃★│ • anticall on/off
+┃★│ • heartreact on/off
+┃★│ • .use on/off
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 > ${config.DESCRIPTION}`,
