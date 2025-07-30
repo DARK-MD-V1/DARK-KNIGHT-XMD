@@ -1,7 +1,6 @@
 // commands/movie1.js – brand‑tagged result card version
 // Requirements: axios, node-cache
 
-const l = console.log;
 const config = require('../config');
 const { cmd } = require('../lib/command');
 const axios = require('axios');
@@ -141,7 +140,6 @@ cmd(
 
           if (sd) picks.push({ n: 1, q: 'SD', ...sd });
           if (hd) picks.push({ n: 2, q: 'HD', ...hd });
-          if (fhd) picks.push({ n: 3, q: 'FHD', ...fhd });
           
           if (!picks.length) {
             await conn.sendMessage(from, { text: '❌ No links.' }, { quoted: msg });
