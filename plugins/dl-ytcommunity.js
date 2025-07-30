@@ -3,7 +3,6 @@ const axios = require('axios');
 
 cmd({
     pattern: "ytpost",
-    alias: ["ytcommunity", "ytc"],
     desc: "Download a YouTube community post",
     category: "downloader",
     react: "🎥",
