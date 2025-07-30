@@ -4,7 +4,8 @@ var { S_WHATSAPP_NET } = require('@whiskeysockets/baileys');
 const Baileys = require('@whiskeysockets/baileys');
 
 cmd({
-    pattern: "pp",
+    pattern: "fullpp",
+    alias: ["pp"],
     desc: "changes profile picture.",
     category: "owner",
     filename: __filename
