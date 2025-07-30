@@ -5,7 +5,6 @@ const { cmd, commands } = require('../command');
 
 cmd({
   pattern: "twitter",
-  alias: ["tweet", "twdl"],
   desc: "Download Twitter videos",
   category: "download",
   filename: __filename
