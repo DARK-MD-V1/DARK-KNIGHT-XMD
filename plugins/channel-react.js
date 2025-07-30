@@ -12,7 +12,7 @@ const stylizedChars = {
 
 cmd({
     pattern: "channelreact",
-    alias: ["creact","chr"],
+    alias: ["creact"],
     react: "🔤",
     desc: "React to channel messages with stylized text",
     category: "owner",
