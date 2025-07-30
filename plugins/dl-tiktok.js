@@ -3,7 +3,7 @@ const { cmd } = require("../command");
 
 cmd({
   pattern: "tiktok",
-  alias: ["ttdl", "tiktokdl","tt"],
+  alias: ["tt"],
   react: '📥',
   desc: "Download TikTok videos.",
   category: "download",
@@ -83,7 +83,7 @@ cmd({
 
 cmd({
     pattern: "tiktok2",
-    alias: ["ttdl2", "tt2", "tiktokdl2"],
+    alias: ["tt2"],
     desc: "Download TikTok video without watermark",
     category: "downloader",
     react: "🎵",
