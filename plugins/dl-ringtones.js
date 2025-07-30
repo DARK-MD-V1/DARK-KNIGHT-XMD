@@ -3,7 +3,6 @@ const { cmd, commands } = require("../command");
 
 cmd({
     pattern: "ringtone",
-    alias: ["ringtones", "ring"],
     desc: "Get a random ringtone from the API.",
     react: "🎵",
     category: "fun",
