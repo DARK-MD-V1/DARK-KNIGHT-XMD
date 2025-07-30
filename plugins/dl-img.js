@@ -2,8 +2,7 @@ const { cmd } = require("../command");
 const axios = require("axios");
 
 cmd({
-    pattern: "img",
-    alias: ["image", "googleimage", "searchimg"],
+    pattern: "image",
     react: "🦋",
     desc: "Search and download Google images",
     category: "download",
