@@ -42,7 +42,7 @@ async (conn, mek, m, { from, args, q, reply }) => {
 
 cmd({
   pattern: "fb2",
-  alias: ["facebook2", "fbdl2"],
+  alias: ["facebook2"],
   desc: "Download Facebook videos",
   category: "download",
   filename: __filename
