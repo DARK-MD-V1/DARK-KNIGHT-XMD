@@ -254,13 +254,13 @@ cmd({
 ┃★│ • kickall1
 ┃★│ • kickall2
 ┃★│ • leave
-┃★│ • link
+┃★│ • glink
 ┃★│ • lock 
 ┃★│ • mute
 ┃★│ • newgc
 ┃★│ • out 
 ┃★│ • poll
-┃★│ • resetlink
+┃★│ • resetglink
 ┃★│ • tagadmins
 ┃★│ • unlock 
 ┃★│ • unmute
@@ -491,6 +491,7 @@ cmd({
 ┃★│ • githubstalk
 ┃★│ • npm
 ┃★│ • news
+┃★│ • mvdetail
 ┃★│ • praytime
 ┃★│ • sss
 ┃★│ • srepo
