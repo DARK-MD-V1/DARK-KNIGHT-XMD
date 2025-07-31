@@ -4,7 +4,7 @@ const axios = require("axios");
 
 cmd({
     pattern: "song2",
-    alias: ["play2"],
+    alias: ["ytmp3"],
     desc: "To download songs.",
     react: "🎵",
     category: "download",
