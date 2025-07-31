@@ -23,7 +23,7 @@ cmd({
     await conn.sendMessage(
       mek.chat,
       { 
-        text: `👦 *Yeh lo tumhara Bacha!* \n\n@${randomUser.id.split('@')[0]} is your handsome boy! 😎`, 
+        text: `👦 *Happy Boy!* \n\n@${randomUser.id.split('@')[0]} is your handsome boy! 😎`, 
         mentions: [randomUser.id] 
       },
       { quoted: mek }
@@ -58,7 +58,7 @@ cmd({
     await conn.sendMessage(
       mek.chat,
       { 
-        text: `👧 *Yeh lo tumhari Bachi!* \n\n@${randomUser.id.split('@')[0]} is your beautiful girl! 💖`, 
+        text: `👧 *Happy girl!* \n\n@${randomUser.id.split('@')[0]} is your beautiful girl! 💖`, 
         mentions: [randomUser.id] 
       },
       { quoted: mek }
