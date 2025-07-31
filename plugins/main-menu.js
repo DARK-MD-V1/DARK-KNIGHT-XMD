@@ -172,9 +172,7 @@ cmd({
 ┃★│ • tiks
 ┃★│ • twitter
 ┃★│ • play
-┃★│ • play1
 ┃★│ • play2
-┃★│ • play3
 ┃★│ • song
 ┃★│ • song1
 ┃★│ • song2
@@ -182,6 +180,10 @@ cmd({
 ┃★│ • video1
 ┃★│ • video2
 ┃★│ • video3
+┃★│ • xnxx
+┃★│ • xvideo 
+┃★│ • porn
+┃★│ • xporn
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 > ${config.DESCRIPTION}`,
