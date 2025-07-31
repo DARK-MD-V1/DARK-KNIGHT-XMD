@@ -8,7 +8,7 @@ const axios = require('axios')
 
 cmd({
     pattern: "menu2",
-    alias: ["allmenu","fullmenu"],
+    alias: ["allmenu"],
     use: '.menu2',
     desc: "Show all bot commands",
     category: "menu",
@@ -165,13 +165,13 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • kickall1
 ┃★│ • kickall2
 ┃★│ • leave
-┃★│ • link
+┃★│ • glink
 ┃★│ • lock 
 ┃★│ • mute
 ┃★│ • newgc
 ┃★│ • out 
 ┃★│ • poll
-┃★│ • resetlink
+┃★│ • resetglink
 ┃★│ • tagadmins
 ┃★│ • unlock 
 ┃★│ • unmute
@@ -378,6 +378,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • githubstalk
 ┃★│ • npm
 ┃★│ • news
+┃★│ • mvdetail
 ┃★│ • praytime
 ┃★│ • sss
 ┃★│ • srepo
