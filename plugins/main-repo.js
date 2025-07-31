@@ -4,7 +4,6 @@ const { cmd } = require('../command');
 
 cmd({
     pattern: "repo",
-    alias: ["sc", "script", "info"],
     desc: "Fetch GitHub repository information",
     react: "📂",
     category: "info",
