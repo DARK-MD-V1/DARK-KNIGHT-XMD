@@ -91,9 +91,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • tiks
 ┃★│ • twitter
 ┃★│ • play
-┃★│ • play1
 ┃★│ • play2
-┃★│ • play3
 ┃★│ • song
 ┃★│ • song1
 ┃★│ • song2
@@ -101,6 +99,10 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • video1
 ┃★│ • video2
 ┃★│ • video3
+┃★│ • xnxx
+┃★│ • xvideo
+┃★│ • porn
+┃★│ • xporn
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 
@@ -182,6 +184,13 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 
 ╭━━〔 🖼️ *Imagine Menu* 〕━━┈⊷
 ┃★╭──────────────
+┃★│ • awoo
+┃★│ • dog
+┃★│ • imgloli
+┃★│ • maid
+┃★│ • megumin
+┃★│ • waifu
+┃★│ • neko
 ┃★│ • anime
 ┃★│ • anime1
 ┃★│ • anime2
@@ -197,7 +206,11 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • imagine
 ┃★│ • imagine2
 ┃★│ • imagine3
+┃★│ • wallpaper
+┃★│ • randomwall
+┃★│ • getimage
 ┃★│ • imgscan
+┃★│ • image
 ┃★│ • adedit
 ┃★│ • bluredit
 ┃★│ • greyedit
@@ -207,9 +220,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • nokiaedit
 ┃★│ • wantededit
 ┃★│ • removebg
-┃★│ • getimage
 ┃★│ • couplepp
-┃★│ • awoo
 ┃★│ • bonk
 ┃★│ • bully
 ┃★│ • blush
@@ -217,21 +228,15 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • cry
 ┃★│ • cuddle
 ┃★│ • cringe
-┃★│ • dog
 ┃★│ • dance
 ┃★│ • glomp
 ┃★│ • hug
 ┃★│ • happy
 ┃★│ • handhold
 ┃★│ • highfive
-┃★│ • image
-┃★│ • imgloli
 ┃★│ • kill
 ┃★│ • kiss
 ┃★│ • lick
-┃★│ • maid
-┃★│ • megumin
-┃★│ • neko
 ┃★│ • nom
 ┃★│ • pat
 ┃★│ • poke
@@ -240,10 +245,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • smile
 ┃★│ • wave
 ┃★│ • wink
-┃★│ • waifu
 ┃★│ • yeet
-┃★│ • wallpaper
-┃★│ • randomwall
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 
