@@ -3,11 +3,11 @@ const { cmd } = require('../command');
 
 // Simplified MP3 song download using David Cyril API
 cmd({ 
-    pattern: "play3", 
+    pattern: "play2", 
     react: "🎵", 
     desc: "Download YouTube song (simple)", 
     category: "main", 
-    use: '.play3 <song name>', 
+    use: '.play2 <song name>', 
     filename: __filename 
 }, async (conn, mek, m, { from, sender, reply, q }) => { 
     try {
