@@ -336,6 +336,7 @@ cmd({
 ┃★│ • smug
 ┃★│ • slay
 ┃★│ • smile
+┃★│ • marige
 ┃★│ • wave
 ┃★│ • wink
 ┃★│ • yeet
