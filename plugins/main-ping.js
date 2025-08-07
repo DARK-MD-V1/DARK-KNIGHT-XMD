@@ -8,6 +8,82 @@ cmd({
     category: "main",
     react: "⚡",
     filename: __filename
+}, async (conn, mek, m, { from, sender, reply }) => {
+    try {
+        const startTime = Date.now();
+
+        const emojis = ['🔥', '⚡', '🚀', '💨', '🎯', '🎉', '🌟', '💥', '🕐', '🔹', '💎', '🏆', '🎶', '🌠', '🌀', '🔱', '🛡️', '✨'];
+        const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+        // React instantly with a random emoji
+        await conn.sendMessage(from, {
+            react: { text: randomEmoji, key: mek.key }
+        });
+
+        const ping = Date.now() - startTime;
+
+        // Speed categorization
+        let badge = '🐢 Slow', color = '🔴';
+        if (ping <= 150) {
+            badge = '🚀 Super Fast';
+            color = '🟢';
+        } else if (ping <= 300) {
+            badge = '⚡ Fast';
+            color = '🟡';
+        } else if (ping <= 600) {
+            badge = '⚠️ Medium';
+            color = '🟠';
+        }
+
+        // Fake VCard
+const FakeVCard = {
+    key: {
+        fromMe: false,
+        participant: "0@s.whatsapp.net",
+        remoteJid: "status@broadcast"
+    },
+    message: {
+        contactMessage: {
+            displayName: "© your name",
+            vcard: `BEGIN:VCARD
+VERSION:3.0
+FN:Meta
+ORG:META AI;
+TEL;type=CELL;type=VOICE;waid=13135550002:+13135550002
+END:VCARD`
+        }
+    }
+};
+        
+        // Final response
+        await conn.sendMessage(from, {
+            text: `> *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ʀᴇsᴘᴏɴsᴇ: ${ping} ms ${randomEmoji}*\n> *sᴛᴀᴛᴜs: ${color} ${badge}*\n> *ᴠᴇʀsɪᴏɴ: ${config.version}*`,
+            contextInfo: {
+                mentionedJid: [sender],
+                forwardingScore: 999,
+                isForwarded: true,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: '120363400240662312@newsletter',
+                    newsletterName: "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳",
+                    serverMessageId: 143
+                }
+            }
+        }, { quoted: FakeVCard });
+
+    } catch (e) {
+        console.error("❌ Error in ping command:", e);
+        reply(`⚠️ Error: ${e.message}`);
+    }
+});
+
+
+cmd({
+    pattern: "ping2",
+    use: '.ping',
+    desc: "Check bot's response time.",
+    category: "main",
+    react: "🍂",
+    filename: __filename
 },
 async (conn, mek, m, { from, quoted, sender, reply }) => {
     try {
@@ -53,25 +129,3 @@ async (conn, mek, m, { from, quoted, sender, reply }) => {
         reply(`An error occurred: ${e.message}`);
     }
 });
-
-// ping2 
-
-cmd({
-    pattern: "ping2",
-    desc: "Check bot's response time.",
-    category: "main",
-    react: "🍂",
-    filename: __filename
-},
-async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
-    try {
-        const startTime = Date.now()
-        const message = await conn.sendMessage(from, { text: '*PINGING...*' })
-        const endTime = Date.now()
-        const ping = endTime - startTime
-        await conn.sendMessage(from, { text: `*☣️ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 SPEED : ${ping}ms*` }, { quoted: message })
-    } catch (e) {
-        console.log(e)
-        reply(`${e}`)
-    }
-})
