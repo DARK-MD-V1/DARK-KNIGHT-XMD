@@ -44,7 +44,7 @@ const FakeVCard = {
     },
     message: {
         contactMessage: {
-            displayName: "© your name",
+            displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
             vcard: `BEGIN:VCARD
 VERSION:3.0
 FN:Meta
@@ -57,7 +57,7 @@ END:VCARD`
         
         // Final response
         await conn.sendMessage(from, {
-            text: `> *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ʀᴇsᴘᴏɴsᴇ: ${ping} ms ${randomEmoji}*\n> *sᴛᴀᴛᴜs: ${color} ${badge}*\n> *ᴠᴇʀsɪᴏɴ: ${config.version}*`,
+            text: `> *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ʀᴇsᴘᴏɴsᴇ: ${ping} ms ${randomEmoji}*\n> *sᴛᴀᴛᴜs: ${color} ${badge}*\n> *ᴠᴇʀsɪᴏɴ: 2.0.0*`,
             contextInfo: {
                 mentionedJid: [sender],
                 forwardingScore: 999,
