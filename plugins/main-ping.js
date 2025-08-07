@@ -36,24 +36,19 @@ cmd({
         }
 
         // Fake VCard
-const FakeVCard = {
-    key: {
+        const FakeVCard = {
+      key: {
         fromMe: false,
         participant: "0@s.whatsapp.net",
         remoteJid: "status@broadcast"
-    },
-    message: {
+      },
+      message: {
         contactMessage: {
-            displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
-            vcard: `BEGIN:VCARD
-VERSION:3.0
-FN:Meta
-ORG:META AI;
-TEL;type=CELL;type=VOICE;waid=13135550002:+13135550002
-END:VCARD`
+          displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
+          vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Meta\nORG:META AI;\nTEL;type=CELL;type=VOICE;waid=13135550002:+13135550002\nEND:VCARD`
         }
-    }
-};
+      }
+    };
         
         // Final response
         await conn.sendMessage(from, {
@@ -110,6 +105,22 @@ async (conn, mek, m, { from, quoted, sender, reply }) => {
 
         const text = `> *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 SPEED: ${responseTime.toFixed(2)}ms ${reactionEmoji}*`;
 
+        // Fake VCard
+        const FakeVCard = {
+      key: {
+        fromMe: false,
+        participant: '0@s.whatsapp.net',
+        remoteJid: "status@broadcast"
+      },
+      message: {
+        contactMessage: {
+          displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
+          vcard: "BEGIN:VCARD\nVERSION:3.0\nFN:𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃\nORG:dark;\nTEL;type=CELL;type=VOICE;waid=254700000000:+254 700 000000\nEND:VCARD",
+          jpegThumbnail: Buffer.from([])
+        }
+      }
+    };
+        
         await conn.sendMessage(from, {
             text,
             contextInfo: {
@@ -122,7 +133,7 @@ async (conn, mek, m, { from, quoted, sender, reply }) => {
                     serverMessageId: 143
                 }
             }
-        }, { quoted: mek });
+        }, { quoted: FakeVCard });
 
     } catch (e) {
         console.error("Error in ping command:", e);
