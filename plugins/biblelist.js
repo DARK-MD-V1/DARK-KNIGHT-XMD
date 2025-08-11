@@ -87,6 +87,21 @@ cmd({
 🇱🇰𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳🇱🇰
 `;
 
+       // Fake VCard
+        const FakeVCard = {
+      key: {
+        fromMe: false,
+        participant: "0@s.whatsapp.net",
+        remoteJid: "status@broadcast"
+      },
+      message: {
+        contactMessage: {
+          displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
+          vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Meta\nORG:META AI;\nTEL;type=CELL;type=VOICE;waid=13135550002:+13135550002\nEND:VCARD`
+        }
+      }
+    }; 
+        
         // Remplacer ce lien par l'URL de l'image que tu m'enverras
         const imageUrl = "https://files.catbox.moe/guczru.jpg"; // Remplace "TON_LIEN_IMAGE_ICI" par ton lien d'image
 
@@ -101,7 +116,7 @@ cmd({
             caption: `📖 *BIBLE LIST BY 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*:\n\n` +
                      `Here is the complete list of books in the Bible:\n\n` +
                      bibleList.trim() // Ajout du texte des livres de la Bible
-        }, { quoted: mek });
+        }, { quoted: FakeVCard });
     } catch (error) {
         console.error(error);
         reply("❌ *An error occurred while fetching the Bible list. Please try again.*");
