@@ -37,7 +37,7 @@ https://whatsapp.com/channel/0029VbAM4eo3AzNQZ1WleW3e
 https://chat.whatsapp.com/IGgPW6pTrH14oAWCJALYR5
 
 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-owner🧑‍💻*
-https://wa.me/+94771825192 ?text=Support!
+https://wa.me/+94771825192?text=Support!
 
 ⟣──────────────────⟢
 
@@ -69,7 +69,7 @@ https://wa.me/+94771825192 ?text=Support!
                     isForwarded: true,
                     forwardedNewsletterMessageInfo: {
                         newsletterJid: '120363400240662312@newsletter',
-                        newsletterName: '『 ☣️ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 🦖 』',
+                        newsletterName: '𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳',
                         serverMessageId: 143
                     }
                 }
