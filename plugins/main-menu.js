@@ -45,7 +45,7 @@ cmd({
 ╰──────────────┈⊷
 > ${config.DESCRIPTION}`;
 
-    // Fake VCard
+      // Fake VCard
         const FakeVCard = {
       key: {
         fromMe: false,
@@ -105,7 +105,7 @@ cmd({
             sentMsg = await conn.sendMessage(
                 from,
                 { text: menuCaption, contextInfo: contextInfo },
-                { quoted: mek }
+                { quoted: FakeVCard }
             );
         }
         
