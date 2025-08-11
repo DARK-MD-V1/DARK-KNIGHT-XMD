@@ -3,8 +3,6 @@ const { cmd, commands } = require('../command');
 const os = require("os");
 const { runtime } = require('../lib/functions');
 const axios = require('axios');
-const more = String.fromCharCode(8206)
-const readMore = more.repeat(4001)
 
 cmd({
     pattern: "support",
@@ -31,23 +29,36 @@ let dec = `
 > ☣️ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ☣️ 
 
 ⟣──────────────────⟢
-${readMore}
-\ CHANNEL🛠️\
+
+*CHANNEL 🛠️*
 https://whatsapp.com/channel/0029VbAM4eo3AzNQZ1WleW3e
 
-\ GROUP\ 👥
+*GROUP 👥*
+https://chat.whatsapp.com/IGgPW6pTrH14oAWCJALYR5
 
-[https://chat.whatsapp.com/IGgPW6pTrH14oAWCJALYR5]
-
-\ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃\ *Dev🧑‍💻*
-
-wa.me/+94771825192 ?text=Support!
+*𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-owner🧑‍💻*
+https://wa.me/+94771825192 ?text=Support!
 
 ⟣──────────────────⟢
 
 `;
 
-await conn.sendMessage(
+      // Fake VCard
+        const FakeVCard = {
+      key: {
+        fromMe: false,
+        participant: "0@s.whatsapp.net",
+        remoteJid: "status@broadcast"
+      },
+      message: {
+        contactMessage: {
+          displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
+          vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Meta\nORG:META AI;\nTEL;type=CELL;type=VOICE;waid=13135550002:+13135550002\nEND:VCARD`
+        }
+      }
+    };
+        
+        await conn.sendMessage(
             from,
             {
                 image: { url: `https://files.catbox.moe/brlkte.jpg` },
@@ -63,7 +74,7 @@ await conn.sendMessage(
                     }
                 }
             },
-            { quoted: mek });
+            { quoted: FakeVCard });
         
     } catch (e) {
         console.log(e);
