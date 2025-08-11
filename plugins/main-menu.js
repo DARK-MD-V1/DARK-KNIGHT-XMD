@@ -81,14 +81,14 @@ cmd({
                         caption: menuCaption,
                         contextInfo: contextInfo
                     },
-                    { quoted: mek }
+                    { quoted: FakeVCard }
                 );
             } catch (e) {
                 console.log('Image send failed, falling back to text');
                 return await conn.sendMessage(
                     from,
                     { text: menuCaption, contextInfo: contextInfo },
-                    { quoted: mek }
+                    { quoted: FakeVCard }
                 );
             }
         };
