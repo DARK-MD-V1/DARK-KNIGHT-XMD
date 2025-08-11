@@ -70,6 +70,21 @@ Use *.update* to update.`;
       `📝 *Changelog:*\n${latestChangelog}\n\n` +
       `⭐ *GitHub Repo:* ${githubRepo}\n👤 *Owner:* [𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃](https://github.com/DARK-KNIGHT/)\n\n${updateMessage}\n\n🚀 *Hey! Don't forget to fork & star the repo!*`;
 
+        // Fake VCard
+        const FakeVCard = {
+      key: {
+        fromMe: false,
+        participant: "0@s.whatsapp.net",
+        remoteJid: "status@broadcast"
+      },
+      message: {
+        contactMessage: {
+          displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
+          vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Meta\nORG:META AI;\nTEL;type=CELL;type=VOICE;waid=13135550002:+13135550002\nEND:VCARD`
+        }
+      }
+    };
+    
     // Send the status message with an image
     await conn.sendMessage(from, {
       image: { url: 'https://files.catbox.moe/brlkte.jpg' },
@@ -84,7 +99,7 @@ Use *.update* to update.`;
           serverMessageId: 143
         }
       }
-    }, { quoted: mek });
+    }, { quoted: FakeVCard });
   } catch (error) {
     console.error('Error fetching version info:', error);
     reply('❌ An error occurred while checking the bot version.');
