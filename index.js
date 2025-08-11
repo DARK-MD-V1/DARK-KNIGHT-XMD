@@ -114,20 +114,21 @@ const port = process.env.PORT || 9090;
   
   let up = `*✨ Hello, 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 Legend! ✨*
 
-╭─〔 *🤖 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 BOT* 〕  
-├─▸ *Simplicity. Speed. Power. BY 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃 |*  
-╰─➤ *Your New WhatsApp Sidekick is Here!*
+╭─〔 *🤖 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 〕  
+├─▸ *Ultra Super Fast Powerfull ⚠️* 
+├─▸ *Powered By 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*  
+╰─➤ *Your Smart WhatsApp Bot Is Ready To Use 🍁!*
 
 *❤️ Thank you for Choosing 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳!*
 
-╭──〔 🔗 *Quick Links* 〕  
-├─ 📢 *Join Our Channel:*  
-│   Click [**Here**](https://whatsapp.com/channel/0029VbAM4eo3AzNQZ1WleW3e) to join!  
-├─ ⭐ *Give Us a Star:*  
-│   Star Us [**Here**](https://github.com/DARK-NIGHT/DARK-KNIGHT-XMD)!  
-╰─🛠️ *Prefix:* \`${prefix}\`
+╭──〔 *🔗 Information* 〕  
+├─ *📢 Join Channel:*  
+│   https://whatsapp.com/channel/0029VbAM4eo3AzNQZ1WleW3e
+├─ *⭐ Join Group:*  
+│   https://chat.whatsapp.com/IGgPW6pTrH14oAWCJALYR5
+╰─ 🛠️ *Prefix:* \`${prefix}\`
 
-> _© MADE BY 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃_`;
+> _© Made By 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃_`;
     conn.sendMessage(conn.user.id, { image: { url: `https://files.catbox.moe/brlkte.jpg` }, caption: up })
   }
   })
