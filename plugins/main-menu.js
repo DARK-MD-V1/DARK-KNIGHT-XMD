@@ -586,13 +586,13 @@ cmd({
                                         caption: selectedMenu.content,
                                         contextInfo: contextInfo
                                     },
-                                    { quoted: receivedMsg }
+                                    { quoted: FakeVCard }
                                 );
                             } else {
                                 await conn.sendMessage(
                                     senderID,
                                     { text: selectedMenu.content, contextInfo: contextInfo },
-                                    { quoted: receivedMsg }
+                                    { quoted: FakeVCard }
                                 );
                             }
 
@@ -605,7 +605,7 @@ cmd({
                             await conn.sendMessage(
                                 senderID,
                                 { text: selectedMenu.content, contextInfo: contextInfo },
-                                { quoted: receivedMsg }
+                                { quoted: FakeVCard }
                             );
                         }
 
@@ -616,7 +616,7 @@ cmd({
                                 text: `❌ *Invalid Option!* ❌\n\nPlease reply with a number between 1-11 to select a menu.\n\n*Example:* Reply with "1" for Download Menu\n\n> ${config.DESCRIPTION}`,
                                 contextInfo: contextInfo
                             },
-                            { quoted: receivedMsg }
+                            { quoted: FakeVCard }
                         );
                     }
                 }
