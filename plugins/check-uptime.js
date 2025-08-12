@@ -111,6 +111,21 @@ ${config.DESCRIPTION}`;
         const styles = [style1, style2, style3, style4, style5, style6, style7, style8, style9, style10];
         const selectedStyle = styles[Math.floor(Math.random() * styles.length)];
 
+                // Fake VCard
+        const FakeVCard = {
+      key: {
+        fromMe: false,
+        participant: "0@s.whatsapp.net",
+        remoteJid: "status@broadcast"
+      },
+      message: {
+        contactMessage: {
+          displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
+          vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Meta\nORG:META AI;\nTEL;type=CELL;type=VOICE;waid=13135550002:+13135550002\nEND:VCARD`
+        }
+      }
+    };
+        
         await conn.sendMessage(from, { 
             text: selectedStyle,
             contextInfo: {
@@ -123,7 +138,7 @@ ${config.DESCRIPTION}`;
                     serverMessageId: 143
                 }
             }
-        }, { quoted: mek });
+        }, { quoted: FakeVCard });
 
     } catch (e) {
         console.error("Uptime Error:", e);
