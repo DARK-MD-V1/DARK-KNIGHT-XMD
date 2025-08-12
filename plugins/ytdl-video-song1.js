@@ -44,10 +44,10 @@ try {
 
     let downloadUrl = json.result.download_url;
 
-    await conn.sendMessage(from, { audio: { url: downloadUrl }, mimetype: "audio/mp3" }, { quoted: mek });
+    await conn.sendMessage(from, { audio: { url: downloadUrl }, mimetype: "audio/mpeg" }, { quoted: mek });
     await conn.sendMessage(from, {
         document: { url: downloadUrl },
-        mimetype: "audio/mp3",
+        mimetype: "audio/mpeg",
         fileName: json.result.title + ".mp3",
         caption: "*© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*"
     }, { quoted: mek });
