@@ -27,6 +27,21 @@ async (conn, mek, m, { from }) => {
             }
         });
 
+     // Fake VCard
+        const FakeVCard = {
+      key: {
+        fromMe: false,
+        participant: "0@s.whatsapp.net",
+        remoteJid: "status@broadcast"
+      },
+      message: {
+        contactMessage: {
+          displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
+          vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Meta\nORG:META AI;\nTEL;type=CELL;type=VOICE;waid=13135550002:+13135550002\nEND:VCARD`
+        }
+      }
+    };
+        
         // Send the owner contact message with image and audio
         await conn.sendMessage(from, {
             image: { url: 'https://files.catbox.moe/brlkte.jpg' }, // Image URL from your request
@@ -50,7 +65,7 @@ async (conn, mek, m, { from }) => {
                     serverMessageId: 143
                 }            
             }
-        }, { quoted: mek });
+        }, { quoted: FakeVCard });
 
     } catch (error) {
         console.error(error);
