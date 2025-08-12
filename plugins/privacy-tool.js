@@ -28,7 +28,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃◈┃• getprivacy - View current privacy settings
 ┃◈┃• getpp - Get user's profile picture
 ┃◈┃
-┃◈┃*Options for privacy commands:*
+┃◈┃ *Options for privacy commands:*
 ┃◈┃• all - Everyone
 ┃◈┃• contacts - My contacts only
 ┃◈┃• contact_blacklist - Contacts except blocked
@@ -38,6 +38,21 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ╰──────────────┈⊷
 *Note:* Most commands are owner-only`;
 
+         // Fake VCard
+        const FakeVCard = {
+      key: {
+        fromMe: false,
+        participant: "0@s.whatsapp.net",
+        remoteJid: "status@broadcast"
+      },
+      message: {
+        contactMessage: {
+          displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
+          vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Meta\nORG:META AI;\nTEL;type=CELL;type=VOICE;waid=13135550002:+13135550002\nEND:VCARD`
+        }
+      }
+    };       
+        
         await conn.sendMessage(
             from,
             {
@@ -54,7 +69,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
                     }
                 }
             },
-            { quoted: mek }
+            { quoted: FakeVCard }
         );
 
     } catch (e) {
