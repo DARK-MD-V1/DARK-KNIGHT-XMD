@@ -10,14 +10,7 @@
     "SESSION_ID": {
       "description": "Put the session-id here.",
       "required": true,
-      "value": ""
-    },  
-     
-    "MODE": {
-      "description": "select your bot work type public-private-inbox-group.",
-      "required": false,
-      "value": "public"
-      
+      "value": "" 
     }
 
 },
