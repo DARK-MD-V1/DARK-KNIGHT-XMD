@@ -48,4 +48,3 @@ cmd({
         reply("❌ An error occurred while checking the country code.");
     }
 });
-  
