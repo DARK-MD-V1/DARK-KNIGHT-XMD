@@ -24,13 +24,7 @@
       "required": false,
       "value": "public"
       
-    },
-
-    "OWNER_NUMBER": {
-      "description": "put the owner number for bot.",
-      "required": false,
-      "value": "94771825192"
-     }
+    }
 
 },
 
