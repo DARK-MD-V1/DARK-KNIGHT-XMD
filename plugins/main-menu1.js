@@ -250,38 +250,43 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 
-╭━━〔 🎨 *Logo Menu* 〕━━┈⊷
+╭━━━〔 🎨 *Logo Menu* 〕━━━┈⊷
 ┃★╭──────────────
-┃★│ • neonlight
-┃★│ • blackpink
 ┃★│ • 3dcomic
-┃★│ • america
-┃★│ • naruto
-┃★│ • sadgirl
-┃★│ • clouds
-┃★│ • futuristic
 ┃★│ • 3dpaper
-┃★│ • eraser
-┃★│ • sunset
-┃★│ • leaf
-┃★│ • galaxy
-┃★│ • sans
-┃★│ • boom
-┃★│ • hacker
-┃★│ • devilwings
-┃★│ • nigeria
-┃★│ • bulb
+┃★│ • america
 ┃★│ • angelwings
-┃★│ • zodiac
-┃★│ • luxury
-┃★│ • paint
-┃★│ • frozen
-┃★│ • castle
-┃★│ • tatoo
-┃★│ • valorant
 ┃★│ • bear
-┃★│ • typography
+┃★│ • bulb
+┃★│ • boom
 ┃★│ • birthday
+┃★│ • blackpink
+┃★│ • cat
+┃★│ • clouds
+┃★│ • castle
+┃★│ • deadpool
+┃★│ • dragonball
+┃★│ • devilwings
+┃★│ • eraser
+┃★│ • frozen
+┃★│ • futuristic
+┃★│ • galaxy
+┃★│ • hacker
+┃★│ • leaf
+┃★│ • luxury
+┃★│ • naruto
+┃★│ • nigeria
+┃★│ • neonlight
+┃★│ • paint
+┃★│ • pornhub
+┃★│ • sans
+┃★│ • sunset
+┃★│ • sadgirl
+┃★│ • thor
+┃★│ • tatoo
+┃★│ • typography
+┃★│ • valorant
+┃★│ • zodiac
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 
@@ -338,6 +343,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • creact
 ┃★│ • setsudo
 ┃★│ • delsudo
+┃★│ • listsudo
 ┃★│ • vv
 ┃★│ • vv1
 ┃★│ • vv3
