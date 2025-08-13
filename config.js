@@ -33,7 +33,7 @@ STICKER_NAME: process.env.STICKER_NAME || "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷
 // type sticker pack name 
 CUSTOM_REACT: process.env.CUSTOM_REACT || "false",
 // make this true for custum emoji react    
-CUSTOM_REACT_EMOJIS: process.env.CUSTOM_REACT_EMOJIS || "💝,💖,💗,❤️‍🩹,❤️,🧡,💛,💚,💙,💜,🤎,🖤,🤍",
+CUSTOM_REACT_EMOJIS: process.env.CUSTOM_REACT_EMOJIS || "👍,❤️,😂,😮,😢,🙏,🥲,🙂,😔",
 // chose custom react emojis by yourself 
 DELETE_LINKS: process.env.DELETE_LINKS || "true",
 // automatic delete links witho remove member 
@@ -51,6 +51,8 @@ READ_MESSAGE: process.env.READ_MESSAGE || "false",
 // Turn true or false for automatic read msgs
 AUTO_REACT: process.env.AUTO_REACT || "false",
 // make this true or false for auto react on all msgs
+HEART_REACT: process.env.HEART_REACT || "false",
+// make this true or false for heart react on all msgs
 ANTI_BAD: process.env.ANTI_BAD || "false",
 // false or true for anti bad words  
 MODE: process.env.MODE || "public",
