@@ -176,24 +176,6 @@
       "description": "change it to -same- if you want to resend deleted message in same chat",
       "required": false,
       "value": "log"
-    }, 
-
-    "ADMIN_EVENTS": {
-      "description": "make it true if want know who promote or demote a member .",
-      "required": false,
-      "value": "false"
-    },
-
-    "WELCOME": {
-      "description": "make it true if want goodbye and welcome message in groups.",
-      "required": false,
-      "value": "true"
-    },
-
-    "READ_MESSAGE": {
-      "description": "Make it true if you want bot read your all sms just now.",
-      "required": false,
-      "value": "false"
     }
 
 },
