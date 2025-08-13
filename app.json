@@ -13,12 +13,6 @@
       "value": ""
     },  
     
-    "STICKER_NAME": {
-      "description": "type your sticker pack name.",
-      "required": false,
-      "value": "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳"
-    }, 
-      
     "PREFIX": {
       "description": "paste your bot prefix note! Don't apply null prefix.",
       "required": false,
