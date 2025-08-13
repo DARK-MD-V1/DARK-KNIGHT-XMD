@@ -556,3 +556,26 @@ cmd({
         return reply("*🔥 Example: .heartreact on* or *[.heartreact off]*");
     }
 });
+
+cmd({
+    pattern: "customreact",
+    react: "💖",
+    alias: ["creact"],
+    desc: "Enable or disable custom react.",
+    category: "settings",
+    filename: __filename,
+}, async (conn, mek, m, { from, args, isOwner, reply }) => {
+    if (!isOwner) return reply("*📛 ᴏɴʟʏ ᴛʜᴇ ᴏᴡɴᴇʀ ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ!*");
+
+    const option = args[0]?.toLowerCase();
+    
+    if (option === "on" || option === "true") {
+        config.CUSTOM_REACT = "true"; // Set to "true" for enabling
+        return reply("❤️ Custom react is now enabled.");
+    } else if (option === "off" || option === "false") {
+        config.CUSTOM_REACT = "false"; // Set to "false" for disabling
+        return reply("💔 Custom react is now disabled.");
+    } else {
+        return reply("*🔥 Example: .customreact on* or *[.customreact off]*");
+    }
+});
