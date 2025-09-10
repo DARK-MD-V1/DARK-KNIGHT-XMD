@@ -1,4 +1,4 @@
-const { cmd, commands } = require('../lib/command');
+const { cmd, commands } = require('../command');
 const yts = require('yt-search');
 const { fetchJson } = require('../lib/functions');
 const { ytsearch } = require('@dark-yasiya/yt-dl.js');
@@ -20,7 +20,7 @@ function convertYouTubeLink(q) {
 }
 
 cmd({
-    pattern: "video3",
+    pattern: "video5",
     alias: ["ytv3"],
     desc: "To download songs.",
     react: "🎬",
@@ -86,7 +86,7 @@ await conn.sendMessage(from, { delete: sentMsg.key });
 });
 
 cmd({
-    pattern: "video",
+    pattern: "video6",
     alias: ["ytv","mp4"],
     desc: "To download songs.",
     react: "🎬",
