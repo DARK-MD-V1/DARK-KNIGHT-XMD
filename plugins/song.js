@@ -1,4 +1,4 @@
-const { cmd, commands } = require('../lib/command');
+const { cmd, commands } = require('../command');
 const yts = require('yt-search');
 const { fetchJson } = require('../lib/functions');
 const ddownr = require('denethdev-ytmp3');
@@ -20,7 +20,7 @@ function convertYouTubeLink(q) {
 }
 
 cmd({
-    pattern: "song",
+    pattern: "song5",
     alias: "play",
     desc: "To download songs.",
     react: "🎵",
