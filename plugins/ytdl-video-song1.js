@@ -61,7 +61,7 @@ try {
 //====================video_dl=======================
 
 cmd({
-    pattern: "videp2",
+    pattern: "video2",
     alias: ["mp4"],
     desc: "To download videos.",
     react: "🎥",
