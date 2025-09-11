@@ -19,7 +19,7 @@ try {
     const url = data.url;
 
     let desc = `
-*⫷* 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 download⦁⫸*
+*⫷⦁𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 download⦁⫸*
 
 🎵 *MUSⵊC FOUND!* 
 
@@ -37,7 +37,7 @@ try {
     await conn.sendMessage(from, { image: { url: data.thumbnail }, caption: desc }, { quoted: mek });
 
     // Use new API
-    let apiRes = await fetch(`https://api.giftedtech.web.id/api/download/dlmp3?apikey=gifted&url=${encodeURIComponent(url)}`);
+    let apiRes = await fetch(`https://api.giftedtech.web.id/api/download/ytmp3?apikey=gifted&url=${encodeURIComponent(url)}`);
     let json = await apiRes.json();
 
     if (!json.success) return reply("Failed to fetch audio from new API");
