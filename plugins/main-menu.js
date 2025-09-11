@@ -186,15 +186,10 @@ cmd({
 ┃★│ • tt2
 ┃★│ • tiks
 ┃★│ • twitter
-┃★│ • play
-┃★│ • play2
 ┃★│ • song
-┃★│ • song1
 ┃★│ • song2
 ┃★│ • video
-┃★│ • video1
 ┃★│ • video2
-┃★│ • video3
 ┃★│ • xnxx
 ┃★│ • xvideo 
 ┃★│ • porn
