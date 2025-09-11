@@ -10,12 +10,11 @@ function replaceYouTubeID(url) {
 }
 
 cmd({
-    pattern: "song1",
-    alias: ["s"],
+    pattern: "song",
     react: "🎵",
-    desc: "Download Ytmp3",
+    desc: "Download Ytmp4",
     category: "download",
-    use: ".song2 <Text or YT URL>",
+    use: ".song <Text or YT URL>",
     filename: __filename
 }, async (conn, m, mek, { from, q, reply }) => {
     try {
@@ -42,8 +41,8 @@ cmd({
             `👤 *Author:* ${author?.name || "Unknown"}\n` +
             `🖇 *Url:* ${url || "Unknown"}\n\n` +
             `🔽 *Reply with your choice:*\n` +
-            `1 *Audio Type* 🎵\n` +
-            `2 *Document Type* 📁\n\n` +
+            `1️⃣ *Audio Type* 🎵\n` +
+            `2️⃣ *Document Type* 📁\n\n` +
             `${config.FOOTER || "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳"}`;
 
         const sentMsg = await conn.sendMessage(from, { image: { url: image }, caption: info }, { quoted: mek });
@@ -102,12 +101,11 @@ cmd({
 
 
 cmd({
-    pattern: "video4",
-    alias: ["s"],
-    react: "🎵",
-    desc: "Download Ytmp3",
+    pattern: "video",
+    react: "🎬",
+    desc: "Download Ytmp4",
     category: "download",
-    use: ".song2 <Text or YT URL>",
+    use: ".video <Text or YT URL>",
     filename: __filename
 }, async (conn, m, mek, { from, q, reply }) => {
     try {
@@ -126,16 +124,16 @@ cmd({
 
         const { url, title, image, timestamp, ago, views, author } = data.results[0];
 
-        let info = `🍄 *𝚂𝙾𝙽𝙶 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳𝙴𝚁* 🍄\n\n` +
-            `🎵 *Title:* ${title || "Unknown"}\n` +
+        let info = `🍄 *video 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳𝙴𝚁* 🍄\n\n` +
+            `🎬 *Title:* ${title || "Unknown"}\n` +
             `⏳ *Duration:* ${timestamp || "Unknown"}\n` +
             `👀 *Views:* ${views || "Unknown"}\n` +
             `🌏 *Release Ago:* ${ago || "Unknown"}\n` +
             `👤 *Author:* ${author?.name || "Unknown"}\n` +
             `🖇 *Url:* ${url || "Unknown"}\n\n` +
             `🔽 *Reply with your choice:*\n` +
-            `1 *Audio Type* 🎵\n` +
-            `2 *Document Type* 📁\n\n` +
+            `1️⃣ *Video Type* 🎬\n` +
+            `2️⃣ *Document Type* 📁\n\n` +
             `${config.FOOTER || "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳"}`;
 
         const sentMsg = await conn.sendMessage(from, { image: { url: image }, caption: info }, { quoted: mek });
