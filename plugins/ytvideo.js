@@ -69,15 +69,15 @@ cmd({
                 if (userReply === "1.1") {
                     msg = await conn.sendMessage(from, { text: "⏳ Processing..." }, { quoted: mek });
                     response = await dy_scrap.ytmp4(`https://youtube.com/watch?v=${id}`);
-                    let downloadUrl = response?.result?.download?.find(v => v.quality === "360p")?.url;
-                    if (!downloadUrl) return await reply("❌ 360p Download link not found!");
+                    let downloadUrl = response?.result?.download?.find(v => v.quality === "360p,480p,720p")?.url;
+                    if (!downloadUrl) return await reply("❌ Download link not found!");
                     type = { video: { url: downloadUrl }, mimetype: "video/mp4" };
                     
                 } else if (userReply === "1.2") {
                     msg = await conn.sendMessage(from, { text: "⏳ Processing..." }, { quoted: mek });
                     response = await dy_scrap.ytmp4(`https://youtube.com/watch?v=${id}`);
-                    let downloadUrl = response?.result?.download?.find(v => v.quality === "360p")?.url;
-                    if (!downloadUrl) return await reply("❌ 360p Download link not found!");
+                    let downloadUrl = response?.result?.download?.find(v => v.quality === "360p,480p,720p")?.url;
+                    if (!downloadUrl) return await reply("❌ Download link not found!");
                     type = { document: { url: downloadUrl }, fileName: `${title}.mp4`, mimetype: "video/mp4", caption: title };
                     
                 } else { 
