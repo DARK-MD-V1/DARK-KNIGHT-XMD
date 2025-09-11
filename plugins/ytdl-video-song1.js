@@ -19,7 +19,7 @@ try {
     const url = data.url;
 
     let desc = `
-*⫷* 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 MUSⵊC DOWNLOADⵊNG⦁⫸*
+*⫷* 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 download⦁⫸*
 
 🎵 *MUSⵊC FOUND!* 
 
@@ -29,7 +29,7 @@ try {
 ➥ *Uploaded On:* ${data.ago} 
 ➥ *Link:* ${data.url} 
 
-🎧 *ENJOY THE MUSIC BROUGHT TO YOU!*
+🎧 *MUSIC DOWNLOAD*
 
 > *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 
 `;
@@ -61,8 +61,8 @@ try {
 //====================video_dl=======================
 
 cmd({
-    pattern: "darama",
-    alias: ["video2"],
+    pattern: "videp2",
+    alias: ["mp4"],
     desc: "To download videos.",
     react: "🎥",
     category: "download",
@@ -77,7 +77,7 @@ try {
     const url = data.url;
 
     let desc = `
-*⫷⦁𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 DOWNLOADⵊNG⦁⫸*
+*⫷⦁𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 download⦁⫸*
 
 🎥 *VⵊDEO FOUND!* 
 
@@ -87,7 +87,7 @@ try {
 ➥ *Uploaded On:* ${data.ago} 
 ➥ *Link:* ${data.url} 
 
-🎬 *ENJOY THE VIDEO BROUGHT TO YOU!*
+🎬 *VIDEO DOWNLOAD*
 
 > *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 
 `;
