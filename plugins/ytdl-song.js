@@ -5,14 +5,14 @@ const axios = require("axios");
 cmd({
     pattern: "song22",
     alias: ["ytmp3"],
-    desc: "To download songs.",
+    desc: "To download songs using Dark-Yasiya API.",
     react: "🎵",
     category: "download",
     filename: __filename
 },
 async(conn, mek, m,{from, q, pushname, reply}) => {
 try {
-    if (!q) return reply("👉 මට ගීතයේ නම හෝ YouTube link එක දෙන්න.");
+    if (!q) return reply("👉 ගීතයේ නම හෝ YouTube link එක දෙන්න.");
 
     reply("🔎 ගීතය සොයමින් පවතී...");
 
@@ -39,17 +39,17 @@ try {
 
     reply("⬇️ ගීතය download කරමින් පවතී...");
 
-    // API call with axios
+    // Dark-Yasiya API
     let apiRes = await axios.get(
-        `https://api.giftedtech.web.id/api/download/ytmp3?apikey=gifted&url=${encodeURIComponent(url)}`
+        `https://www.dark-yasiya-api.site/download/ytmp3?url=${encodeURIComponent(url)}`
     );
     let json = apiRes.data;
 
-    if (!json || !json.result || !json.result.download_url) {
+    if (!json || !json.url) {
         return reply("❌ ගීතය ලබාගැනීමට නොහැකි විය. තවත් උත්සාහ කරන්න.");
     }
 
-    let downloadUrl = json.result.download_url;
+    let downloadUrl = json.url;
 
     // Send audio as voice
     await conn.sendMessage(from, { 
@@ -61,8 +61,8 @@ try {
     await conn.sendMessage(from, {
         document: { url: downloadUrl },
         mimetype: "audio/mpeg",
-        fileName: json.result.title + ".mp3",
-        caption: "✅ *Downloaded by DARK-KNIGHT-XMD*"
+        fileName: data.title + ".mp3",
+        caption: "✅ *Downloaded via Dark-Yasiya API*"
     }, { quoted: mek });
 
 } catch (e) {
