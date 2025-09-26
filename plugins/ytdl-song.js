@@ -36,7 +36,16 @@ cmd({
 
         await conn.sendMessage(from, {
             image: { url: result.thumbnail },
-            caption: `🎬 *audio Found:*\n\n📌 *Title:* ${title}\n⏱️ *Duration:* ${timestamp}\n🔗 *Link:* ${url}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+            caption: `╸╸╸╸╸╸╸╸╸╸╸╸╸
+        
+*ℹ️ Title :* \`${data.title}\`
+*⏱️Duration :* ${data.timestamp} 
+*🧬 Views :* ${data.views}
+📅 *Released Date :* ${data.ago}
+ 
+╸╸╸╸╸╸╸╸╸╸╸╸╸
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: mek });
 
         await conn.sendMessage(from, {
