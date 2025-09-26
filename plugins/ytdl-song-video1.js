@@ -56,7 +56,7 @@ cmd({
             document : { url: result.download },
             mimetype: "audio/mpeg",
             ptt: false,
-            fileName: ${title}.mp3
+            fileName: data.result.title + ".mp3",
         }, { quoted: mek });        
 
     } catch (error) {
