@@ -106,7 +106,6 @@ cmd({
         await conn.sendMessage(from, {
             video: { url: result.download },
             mimetype: "video/mp4",
-            ptt: false,
         }, { quoted: mek });
 
     } catch (error) {
