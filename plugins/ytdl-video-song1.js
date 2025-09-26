@@ -20,7 +20,7 @@ try {
     let desc = `
 *⫷⦁𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 download⦁⫸*
 
-🎵 *MUSⵊC FOUND!* 
+🎵 *song download!* 
 
 ➥ *Title:* ${data.title} 
 ➥ *Duration:* ${data.timestamp} 
@@ -28,15 +28,13 @@ try {
 ➥ *Uploaded On:* ${data.ago} 
 ➥ *Link:* ${data.url} 
 
-🎧 *MUSIC DOWNLOAD*
-
 > *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 
 `;
 
     await conn.sendMessage(from, { image: { url: data.thumbnail }, caption: desc }, { quoted: mek });
 
     // Use new API
-    let apiRes = await fetch(`https://api.giftedtech.web.id/api/download/ytmp3?apikey=gifted&url=${encodeURIComponent(url)}`);
+    let apiRes = await fetch(`https://api.giftedtech.web.id/api/download/ytaudio?apikey=gifted&format=128kbps&url=${encodeURIComponent(url)}`);
     let json = await apiRes.json();
 
     if (!json.success) return reply("Failed to fetch audio from new API");
@@ -61,7 +59,6 @@ try {
 
 cmd({
     pattern: "video2",
-    alias: ["mp4"],
     desc: "To download videos.",
     react: "🎥",
     category: "download",
@@ -78,7 +75,7 @@ try {
     let desc = `
 *⫷⦁𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 download⦁⫸*
 
-🎥 *VⵊDEO FOUND!* 
+🎥 *video download!* 
 
 ➥ *Title:* ${data.title} 
 ➥ *Duration:* ${data.timestamp} 
@@ -86,15 +83,13 @@ try {
 ➥ *Uploaded On:* ${data.ago} 
 ➥ *Link:* ${data.url} 
 
-🎬 *VIDEO DOWNLOAD*
-
 > *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 
 `;
 
     await conn.sendMessage(from, { image: { url: data.thumbnail }, caption: desc }, { quoted: mek });
 
     // Use new API
-    let apiRes = await fetch(`https://api.giftedtech.web.id/api/download/dlmp4?apikey=gifted&url=${encodeURIComponent(url)}`);
+    let apiRes = await fetch(`https://api.giftedtech.web.id/api/download/ytmp4?apikey=gifted&url=${encodeURIComponent(url)}`);
     let json = await apiRes.json();
 
     if (!json.success) return reply("Failed to fetch video from new API");
