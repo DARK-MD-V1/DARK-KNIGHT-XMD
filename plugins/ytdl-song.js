@@ -37,10 +37,11 @@ cmd({
             image: { url: result.thumbnail },
             caption: `╸╸╸╸╸╸╸╸╸╸╸╸╸
         
-*ℹ️ Title :* \`${data.title}\`
-*⏱️Duration :* ${data.timestamp} 
-*🧬 Views :* ${data.views}
+ℹ️ *Title :* \`${data.title}\`
+⏱️ *Duration :* ${data.timestamp} 
+🧬 *Views :* ${data.views}
 📅 *Released Date :* ${data.ago}
+🖇️ *Link :* ${data.url}
  
 ╸╸╸╸╸╸╸╸╸╸╸╸╸
 
@@ -64,10 +65,9 @@ cmd({
     }
 });
 
-
 cmd({
     pattern: "video1",
-    desc: "Download YouTube MP4",
+    desc: "To download videos.",
     react: "🎥",
     category: "download",
     filename: __filename
@@ -82,20 +82,22 @@ try {
 
     let desc = `
 ╸╸╸╸╸╸╸╸╸╸╸╸╸
-        
-*ℹ️ Title :* \`${data.title}\`
-*⏱️Duration :* ${data.timestamp} 
-*🧬 Views :* ${data.views}
-📅 *Released Date :* ${data.ago}
- 
+
+ℹ️ *Title :* ${data.title} 
+⏱️ *Duration :* ${data.timestamp} 
+🧬 *Views :* ${data.views} 
+📅 *Uploaded On :* ${data.ago} 
+🖇️ *Link :* ${data.url} 
+
 ╸╸╸╸╸╸╸╸╸╸╸╸╸
 
-> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+`;
 
-    await conn.sendMessage(from, { image: { url: daa.thumbnail }, caption: desc }, { quoted: mek });
+    await conn.sendMessage(from, { image: { url: data.thumbnail }, caption: desc }, { quoted: mek });
 
     // Use new API
-    let apiRes = await fetch(`https://api.giftedtech.web.id/api/download/dlmp4?apikey=gifted&url=${encodeURIComponent(url)}`);
+    let apiRes = await fetch(`https://api.giftedtech.web.id/api/download/ytmp4?apikey=gifted&url=${encodeURIComponent(url)}`);
     let json = await apiRes.json();
 
     if (!json.success) return reply("Failed to fetch video from new API");
@@ -115,4 +117,3 @@ try {
     reply(`_Hi ${pushname}, retry later_`);
 }
 })
-    
