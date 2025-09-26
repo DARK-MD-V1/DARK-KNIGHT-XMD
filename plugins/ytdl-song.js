@@ -1,5 +1,5 @@
 const { cmd } = require('../command');
-const { ytsearch } = require('@dark-yasiya/yt-dl.js');
+const { yts } = require('yt-search');
 const fetch = require("node-fetch");
 const path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
