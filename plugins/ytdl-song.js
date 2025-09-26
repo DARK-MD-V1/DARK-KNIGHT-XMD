@@ -80,7 +80,7 @@ cmd({
         const ytUrl = data.url;
         const ago = data.ago;
 
-        const api = `https://sadiya-tech-apis.vercel.app/download/ytdl?url=${ytUrl}&format=480&apikey=sadiya`;
+        const api = `https://yt-five-tau.vercel.app/download?q=${ytUrl}&format=380`;
         const { data: apiRes } = await axios.get(api);
 
         if (!apiRes?.status || !apiRes.result?.download) {
