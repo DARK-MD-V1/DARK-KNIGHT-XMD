@@ -2,19 +2,18 @@ const {cmd , commands} = require('../command')
 const yts = require('yt-search')
 const axios = require("axios");
 
-
 cmd({
     pattern: "song1",
-    react: "📽",
+    react: "🎵",
     desc: "Download YouTube MP3",
     category: "download",
     use: ".song1 <query>",
     filename: __filename
 }, async (conn, mek, m, { from, reply, q }) => {
     try {
-        if (!q) return reply("❓ What video do you want to download? Please provide a search term.");
+        if (!q) return reply("❓ What song do you want to download?");
 
-        await reply("🔍 *Searching for your audio, please wait...*");
+        await reply("🔍 *Searching for your song, please wait...*");
 
         const yts = require('yt-search');
         const search = await yts(q);
@@ -52,7 +51,6 @@ cmd({
             audio: { url: result.download },
             mimetype: "audio/mpeg",
             ptt: false,
-            caption: `🎬 *audio Downloaded Successfully!*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: mek });
 
     } catch (error) {
