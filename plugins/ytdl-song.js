@@ -13,8 +13,6 @@ cmd({
     try {
         if (!q) return reply("❓ What song do you want to download?");
 
-        await reply("🔍 *Searching for your song, please wait...*");
-
         const yts = require('yt-search');
         const search = await yts(q);
         
@@ -97,7 +95,7 @@ try {
     await conn.sendMessage(from, { image: { url: data.thumbnail }, caption: desc }, { quoted: mek });
 
     // Use new API
-    let apiRes = await fetch(`https://api.giftedtech.web.id/api/download/ytmp4?apikey=gifted&url=${encodeURIComponent(url)}`);
+    let apiRes = await fetch(`https://api.giftedtech.web.id/api/download/dlmp4?apikey=gifted&url=${encodeURIComponent(url)}`);
     let json = await apiRes.json();
 
     if (!json.success) return reply("Failed to fetch video from new API");
@@ -114,6 +112,6 @@ try {
 
 } catch (e) {
     console.log(e);
-    reply(`_Hi ${pushname}, retry later_`);
+    reply(`❌ An error occurred`);
 }
 })
