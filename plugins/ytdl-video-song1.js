@@ -36,7 +36,7 @@ try {
     await conn.sendMessage(from, { image: { url: data.thumbnail }, caption: desc }, { quoted: mek });
 
     // Use new API
-    let apiRes = await fetch(`https://api.giftedtech.web.id/api/download/ytmusic?apikey=gifted&quality=128kbps&url=${encodeURIComponent(url)}`);
+    let apiRes = await fetch(`https://api.giftedtech.web.id/api/download/ytmp3?apikey=gifted&url=${encodeURIComponent(url)}`);
     let json = await apiRes.json();
 
     if (!json.success) return reply("Failed to fetch audio from new API");
