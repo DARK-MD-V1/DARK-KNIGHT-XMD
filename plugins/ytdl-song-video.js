@@ -1,5 +1,6 @@
 const config = require('../config');
 const { cmd } = require('../command');
+const yts = require('yt-search')
 const DY_SCRAP = require('@dark-yasiya/scrap');
 const dy_scrap = new DY_SCRAP();
 
@@ -187,5 +188,71 @@ cmd({
         console.error(error);
         await conn.sendMessage(from, { react: { text: '❌', key: mek.key } });
         await reply(`❌ *An error occurred:* ${error.message || "Error!"}`);
+    }
+});
+
+cmd({
+    pattern: "song1",
+    react: "🎵",
+    desc: "Download Ytmp3",
+    category: "download",
+    use: ".song <Text or YT URL>",
+    filename: __filename
+}, async (conn, m, mek, { from, q, reply }) => {
+    try {
+        if (!q) return await reply("❌ Please provide a Query or Youtube URL!");
+        }
+
+        const yts = require('yt-search');
+        const search = await yts(q);
+
+        if (!search.videos.length) {
+            return reply("*ගීතය හමුනොවුණා... ❌*");
+        }
+
+        const data = search.videos[0];
+        const ytUrl = data.url;
+        const ago = data.ago;
+
+        const api = `https://sadiya-tech-apis.vercel.app/download/ytdl?url=${ytUrl}&format=mp3&apikey=sadiya`;
+        const { data: apiRes } = await axios.get(api);
+
+        if (!apiRes?.status || !apiRes.result?.download) {
+            return reply("❌ ගීතය බාගත කළ නොහැක. වෙනත් එකක් උත්සහ කරන්න!");
+        }
+
+        const result = apiRes.result;
+
+        const caption = `╸╸╸╸╸╸╸╸╸╸╸╸╸
+        
+*ℹ️ Title :* \`${data.title}\`
+*⏱️Duration :* ${data.timestamp} 
+*🧬 Views :* ${data.views}
+📅 *Released Date :* ${data.ago}
+ 
+╸╸╸╸╸╸╸╸╸╸╸╸╸`;
+
+        await socket.sendMessage(sender, {
+            image: { url: result.thumbnail },
+            caption: caption,
+    contextInfo: fakeForward,
+}, {
+    quoted: mek
+});
+    
+
+        await socket.sendMessage(sender, {
+            audio: { url: result.download },
+            mimetype: "audio/mpeg",
+            ptt: false,
+          contextInfo: fakeForward,
+}, {
+    quoted: mek
+});
+  
+
+    } catch (e) {
+        console.error(e);
+        reply("*ඇතැම් දෝෂයකි! පසුව නැවත උත්සහ කරන්න.*");
     }
 });
