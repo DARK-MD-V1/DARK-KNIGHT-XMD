@@ -35,7 +35,7 @@ cmd({
             image: { url: result.thumbnail },
             caption: `╸╸╸╸╸╸╸╸╸╸╸╸╸
         
-ℹ️ *Title :* \`${data.title}\`
+ℹ️ *Title :* ${data.title}
 ⏱️ *Duration :* ${data.timestamp} 
 🧬 *Views :* ${data.views}
 📅 *Released Date :* ${data.ago}
@@ -66,7 +66,7 @@ cmd({
 cmd({
     pattern: "video1",
     desc: "To download videos.",
-    react: "🎥",
+    react: "🎬",
     category: "download",
     filename: __filename
 },
