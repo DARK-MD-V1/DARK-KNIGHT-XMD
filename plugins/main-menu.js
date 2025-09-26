@@ -187,8 +187,10 @@ cmd({
 ┃★│ • tiks
 ┃★│ • twitter
 ┃★│ • song
+┃★│ • song1
 ┃★│ • song2
 ┃★│ • video
+┃★│ • video1
 ┃★│ • video2
 ┃★│ • xnxx
 ┃★│ • xvideo 
