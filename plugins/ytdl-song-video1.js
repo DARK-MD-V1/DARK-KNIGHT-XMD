@@ -55,7 +55,7 @@ cmd({
         await conn.sendMessage(from, {
             document : { url: result.download },
             mimetype: "audio/mpeg",
-            ptt: false,
+            fileName: `${data.title}.mp3`
         }, { quoted: mek });        
 
     } catch (error) {
