@@ -1,8 +1,6 @@
 const { cmd } = require('../command');
 const { fetchJson } = require('../lib/functions');
 
-const apilink = 'https://www.dark-yasiya-api.site/'; 
-
 cmd({
     pattern: "xvideo",
     alias: ["xvdl", "xnxx"],
@@ -17,7 +15,7 @@ async (conn, mek, m, { from, quoted, q, reply }) => {
         if (!q) return await reply("*Please provide a search query!*");
 
         // XVideo search
-        const xv_list = await fetchJson(`${apilink}/search/xvideo?text=${q}`);
+        const xv_list = await fetchJson(`https://api.giftedtech.web.id/api/download/xvideosdl?apikey=gifted&url=${q}`);
         if (!xv_list.result || xv_list.result.length === 0) return await reply("*No results found!*");
 
         const videos = xv_list.result.slice(0, 30); // Limit to 30 results
@@ -75,7 +73,7 @@ async (conn, mek, m, { from, quoted, q, reply }) => {
 
    
                 await conn.sendMessage(from, { react: { text: '⬇️', key: replyMek.key } });
-                const xv_info = await fetchJson(`${apilink}/download/xvideo?url=${selectedVideo.url}`);
+                const xv_info = await fetchJson(`https://api.giftedtech.web.id/api/download/xvideosdl?apikey=gifted&url=${selectedVideo.url}`);
                 if (!xv_info.result || !xv_info.result.dl_link) {
                     await conn.sendMessage(from, { text: "*Failed to download! Try another video.*" }, { quoted: replyMek });
                     return;
