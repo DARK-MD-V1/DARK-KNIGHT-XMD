@@ -194,8 +194,6 @@ cmd({
 ┃★│ • video2
 ┃★│ • xnxx
 ┃★│ • xvideo 
-┃★│ • porn
-┃★│ • xporn
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 > ${config.DESCRIPTION}`,
