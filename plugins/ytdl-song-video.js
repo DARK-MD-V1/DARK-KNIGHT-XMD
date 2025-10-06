@@ -5,8 +5,7 @@ const config = require('../config');
 const { ytsearch } = require('@dark-yasiya/yt-dl.js');
 
 cmd({ 
-    pattern: "video", 
-    alias: ["mp4"], 
+    pattern: "video",
     react: "🎥", 
     desc: "Download YouTube video", 
     category: "main", 
@@ -29,18 +28,18 @@ cmd({
             return reply("Failed to fetch the video. Please try again later.");
         }
 
-        let ytmsg = `📹 *Video Details*
-🎬 *Title:* ${yts.title}
-⏳ *Duration:* ${yts.timestamp}
-👀 *Views:* ${yts.views}
-👤 *Author:* ${yts.author.name}
-🔗 *Link:* ${yts.url}
+        let ytmsg = `
+🔖 *Title:* ${yts.title}
+⏱️ *Duration:* ${yts.timestamp}
+🧬 *Views:* ${yts.views}
+📅 *Released Date :* ${yts.ago}
+🖇️ *Link:* ${yts.url}
 
 *Choose download format:*
-1. 📄 Document (no preview)
-2. ▶️ Normal Video (with preview)
+1| ▶️ Normal Video 
+2| 📄 document Video
 
-_Reply to this message with 1 or 2 to download._`;
+Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
         // Removed channel/newsletter info here
         let contextInfo = {
@@ -129,7 +128,7 @@ cmd({
  📅 *Released Date :* ${video.ago}
  🖇️ *Link :* ${video.url}
 
- 📌 පොඩ්ඩක් වෙලා ඉන්න song එක එනකම්.
+ 📌 Song එක එනකම් පොඩ්ඩක් වෙලා ඉන්න.
 
  Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
  `}, { quoted: m });
