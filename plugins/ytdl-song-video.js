@@ -6,6 +6,7 @@ const { ytsearch } = require('@dark-yasiya/yt-dl.js');
 
 cmd({ 
     pattern: "video", 
+    alias: ["mp4"], 
     react: "🎥", 
     desc: "Download YouTube video", 
     category: "main", 
@@ -41,9 +42,11 @@ cmd({
 
 _Reply to this message with 1 or 2 to download._`;
 
+        // Removed channel/newsletter info here
         let contextInfo = {
             mentionedJid: [m.sender],
-            }
+            forwardingScore: 999,
+            isForwarded: true
         };
 
         // Send thumbnail with options
@@ -82,7 +85,7 @@ _Reply to this message with 1 or 2 to download._`;
                     default:
                         await conn.sendMessage(
                             from,
-                            { text: "*Please Reply with ( 1 , 2 or 3) ❤️" },
+                            { text: "*Please Reply with ( 1 or 2 ) ❤️*" },
                             { quoted: replyMsg }
                         );
                         break;
@@ -95,6 +98,7 @@ _Reply to this message with 1 or 2 to download._`;
         reply("An error occurred. Please try again later.");
     }
 });
+
 
 cmd({
     pattern: "song",
