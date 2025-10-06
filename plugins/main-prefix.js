@@ -1,6 +1,3 @@
-
-
-
 const { cmd } = require('../command');
 
 const config = require('../config');
@@ -9,7 +6,7 @@ const { setPrefix } = require('../lib/prefix');
 
 cmd({
 
-  pattern: "setprefix",
+  pattern: "botprefix",
 
   alias: ["prefix"],
 
