@@ -6,7 +6,6 @@ const yts = require('yt-search');
 
 cmd({
     pattern: "song",
-    alias: ["music", "play"],
     desc: "Download song from YouTube",
     category: "download",
     react: "🎵",
@@ -27,8 +26,17 @@ cmd({
         // Inform user
         await conn.sendMessage(from, {
             image: { url: video.thumbnail },
-            caption: `🎵 *Downloading:* ${video.title}\n⏱ Duration: ${video.timestamp}`
-        }, { quoted: m });
+            caption: `
+ ℹ️ *Title :* ${video.title}
+ ⏱️ *Duration :* ${video.timestamp} 
+ 🧬 *Views :* ${video.views}
+ 📅 *Released Date :* ${video.ago}
+ 🖇️ *Link :* ${video.url}
+
+ පොඩ්ඩක් වෙලා ඉන්න song එක එනකම්.
+
+ > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+ `}, { quoted: m });
 
         // API link
         const apiUrl = `https://izumiiiiiiii.dpdns.org/downloader/youtube?url=${encodeURIComponent(video.url)}&format=mp3`;
