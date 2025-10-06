@@ -1,105 +1,67 @@
-const axios = require("axios");
-const yts = require("yt-search");
-const { youtube } = require("btch-downloader");
 const { cmd } = require('../command');
+const axios = require('axios');
 
 cmd({
-  pattern: 'spotify',
-  react: '🎵',
-  desc: "Fetch audio from Spotify or YouTube",
-  category: "media",
-  filename: __filename
-}, async (client, message, details, context) => {
-  const { q, from, reply } = context;
+    pattern: "spotify",
+    desc: "Download Spotify music as MP3",
+    category: "downloader",
+    react: "🎵",
+    filename: __filename
+},
+async (conn, mek, m, { from, args, q, reply, pushname }) => {
+    try {
+        if (!q) return reply("*Please provide a Spotify link.*");
+        if (!q.includes("spotify.com")) return reply("*Invalid Spotify link provided.*");
 
-  if (!q) {
-    return reply("Please provide a title or link (Spotify/YouTube)!");
-  }
+        reply("⏳ *Fetching Spotify track... Please wait!*");
 
-  reply("> 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ɪs ғᴇᴛᴄʜɪɴɢ ᴀᴜᴅɪᴏ... 🎧");
-
-  let spotifySent = false;
-  let youtubeSent = false;
-
-  try {
-    // Fetch from Spotify
-    const spotifyResponse = await axios.get(
-      `https://apis-keith.vercel.app/download/spotify?q=${encodeURIComponent(q)}`
-    );
-    const spotifyTrack = spotifyResponse.data?.[0]; // Safely access first track
-
-    if (spotifyTrack) {
-      const trackStream = await axios({
-        url: `https://apis-keith.vercel.app/download/spotify?q=${encodeURIComponent(spotifyTrack.url)}`,
-        method: "GET",
-        responseType: 'stream'
-      });
-
-      if (trackStream.headers["content-type"]?.includes("audio/mpeg")) {
-        await client.sendMessage(from, {
-          audio: trackStream.data,
-          mimetype: "audio/mpeg",
-          contextInfo: {
-            externalAdReply: {
-              title: spotifyTrack.title,
-              body: "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳: sᴘᴏᴛɪғʏ",
-              mediaType: 1,
-              sourceUrl: spotifyTrack.url,
-              renderLargerThumbnail: true
-            }
-          }
+        const { data } = await axios.get(`https://api.siputzx.my.id/api/d/spotify`, {
+            params: { url: q }
         });
-        spotifySent = true;
-      } else {
-        console.log("Spotify stream not in audio/mpeg format.");
-      }
-    } else {
-      console.log("No Spotify track found.");
+
+        if (!data.status || !data.data) return reply("*Failed to fetch Spotify track. Please try again later.*");
+
+        const {
+            title,
+            type,
+            artis,
+            durasi,
+            image,
+            download
+        } = data.data;
+
+        // Convert duration from milliseconds to MM:SS format
+        const durationSec = Math.floor(durasi / 1000);
+        const minutes = Math.floor(durationSec / 60).toString().padStart(2, '0');
+        const seconds = (durationSec % 60).toString().padStart(2, '0');
+        const duration = `${minutes}:${seconds}`;
+
+        const caption = `
+*⫷⦁ SPOTIFY DOWNLOADER ⦁⫸*
+
+🎵 *Title:* ${title}
+🧑‍🎤 *Artist:* ${artis}
+🎶 *Type:* ${type}
+⏱️ *Duration:* ${duration}
+
+> *© Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*
+`.trim();
+
+        // Send cover image with track info
+        await conn.sendMessage(from, {
+            image: { url: image },
+            caption: caption
+        }, { quoted: mek });
+
+        // Send the MP3 file
+        await conn.sendMessage(from, {
+            audio: { url: download },
+            mimetype: "audio/mpeg",
+            ptt: false
+        }, { quoted: mek });
+
+    } catch (e) {
+        console.error("Spotify Download Error:", e);
+        reply("*Oops! An error occurred while downloading the Spotify track.*");
     }
-  } catch (error) {
-    console.error("Spotify Error:", error.message);
-  }
-
-  try {
-    // Fetch from YouTube
-    const youtubeSearchResults = await yts(q);
-    const youtubeVideo = youtubeSearchResults.videos[0];
-
-    if (youtubeVideo && youtubeVideo.seconds < 3600) { // Video duration < 1 hour
-      const youtubeAudio = await youtube(youtubeVideo.url);
-
-      if (youtubeAudio?.mp3) {
-        await client.sendMessage(from, {
-          audio: { url: youtubeAudio.mp3 },
-          mimetype: "audio/mpeg",
-          contextInfo: {
-            externalAdReply: {
-              title: youtubeVideo.title,
-              body: "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳: ʏᴏᴜᴛᴜʙᴇ",
-              mediaType: 1,
-              sourceUrl: youtubeVideo.url,
-              renderLargerThumbnail: true
-            }
-          }
-        });
-        youtubeSent = true;
-      } else {
-        console.log("Failed to fetch YouTube audio.");
-      }
-    } else {
-      console.log("No suitable YouTube results found.");
-    }
-  } catch (error) {
-    console.error("YouTube Error:", error.message);
-  }
-
-  if (!spotifySent && !youtubeSent) {
-    reply("Failed to fetch audio from both Spotify and YouTube.");
-  } else if (spotifySent && youtubeSent) {
-    reply("Both Spotify and YouTube audio sent successfully.");
-  } else if (spotifySent) {
-    reply("𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳: sᴘᴏᴛɪғʏ ᴀᴜᴅɪᴏ sᴇɴᴛ sᴜᴄᴄᴇsғᴜʟʟʏ.");
-  } else if (youtubeSent) {
-    reply("𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳: ʏᴏᴜᴛᴜʙᴇ ᴀᴜᴅɪᴏ sᴇɴᴛ sᴜᴄᴄᴇsғᴜʟʟʏ.");
-  }
 });
