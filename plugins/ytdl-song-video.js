@@ -74,3 +74,53 @@ cmd({
         reply("❌ Failed to download song. Try again later.");
     }
 });
+
+cmd({
+    pattern: "song3",
+    desc: "Download songs via YouTube.",
+    react: "🎵",
+    category: "download",
+    filename: __filename
+},
+async (conn, mek, m, { from, quoted, q, pushname, reply }) => {
+    try {
+        if (!q) return reply("❌ Please provide a song title or YouTube link!");
+
+        const search = await yts(q);
+        const song = search.videos[0];
+
+        const caption = `
+┌──⭓ *DARK-KNIGHT XMD*
+│
+├ 🎵 *Title:* ${song.title}
+├ ⏱️ *Duration:* ${song.timestamp}
+├ 👀 *Views:* ${song.views}
+├ 📅 *Uploaded:* ${song.ago}
+├ 🔗 *Link:* ${song.url}
+│
+└──⭓ *Enjoy your music!*
+`;
+
+        await conn.sendMessage(from, { image: { url: song.thumbnail }, caption }, { quoted: mek });
+
+        const res = await fetch(`https://api.bwmxmd.online/api/download/ytmp3?apikey=ibraah-help&url=${encodeURIComponent(song.url)}`);
+        const json = await res.json();
+
+        if (!json.success) return reply("❌ Failed to download audio. Try again later.");
+
+        const { download_url, title } = json.result;
+
+        await conn.sendMessage(from, { audio: { url: download_url }, mimetype: "audio/mpeg" }, { quoted: mek });
+        
+        await conn.sendMessage(from, {
+            document: { url: download_url },
+            mimetype: "audio/mpeg",
+            fileName: `${title}.mp3`,
+            caption: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳"
+        }, { quoted: mek });
+
+    } catch (error) {
+        console.error(error);
+        reply(`❌ Hi ${pushname}, something went wrong. Please try again later.`);
+    }
+});
