@@ -43,8 +43,6 @@ _Reply to this message with 1 or 2 to download._`;
 
         let contextInfo = {
             mentionedJid: [m.sender],
-            forwardingScore: 999,
-            isForwarded: true
             }
         };
 
