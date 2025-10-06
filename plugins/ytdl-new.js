@@ -1,88 +1,61 @@
 const config = require('../config');
 const { cmd } = require('../command');
+const fetch = require("node-fetch");
+const { ytsearch } = require('@dark-yasiya/yt-dl.js'); 
 
+// 🎬 YouTube Video Downloader (song) 
 cmd({
-  pattern: "songx",
-  alias: ["ytmp4"],
-  desc: "Download YouTube video (MP4)",
-  category: "main",
-  use: ".songx <video name>",
-  react: "🔰",
-  filename: __filename
-}, async (conn, mek, m, { from, reply, q }) => {
-  try {
-    if (!q) return reply("❗ Please provide a video/song name.");
+    pattern: "song4",
+    alias: ["video2", "ytv2"],
+    react: "🎬",
+    desc: "Download YouTube video",
+    category: "downloader",
+    use: ".song <query/url>",
+    filename: __filename
+}, async (conn, mek, m, { from, q, reply }) => {
+    try {
+        if (!q) return reply("🎬 Please provide video name/URL");
+        
+        await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
+        
+        const yt = await ytsearch(q);
+        if (!yt?.results?.length) {
+            await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
+            return reply("No results found");
+        }
+        
+        const vid = yt.results[0];
+        const apiKey = config.API_KEY || "58b3609c238b2b6bb6";
+        const api = `https://api.nexoracle.com/downloader/yt-video2?apikey=${apiKey}&url=${encodeURIComponent(vid.url)}`;
+        
+        const res = await fetch(api);
+        const json = await res.json();
+        
+        if (!json?.status || !json.result?.url) {
+            await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
+            return reply("Download failed");
+        }
+        
+        const caption = `
+╭─〔*𝙱𝙾𝚈𝚇𝙰-𝚇𝙳 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳𝙴𝚁*〕
+├─▸ *📌 ᴛɪᴛʟᴇ:* ${vid.title}
+├─▸ *⏳ ᴅᴜʀᴀᴛɪᴏɴ:* ${vid.timestamp}
+├─▸ *👀 ᴠɪᴇᴡs:* ${vid.views}
+├─▸ *👤 ᴀᴜᴛʜᴏʀ:* ${vid.author.name}
+╰──➤ *𝙿𝙾𝚆𝙴𝚁𝙴𝙳 𝙱𝚈 𝙱𝙾𝚈𝙺𝙰-𝙼𝚇𝙳*`;
 
-    // ⏳ Processing reaction
-    await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
-
-    const url = `https://api.princetechn.com/api/download/dlmp4?apikey=prince&url=${encodeURIComponent(q)}`;
-    const res = await fetch(url);
-    const data = await res.json();
-
-    if (!data.status || !data.result?.video?.download_url) {
-      await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
-      return reply("❌ No video found or API error.");
+        await conn.sendMessage(from, {
+            video: { url: json.result.url },
+            caption: caption
+        }, { quoted: mek });
+        
+        await conn.sendMessage(from, { react: { text: '✅', key: m.key } });
+        
+    } catch (e) {
+        console.error(e);
+        await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
+        reply("Error occurred");
     }
-
-    const video = data.result;
-
-    await conn.sendMessage(from, {
-      video: { url: video.video.download_url },
-      mimetype: "video/mp4",
-      caption: `📽️ *${video.title}*\n⏳ ${video.duration}\n👁️ ${video.views} views\n🗓️ Published: ${video.published}`
-    }, { quoted: mek });
-
-    // ✅ Success reaction
-    await conn.sendMessage(from, { react: { text: '✅', key: m.key } });
-
-  } catch (err) {
-    console.error(err);
-    await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
-    reply("⚠️ Error occurred. Try again.");
-  }
 });
 
-cmd({
-  pattern: "play4",
-  alias: ["ytmp3"],
-  desc: "Download YouTube song (MP3)",
-  category: "main",
-  use: ".playx <song name>",
-  react: "🔰",
-  filename: __filename
-}, async (conn, mek, m, { from, reply, q }) => {
-  try {
-    if (!q) return reply("❗ 𝙿𝚕𝚎𝚊𝚜𝚎 𝚙𝚛𝚘𝚟𝚒𝚍𝚎 𝚊 𝚜𝚘𝚗𝚐 𝚗𝚊𝚖𝚎.");
-
-    // ⏳ Processing reaction
-    await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
-
-    const url = `https://api.princetechn.com/api/download/yta?apikey=prince&url=${encodeURIComponent(q)}`;
-    const res = await fetch(url);
-    const data = await res.json();
-
-    if (!data.status || !data.result?.download_url) {
-      await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
-      return reply("❌ No audio found or API error.");
-    }
-
-    const song = data.result;
-
-    await conn.sendMessage(from, {
-      audio: { url: song.download_url },
-      mimetype: "audio/mpeg",
-      fileName: `${song.title}.mp3`
-    }, { quoted: mek });
-
-    await reply(`🎵 *${song.title}*\n 𝙳𝚎𝚝𝚊𝚛𝚌𝚑𝚎𝚍 𝚂𝚞𝚌𝚌𝚎𝚜𝚜𝚏𝚞𝚕𝚕 ✅`);
-
-    // ✅ Success reaction
-    await conn.sendMessage(from, { react: { text: '✅', key: m.key } });
-
-  } catch (err) {
-    console.error(err);
-    await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
-    reply("⚠️ Error occurred. Try again.");
-  }
-});
+// 🎥 YouTube Video Downloader 
