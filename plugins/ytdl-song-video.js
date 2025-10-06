@@ -36,8 +36,8 @@ cmd({
 🖇️ *Link:* ${yts.url}
 
 *Choose download format:*
-1| ▶️ Normal Video 
-2| 📄 document Video
+1 | ▶️ Normal Video 
+2 | 📄 document Video
 
 Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
@@ -64,7 +64,7 @@ Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
                 await conn.sendMessage(from, { react: { text: "⬇️", key: replyMsg.key } });
 
                 switch (selected) {
-                    case "1":
+                    case "2":
                         await conn.sendMessage(from, {
                             document: { url: data.result.download_url },
                             mimetype: "video/mp4",
@@ -73,7 +73,7 @@ Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
                         }, { quoted: replyMsg });
                         break;
 
-                    case "2":
+                    case "1":
                         await conn.sendMessage(from, {
                             video: { url: data.result.download_url },
                             mimetype: "video/mp4",
