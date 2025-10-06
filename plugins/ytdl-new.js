@@ -1,23 +1,25 @@
 const config = require('../config');
 const { cmd } = require('../command');
-const fetch = require("node-fetch");
-const { ytsearch } = require('@dark-yasiya/yt-dl.js'); 
+const { ytsearch, ytmp3, ytmp4 } = require('@dark-yasiya/yt-dl.js'); 
 
-// 🎬 YouTube Video Downloader (song) 
+// video
+
 cmd({
-    pattern: "song4",
-    alias: ["video2", "ytv2"],
+    pattern: "song3",
+    alias: ["video", "ytv"],
     react: "🎬",
     desc: "Download YouTube video",
     category: "downloader",
-    use: ".song <query/url>",
+    use: ".mp4 <query/url>",
     filename: __filename
 }, async (conn, mek, m, { from, q, reply }) => {
     try {
         if (!q) return reply("🎬 Please provide video name/URL");
         
+        // 1. Indicate processing
         await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
         
+        // 2. Search YouTube
         const yt = await ytsearch(q);
         if (!yt?.results?.length) {
             await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
@@ -25,30 +27,33 @@ cmd({
         }
         
         const vid = yt.results[0];
-        const apiKey = config.API_KEY || "58b3609c238b2b6bb6";
-        const api = `https://api.nexoracle.com/downloader/yt-video2?apikey=${apiKey}&url=${encodeURIComponent(vid.url)}`;
         
+        // 3. Fetch video
+        const api = `https://api-aswin-sparky.koyeb.app/api/downloader/ytv?url=${encodeURIComponent(vid.url)}`;
         const res = await fetch(api);
         const json = await res.json();
         
-        if (!json?.status || !json.result?.url) {
+        if (!json?.data?.downloadURL) {
             await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
             return reply("Download failed");
         }
         
+        // 4. Create stylish caption
         const caption = `
-╭─〔*𝙱𝙾𝚈𝚇𝙰-𝚇𝙳 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳𝙴𝚁*〕
-├─▸ *📌 ᴛɪᴛʟᴇ:* ${vid.title}
-├─▸ *⏳ ᴅᴜʀᴀᴛɪᴏɴ:* ${vid.timestamp}
-├─▸ *👀 ᴠɪᴇᴡs:* ${vid.views}
-├─▸ *👤 ᴀᴜᴛʜᴏʀ:* ${vid.author.name}
-╰──➤ *𝙿𝙾𝚆𝙴𝚁𝙴𝙳 𝙱𝚈 𝙱𝙾𝚈𝙺𝙰-𝙼𝚇𝙳*`;
-
+╭─〔 *🎥 IMMU-MD DOWNLOADER* 〕
+├─▸ *📌 Title:* ${vid.title}
+├─▸ *⏳ Duration:* ${vid.timestamp}
+├─▸ *👀 Views:* ${vid.views}
+├─▸ *👤 Author:* ${vid.author.name}
+╰─➤ *Powered by IMMU-MD*`;
+        
+        // 5. Send video with formatted caption
         await conn.sendMessage(from, {
-            video: { url: json.result.url },
+            video: { url: json.data.downloadURL },
             caption: caption
         }, { quoted: mek });
         
+        // 6. Success reaction
         await conn.sendMessage(from, { react: { text: '✅', key: m.key } });
         
     } catch (e) {
@@ -57,5 +62,3 @@ cmd({
         reply("Error occurred");
     }
 });
-
-// 🎥 YouTube Video Downloader 
