@@ -137,7 +137,7 @@ cmd({
         const ytUrl = data.url;
         const ago = data.ago;
 
-        const api = `https://sadiya-tech-apis.vercel.app/download/ytdl?url=${ytUrl}&format=360&apikey=sadiya`;
+        const api = `https://sadiya-tech-apis.vercel.app/download/ytdl?url=${ytUrl}&format=480&apikey=sadiya`;
         const { data: apiRes } = await axios.get(api);
 
         if (!apiRes?.status || !apiRes.result?.download) {
@@ -163,7 +163,7 @@ cmd({
 
         await conn.sendMessage(from, {
             video: { url: result.download },
-            caption: `🎬 *${result.title}* (360p)`,
+            caption: `🎬 *${result.title}* (380p)`,
             mimetype: "video/mp4",
         }, { quoted: mek });
        
