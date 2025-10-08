@@ -246,7 +246,7 @@ module.exports = function setupYoutubeAuto(conn) {
             }, { quoted: msg });
 
             // API call
-            const apiUrl = `https://izumiiiiiiii.dpdns.org/downloader/youtube?url=${encodeURIComponent(url)}&format=mp4`;
+            const apiUrl = `https://izumiiiiiiii.dpdns.org/downloader/youtube?url=${encodeURIComponent(url)}&format=360`;
 
             const res = await axios.get(apiUrl, {
                 timeout: 30000,
