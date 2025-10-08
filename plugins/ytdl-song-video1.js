@@ -163,16 +163,12 @@ cmd({
 
         await conn.sendMessage(from, {
             video: { url: result.download },
+            caption: `🎬 *${result.title}* (360p)`,
             mimetype: "video/mp4",
         }, { quoted: mek });
        
-        await conn.sendMessage(from, {
-            document : { url: result.download },
-            mimetype: "video/mp4",
-            fileName: `${data.title}.mp4`
-        }, { quoted: mek });        
-
-    } catch (error) {
+                
+   } catch (error) {
         reply(`❌ An error occurred: ${error.message}`);
     }
 });
