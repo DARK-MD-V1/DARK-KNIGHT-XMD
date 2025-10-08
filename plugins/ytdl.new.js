@@ -34,7 +34,7 @@ try {
     await conn.sendMessage(from, { image: { url: data.thumbnail }, caption: desc }, { quoted: mek });
 
     // Use new API
-    let apiRes = await fetch(`https://api.giftedtech.co.ke/api/download/ytdl?apikey=gifted&url=${encodeURIComponent(url)}`);
+    let apiRes = await fetch(`https://api.giftedtech.co.ke/api/download/ytdlv2?apikey=gifted&url=${encodeURIComponent(url)}`);
     let json = await apiRes.json();
 
     if (!json.success) return reply("Failed to fetch audio from new API");
@@ -89,7 +89,7 @@ try {
     await conn.sendMessage(from, { image: { url: data.thumbnail }, caption: desc }, { quoted: mek });
 
     // Use new API
-    let apiRes = await fetch(`https://api.giftedtech.co.ke/api/download/ytdl?apikey=gifted&url=${encodeURIComponent(url)}`);
+    let apiRes = await fetch(`https://api.giftedtech.co.ke/api/download/ytdlv2?apikey=gifted&url=${encodeURIComponent(url)}`);
     let json = await apiRes.json();
 
     if (!json.success) return reply("Failed to fetch video from new API");
