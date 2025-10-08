@@ -264,10 +264,11 @@ cmd({
         await conn.sendMessage(from, {
             image: { url: video.thumbnail },
             caption: `
-            🎬 *Downloading Video:*
-            📌 *Title:* ${video.title}
-            ⏱ *Duration:* ${video.timestamp}
-            `}, { quoted: m });
+ 🎬 *Downloading Video:*
+
+ 🔖 *Title:* ${video.title}
+ ⏱ *Duration:* ${video.timestamp}
+ `}, { quoted: m });
 
         // API link
         const apiUrl = `https://izumiiiiiiii.dpdns.org/downloader/youtube?url=${encodeURIComponent(video.url)}&format=720`;
