@@ -1,103 +1,6 @@
 const { cmd } = require('../command');
 const axios = require('axios');
 const yts = require('yt-search');
-const config = require('../config');
-const { ytsearch } = require('@dark-yasiya/yt-dl.js');
-
-cmd({ 
-    pattern: "video5",
-    react: "🎥", 
-    desc: "Download YouTube video", 
-    category: "main", 
-    use: '.video < Yt url or Name >', 
-    filename: __filename 
-}, async (conn, mek, m, { from, prefix, quoted, q, reply }) => { 
-    try { 
-        if (!q) return await reply("Please provide a YouTube URL or song name.");
-        
-        const yt = await ytsearch(q);
-        if (yt.results.length < 1) return reply("No results found!");
-        
-        let yts = yt.results[0];  
-        let apiUrl = `https://apis.davidcyriltech.my.id/download/ytmp4?url=${encodeURIComponent(yts.url)}`;
-        
-        let response = await fetch(apiUrl);
-        let data = await response.json();
-        
-        if (data.status !== 200 || !data.success || !data.result.download_url) {
-            return reply("Failed to fetch the video. Please try again later.");
-        }
-
-        let ytmsg = `
-🔖 *Title:* ${yts.title}
-⏱️ *Duration:* ${yts.timestamp}
-🧬 *Views:* ${yts.views}
-📅 *Released Date :* ${yts.ago}
-🖇️ *Link:* ${yts.url}
-
-*Choose download format:*
-1 | ▶️ Normal Video 
-2 | 📄 document Video
-
-Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
-
-        // Removed channel/newsletter info here
-        let contextInfo = {
-            mentionedJid: [m.sender],
-            forwardingScore: 999,
-            isForwarded: true
-        };
-
-        // Send thumbnail with options
-        const videoMsg = await conn.sendMessage(from, { image: { url: yts.thumbnail }, caption: ytmsg, contextInfo }, { quoted: mek });
-
-        conn.ev.on("messages.upsert", async (msgUpdate) => {
-            const replyMsg = msgUpdate.messages[0];
-            if (!replyMsg.message || !replyMsg.message.extendedTextMessage) return;
-
-            const selected = replyMsg.message.extendedTextMessage.text.trim();
-
-            if (
-                replyMsg.message.extendedTextMessage.contextInfo &&
-                replyMsg.message.extendedTextMessage.contextInfo.stanzaId === videoMsg.key.id
-            ) {
-                await conn.sendMessage(from, { react: { text: "⬇️", key: replyMsg.key } });
-
-                switch (selected) {
-                    case "2":
-                        await conn.sendMessage(from, {
-                            document: { url: data.result.download_url },
-                            mimetype: "video/mp4",
-                            fileName: `${yts.title}.mp4`,
-                            contextInfo
-                        }, { quoted: replyMsg });
-                        break;
-
-                    case "1":
-                        await conn.sendMessage(from, {
-                            video: { url: data.result.download_url },
-                            mimetype: "video/mp4",
-                            contextInfo
-                        }, { quoted: replyMsg });
-                        break;
-
-                    default:
-                        await conn.sendMessage(
-                            from,
-                            { text: "*Please Reply with ( 1 or 2 ) ❤️*" },
-                            { quoted: replyMsg }
-                        );
-                        break;
-                }
-            }
-        });
-
-    } catch (e) {
-        console.log(e);
-        reply("An error occurred. Please try again later.");
-    }
-});
-
 
 cmd({
     pattern: "song",
@@ -128,7 +31,7 @@ cmd({
  📅 *Released Date :* ${video.ago}
  🖇️ *Link :* ${video.url}
 
- 📌 Song එක එනකම් පොඩ්ඩක් වෙලා ඉන්න.
+ 🎵 *Downloading Song:* ⏳
 
  Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
  `}, { quoted: m });
@@ -175,7 +78,7 @@ cmd({
     pattern: "video",
     desc: "Download song from YouTube",
     category: "download",
-    react: "🎥",
+    react: "🎬",
     filename: __filename
 }, async (conn, m, store, { from, q, reply }) => {
     try {
@@ -200,7 +103,7 @@ cmd({
  📅 *Released Date :* ${video.ago}
  🖇️ *Link :* ${video.url}
 
- 📌 video එක එනකම් පොඩ්ඩක් වෙලා ඉන්න.
+ 🎬 *Downloading Video:* ⏳
 
  Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
  `}, { quoted: m });
@@ -242,7 +145,7 @@ cmd({
 
 
 cmd({
-    pattern: "video3",
+    pattern: "video4",
     desc: "Download video from YouTube",
     category: "download",
     react: "🎬",
@@ -264,10 +167,15 @@ cmd({
         await conn.sendMessage(from, {
             image: { url: video.thumbnail },
             caption: `
- 🎬 *Downloading Video:*
-
  🔖 *Title:* ${video.title}
  ⏱ *Duration:* ${video.timestamp}
+ 🧬 *Views :* ${video.views}
+ 📅 *Released Date :* ${video.ago}
+ 🖇️ *Link :* ${video.url}
+ 
+ 🎬 *Downloading Video:* ⏳
+ 
+ Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
  `}, { quoted: m });
 
         // API link
