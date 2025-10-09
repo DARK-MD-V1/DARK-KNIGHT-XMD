@@ -5,7 +5,7 @@ const config = require('../config');
 const { ytsearch } = require('@dark-yasiya/yt-dl.js');
 
 cmd({ 
-    pattern: "video4",
+    pattern: "video5",
     react: "🎥", 
     desc: "Download YouTube video", 
     category: "main", 
