@@ -33,15 +33,14 @@ cmd({
 
         await conn.sendMessage(from, {
             image: { url: result.thumbnail },
-            caption: `╸╸╸╸╸╸╸╸╸╸╸╸╸
-        
+            caption: `
 ℹ️ *Title :* ${data.title}
 ⏱️ *Duration :* ${data.timestamp} 
 🧬 *Views :* ${data.views}
 📅 *Released Date :* ${data.ago}
 🖇️ *Link :* ${data.url}
  
-╸╸╸╸╸╸╸╸╸╸╸╸╸
+🎵 *Downloading Song:* ⏳
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: mek });
@@ -79,15 +78,13 @@ try {
     const url = data.url;
 
     let desc = `
-╸╸╸╸╸╸╸╸╸╸╸╸╸
-
 ℹ️ *Title :* ${data.title} 
 ⏱️ *Duration :* ${data.timestamp} 
 🧬 *Views :* ${data.views} 
 📅 *Uploaded On :* ${data.ago} 
 🖇️ *Link :* ${data.url} 
 
-╸╸╸╸╸╸╸╸╸╸╸╸╸
+🎬 *Downloading Video:* ⏳
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
 `;
