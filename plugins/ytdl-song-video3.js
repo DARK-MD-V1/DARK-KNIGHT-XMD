@@ -11,15 +11,15 @@ function extractUrl(text = '') {
 }
 
 cmd({
-    pattern: 'video4',
-    desc: 'Download YouTube video in SD quality.',
+    pattern: 'video3',
+    desc: 'Download YouTube video.',
     category: 'download',
     react: '🎬',
     filename: __filename
 }, async (conn, m, mek, { from, args, reply, quoted }) => {
     try {
         const provided = args.join(' ').trim() || (quoted && (quoted.text || quoted.caption)) || '';
-        if (!provided) return reply('🧩 *Usage:* .video4 <youtube-url>\n👉 Or reply to a message containing a YouTube link.');
+        if (!provided) return reply('🧩 *Usage:* .video3 <youtube-url>\n👉 Or reply to a message containing a YouTube link.');
 
         await reply('⏳ Searching video...');
 
@@ -48,12 +48,14 @@ cmd({
         await conn.sendMessage(from, {
             image: { url: media.thumbnail },
             caption: `
-🎬 *Title:* ${media.title}
-🧬 *Channel:* ${media.channel}
-🖇️ *Link:* ${media.video_url}
-🧩 *Quality:* ${media.quality}  
+ 🎬 *Title:* ${media.title}
+ 🧬 *Channel:* ${media.channel}
+ 🖇️ *Link:* ${media.video_url}
+ 🧩 *Quality:* ${media.quality}  
 
-➡️ *Auto-sending file...*`
+ 🎬 *Downloading Video:* ⏳
+ 
+ Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
  }, { quoted: m });
 
         // Download & send as document
@@ -75,14 +77,14 @@ cmd({
         }, { quoted: m });
 
     } catch (err) {
-        console.error('video4 error =>', err);
+        console.error('video3 error =>', err);
         reply('🚫 Unexpected error. Try again later.');
     }
 });
 
 
 cmd({
-    pattern: 'song4',
+    pattern: 'song3',
     desc: 'Download YouTube song.',
     category: 'download',
     react: '🎵',
@@ -90,7 +92,7 @@ cmd({
 }, async (conn, m, mek, { from, args, reply, quoted }) => {
     try {
         const provided = args.join(' ').trim() || (quoted && (quoted.text || quoted.caption)) || '';
-        if (!provided) return reply('🧩 *Usage:* .song4 <youtube-url>\n👉 Or reply to a message containing a YouTube link.');
+        if (!provided) return reply('🧩 *Usage:* .song3 <youtube-url>\n👉 Or reply to a message containing a YouTube link.');
 
         await reply('⏳ Searching song...');
 
@@ -119,11 +121,13 @@ cmd({
         await conn.sendMessage(from, {
             image: { url: media.thumbnail },
             caption: `
-🎵 *Title:* ${media.title}
-🧬 *Channel:* ${media.channel}
-🖇️ *Link:* ${media.audio_url}
+ 🎵 *Title:* ${media.title}
+ 🧬 *Channel:* ${media.channel}
+ 🖇️ *Link:* ${media.audio_url}
 
-➡️ *Auto-sending file...*`
+ 🎵 *Downloading Song:* ⏳
+
+ Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
  }, { quoted: m });
 
         // Download & send as document
@@ -145,7 +149,7 @@ cmd({
         }, { quoted: m });
 
     } catch (err) {
-        console.error('song4 error =>', err);
+        console.error('song3 error =>', err);
         reply('🚫 Unexpected error. Try again later.');
     }
 });
