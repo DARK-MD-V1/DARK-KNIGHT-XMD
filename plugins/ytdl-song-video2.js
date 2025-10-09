@@ -18,17 +18,15 @@ try {
     const url = data.url;
 
     let desc = `
-*⫷⦁𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 download⦁⫸*
-
-🎵 *Song Download!* 
-
 ➥ *Title:* ${data.title} 
 ➥ *Duration:* ${data.timestamp} 
 ➥ *Views:* ${data.views} 
 ➥ *Uploaded On:* ${data.ago} 
 ➥ *Link:* ${data.url} 
 
-> *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 
+🎵 *Downloading Song:* ⏳
+
+*Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 
 `;
 
     await conn.sendMessage(from, { image: { url: data.thumbnail }, caption: desc }, { quoted: mek });
@@ -60,7 +58,7 @@ try {
 cmd({
     pattern: "video2",
     desc: "To download videos.",
-    react: "🎥",
+    react: "🎬",
     category: "download",
     filename: __filename
 },
@@ -73,17 +71,15 @@ try {
     const url = data.url;
 
     let desc = `
-*⫷⦁𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 download⦁⫸*
-
-🎥 *Video Download!* 
-
 ➥ *Title:* ${data.title} 
 ➥ *Duration:* ${data.timestamp} 
 ➥ *Views:* ${data.views} 
 ➥ *Uploaded On:* ${data.ago} 
 ➥ *Link:* ${data.url} 
 
-> *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 
+🎬 *Downloading Video:* ⏳
+
+*Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 
 `;
 
     await conn.sendMessage(from, { image: { url: data.thumbnail }, caption: desc }, { quoted: mek });
