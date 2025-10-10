@@ -133,3 +133,60 @@ cmd({
     }
 });
 
+
+cmd({
+    pattern: "video11",
+    react: "🎬",
+    desc: "Download YouTube Video",
+    category: "download",
+    use: ".video1 <query or URL>",
+    filename: __filename
+}, async (conn, mek, m, { from, reply, q }) => {
+    try {
+        if (!q) return reply("❓ Please provide a YouTube URL or search query.");
+
+        // If the user sent a URL directly, use it. Otherwise, search YouTube
+        let ytUrl = q;
+        if (!q.includes("youtube.com")) {
+            const yts = require('yt-search');
+            const search = await yts(q);
+            if (!search.videos.length) return reply("❌ No results found for your query.");
+            ytUrl = search.videos[0].url;
+        }
+
+        // Call Sadiya Tech API to get download link
+        const api = `https://sadiya-tech-apis.vercel.app/download/ytdl?url=${ytUrl}&format=360&apikey=sadiya`;
+        const { data: apiRes } = await axios.get(api);
+
+        if (!apiRes?.status || !apiRes.result?.download) {
+            return reply("❌ Could not download the video. Try another one!");
+        }
+
+        const result = apiRes.result;
+
+        // Send thumbnail + info
+        await conn.sendMessage(from, {
+            image: { url: result.thumbnail },
+            caption: `
+ℹ️ *Title:* ${result.title}
+⏱️ *Duration:* ${Math.floor(result.duration / 60)}:${result.duration % 60} mins
+📦 *Format:* ${result.quality}p
+🖇️ *Link:* ${ytUrl}
+
+🎬 *Downloading Video:* ⏳
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+`
+        }, { quoted: mek });
+
+        // Send video
+        await conn.sendMessage(from, {
+            video: { url: result.download },
+            mimetype: "video/mp4",
+            fileName: `${result.title}.mp4`
+        }, { quoted: mek });
+
+    } catch (error) {
+        console.error(error);
+        reply("❌ Something went wrong while downloading the video. Please try again later.");
+    }
+});
