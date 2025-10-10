@@ -60,3 +60,61 @@ cmd({
         reply(`❌ An error occurred: ${error.message}`);
     }
 });
+
+
+
+cmd({
+    pattern: "song6",
+    react: "🎵",
+    desc: "Download YouTube MP3 via Delirius API",
+    category: "download",
+    use: ".song5 <song name>",
+    filename: __filename
+}, async (conn, mek, m, { from, reply, q }) => {
+    try {
+        if (!q) return reply("❓ *Please type a song name!*");
+
+        const search = await yts(q);
+        if (!search.videos.length) return reply("❌ *No YouTube results found!*");
+
+        const video = search.videos[0];
+        const ytUrl = video.url;
+
+        // --- Call Delirius API ---
+        const apiUrl = `https://delirius-apiofc.vercel.app/download/ytmp3?url=${ytUrl}`;
+        const { data: apiRes } = await axios.get(apiUrl);
+
+        if (!apiRes?.status || !apiRes?.data?.download) {
+            return reply("❌ *Couldn't get a download link. Try another song!*");
+        }
+
+        const result = apiRes.data;
+
+        // --- Send info first ---
+        await conn.sendMessage(from, {
+            image: { url: result.thumbnail || video.image },
+            caption: `
+🎧 *Title:* ${result.title || video.title}
+📺 *Channel:* ${result.channel || video.author.name}
+🕒 *Duration:* ${result.duration || video.timestamp}
+📦 *Size:* ${result.size || 'Unknown'}
+🔗 *Link:* ${ytUrl}
+
+> 🎵 Downloading song...
+> Powered by *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*
+`
+        }, { quoted: mek });
+
+        // --- Send audio file ---
+        await conn.sendMessage(from, {
+            audio: { url: result.download },
+            mimetype: "audio/mpeg",
+            fileName: `${result.title || 'song'}.mp3`,
+            ptt: false
+        }, { quoted: mek });
+
+    } catch (error) {
+        console.error("Error in song5 command:", error);
+        reply(`❌ *Error:* ${error.message}`);
+    }
+});
