@@ -107,7 +107,7 @@ cmd({
 
         // --- Send audio file ---
         await conn.sendMessage(from, {
-            audio: { url: result.download },
+            audio: { url: data.download },
             mimetype: "audio/mpeg",
             fileName: `${result.title || 'song'}.mp3`,
             ptt: false
