@@ -22,7 +22,7 @@ cmd({
         const ytUrl = data.url;
         const ago = data.ago;
 
-        const api = `https://api.nekolabs.my.id/downloader/youtube/v1?url=${ytUrl}&format=mp3&apikey=sadiya`;
+        const api = `https://api.nekolabs.my.id/downloader/youtube/v1?url=${ytUrl}&format=mp3`;
         const { data: apiRes } = await axios.get(api);
 
         if (!apiRes?.Status || !apiRes.result?.downloadUrl) {
