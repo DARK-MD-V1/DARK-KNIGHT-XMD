@@ -45,13 +45,13 @@ cmd({
         }, { quoted: mek });
 
         await conn.sendMessage(from, {
-            audio: { url: data.download },
+            audio: { url: title.download },
             mimetype: "audio/mpeg",
             ptt: false,
         }, { quoted: mek });
        
         await conn.sendMessage(from, {
-            document : { url: data.download },
+            document : { url: title.download },
             mimetype: "audio/mpeg",
             fileName: `${data.title}.mp3`
         }, { quoted: mek });        
