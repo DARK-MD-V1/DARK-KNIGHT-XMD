@@ -1,63 +1,62 @@
-const { cmd, commands } = require('../command');
-const yts = require('yt-search');
+const { cmd } = require('../command')
+const yts = require('yt-search')
 const axios = require("axios");
 
 cmd({
     pattern: "song5",
-    react: "🎵",
-    desc: "Download YouTube MP3",
+    react: "🎶",
+    desc: "Download YouTube song as MP3 (Starlight API)",
     category: "download",
-    use: ".song1 <query>",
+    use: ".song2 <query>",
     filename: __filename
 }, async (conn, mek, m, { from, reply, q }) => {
     try {
-        if (!q) return reply("❓ What song do you want to download?");
+        if (!q) return reply("❓ Please enter a song name or YouTube link!");
 
         const search = await yts(q);
         if (!search.videos.length) return reply("❌ No results found for your query.");
 
-        const data = search.videos[0];
-        const ytUrl = data.url;
+        const video = search.videos[0];
+        const ytUrl = video.url;
 
-        // 🔄 NEW API
-        const api = `https://apis-starlights-team.koyeb.app/starlight/youtube-mp3?url=${encodeURIComponent(ytUrl)}&format=mp3`;
-        const { data: apiRes } = await axios.get(api);
+        // 🎧 Fetch from Starlight API
+        const api = `https://apis-starlights-team.koyeb.app/starlight/youtube-mp3?url=${ytUrl}&format=mp3`;
+        const { data } = await axios.get(api);
 
-        if (!apiRes?.status || !apiRes.result?.dl_url) {
-            return reply("❌ Unable to download the song. Try another one!");
+        if (!data || !data.dl_url) {
+            return reply("❌ Failed to download song! Try again later.");
         }
 
-        const result = apiRes.result;
-
-        // 📸 Send song info
+        // 🎵 Send details first
         await conn.sendMessage(from, {
-            image: { url: result.thumbnail },
+            image: { url: data.thumbnail || video.thumbnail },
             caption: `
 🎶 *Title:* ${data.title}
-🔗 *Link:* ${data.url}
+👤 *Artist:* ${data.author}
+📺 *YouTube:* ${data.url}
+🎧 *Quality:* ${data.quality?.toUpperCase() || 'MP3'}
 
-🎧 *Downloading your song...* ⏳
-
-> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ⚡
+`
         }, { quoted: mek });
 
-        // 🎵 Send MP3 audio
+        // 🎧 Send audio file
         await conn.sendMessage(from, {
-            audio: { url: result.dl_url },
+            audio: { url: data.dl_url },
             mimetype: "audio/mpeg",
-            ptt: false,
+            fileName: `${data.title}.mp3`,
+            ptt: false
         }, { quoted: mek });
 
-        // 📄 Send MP3 as document too
+        // 📁 Optional: send as document too
         await conn.sendMessage(from, {
-            document: { url: result.dl_url },
+            document: { url: data.dl_url },
             mimetype: "audio/mpeg",
             fileName: `${data.title}.mp3`
         }, { quoted: mek });
 
     } catch (error) {
         console.error(error);
-        reply(`❌ An error occurred: ${error.message}`);
+        reply(`❌ Error: ${error.message}`);
     }
 });
-
