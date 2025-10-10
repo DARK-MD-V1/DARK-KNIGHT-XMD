@@ -2,26 +2,6 @@ const config = require('../config')
 const {cmd , commands} = require('../command')
 const { fetchJson } = require('../lib/functions')
 
-cmd({
-    pattern: "gemini",
-    react: "📑",
-    desc: "ai chat.",
-    category: "main",
-    filename: __filename
-},
-async(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply}) => {
-try{
-let data = await fetchJson(`https://lakiya-api-site.vercel.app/ai/gemini?q=${q}`)
-return reply(`${data.result}
-
-> ㋛︎ ᴘᴏᴡᴇʀᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`)
-}catch(e){
-console.log(e)
-reply(`${e}`)
-}
-})
-
-
 const GEMINI_API_KEY = "AIzaSyAkryCMMe0mh9TyyUUOBgzLhm2OXdomrEU";
 
 cmd(
@@ -61,3 +41,23 @@ cmd(
     }
   }
 );
+
+
+cmd({
+    pattern: "gemini",
+    react: "📑",
+    desc: "ai chat.",
+    category: "main",
+    filename: __filename
+},
+async(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply}) => {
+try{
+let data = await fetchJson(`https://api-aswin-sparky.koyeb.app/api/search/gpt3?search=${q}`)
+return reply(`${data.data}
+
+> ㋛︎ ᴘᴏᴡᴇʀᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`)
+}catch(e){
+console.log(e)
+reply(`${e}`)
+}
+})
