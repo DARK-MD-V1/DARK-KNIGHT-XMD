@@ -183,7 +183,7 @@ cmd({
     if (!q) return reply("⚠️ Please provide a song name or YouTube link.");
 
     // 🔹 Call Nekolabs API (directly supports search query or URL)
-    const apiUrl = `https://api.nekolabs.my.id/downloader/youtube/v1?url=${url}&format=mp3`;
+    const apiUrl = `https://api.nekolabs.my.id/downloader/youtube/v1?url=${encodeURIComponent(yts.url)}&format=mp3`;
     const res = await fetch(apiUrl);
     const data = await res.json();
 
