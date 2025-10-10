@@ -169,3 +169,73 @@ Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
     reply("⚠️ An error occurred while processing your request.");
   }
 });
+
+
+cmd({
+  pattern: 'song7',
+  react: '🎵',
+  desc: 'Download YouTube song',
+  category: 'download',
+  use: '.song4 <YouTube URL>',
+  filename: __filename
+}, async (conn, mek, m, { from, reply, q }) => {
+  try {
+    if (!q) return reply('⚠️ Please provide a YouTube link.');
+
+    // 🔹 Nekolabs API v1 for direct MP3 download
+    const apiUrl = `https://api.nekolabs.my.id/downloader/youtube/v1?url=${encodeURIComponent(q)}&format=mp3`;
+    const res = await fetch(apiUrl);
+    const data = await res.json();
+
+    if (!data?.status || !data?.result?.downloadUrl) {
+      return reply('❌ Song not found or API error. Try again later.');
+    }
+
+    const meta = data.result;
+    const dlUrl = meta.downloadUrl;
+
+    // 🔹 Fetch thumbnail buffer
+    let buffer;
+    try {
+      const thumbRes = await fetch(meta.cover);
+      buffer = Buffer.from(await thumbRes.arrayBuffer());
+    } catch {
+      buffer = null;
+    }
+
+    // 🔹 Caption card
+    const caption = `
+╔═══════════════
+🎵 *Title:* ${meta.title}
+⏱ *Duration:* ${meta.duration}
+🔗 *Link:* ${q}
+╚═══════════════
+
+🎵 *Downloading Song:* ⏳
+
+Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+`;
+
+    // 🔹 Send info card
+    await conn.sendMessage(from, { image: buffer, caption }, { quoted: mek });
+
+    // 🔹 Send audio
+    const safeTitle = meta.title.replace(/[\\/:*?"<>|]/g, '').slice(0, 80);
+    await conn.sendMessage(from, {
+      audio: { url: dlUrl },
+      mimetype: 'audio/mpeg',
+      fileName: `${safeTitle}.mp3`
+    }, { quoted: mek });
+
+    // 🔹 Send as document (optional)
+    await conn.sendMessage(from, {
+      document: { url: dlUrl },
+      mimetype: 'audio/mpeg',
+      fileName: `${safeTitle}.mp3`
+    }, { quoted: mek });
+
+  } catch (err) {
+    console.error('song cmd error:', err);
+    reply('⚠️ An error occurred while processing your request.');
+  }
+});
