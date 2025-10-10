@@ -25,19 +25,18 @@ cmd({
         const api = `https://delirius-apiofc.vercel.app/download/ytmp3?url=${ytUrl}`;
         const { data: apiRes } = await axios.get(api);
 
-        if (!apiRes?.status || !apiRes.result?.download) {
+        if (!apiRes?.status || !apiRes.data?.download) {
             return reply("❌ ගීතය බාගත කළ නොහැක. වෙනත් එකක් උත්සහ කරන්න!");
         }
 
-        const result = apiRes.result;
+        const result = apiRes.data;
 
         await conn.sendMessage(from, {
-            image: { url: result.thumbnail },
+            image: { url: data.image },
             caption: `
 ℹ️ *Title :* ${data.title}
-⏱️ *Duration :* ${data.timestamp} 
+⏱️ *Duration :* ${data.duration} 
 🧬 *Views :* ${data.views}
-📅 *Released Date :* ${data.ago}
 🖇️ *Link :* ${data.url}
  
 🎵 *Downloading Song:* ⏳
@@ -46,13 +45,13 @@ cmd({
         }, { quoted: mek });
 
         await conn.sendMessage(from, {
-            audio: { url: result.download },
+            audio: { url: data.download },
             mimetype: "audio/mpeg",
             ptt: false,
         }, { quoted: mek });
        
         await conn.sendMessage(from, {
-            document : { url: result.download },
+            document : { url: data.download },
             mimetype: "audio/mpeg",
             fileName: `${data.title}.mp3`
         }, { quoted: mek });        
