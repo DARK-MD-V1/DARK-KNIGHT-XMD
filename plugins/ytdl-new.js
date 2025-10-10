@@ -3,49 +3,60 @@ const axios = require('axios')
 const yts = require('yt-search')
 
 cmd({
-  pattern: 'song',
-  desc: 'Download YouTube songs as MP3',
-  category: 'music',
-  use: '.song <song name or YouTube link>'
-}, async (conn, mek, m, { text }) => {
-  try {
-    if (!text) return m.reply('🪶 Please give me a song name or YouTube link!')
+    pattern: "song5",
+    react: "🎵",
+    desc: "Download YouTube MP3",
+    category: "download",
+    use: ".song1 <query>",
+    filename: __filename
+}, async (conn, mek, m, { from, reply, q }) => {
+    try {
+        if (!q) return reply("❓ What song do you want to download?");
 
-    m.reply('🔎 Searching your song...')
+        const yts = require('yt-search');
+        const search = await yts(q);
+        
+        if (!search.videos.length) return reply("❌ No results found for your query.");
 
-    let videoUrl = ''
-    if (text.includes('youtube.com') || text.includes('youtu.be')) {
-      videoUrl = text
-    } else {
-      const search = await yts(text)
-      if (!search.videos.length) return m.reply('❌ No results found.')
-      videoUrl = search.videos[0].url
+        const data = search.videos[0];
+        const ytUrl = data.url;
+        const ago = data.ago;
+
+        const api = `https://apis-starlights-team.koyeb.app/starlight/youtube-mp3?url=$${ytUrl}&format=mp3`;
+        const { data: apiRes } = await axios.get(api);
+
+        if (!apiRes?.status || !apiRes.data?.dl_url) {
+            return reply("❌ ගීතය බාගත කළ නොහැක. වෙනත් එකක් උත්සහ කරන්න!");
+        }
+
+        const data = apiRes.data;
+
+        await conn.sendMessage(from, {
+            image: { url: data.thumbnail },
+            caption: `
+ℹ️ *Title :* ${data.title}
+⏱️ *author :* ${data.author} 
+🧬 *Views :* ${data.quality}
+🖇️ *Link :* ${data.url}
+ 
+🎵 *Downloading Song:* ⏳
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+        }, { quoted: mek });
+
+        await conn.sendMessage(from, {
+            audio: { url: data.dl_url },
+            mimetype: "audio/mpeg",
+            ptt: false,
+        }, { quoted: mek });
+       
+        await conn.sendMessage(from, {
+            document : { url: data.dl_url },
+            mimetype: "audio/mpeg",
+            fileName: `${data.title}.mp3`
+        }, { quoted: mek });        
+
+    } catch (error) {
+        reply(`❌ An error occurred: ${error.message}`);
     }
-
-    m.reply('🎧 Downloading MP3, please wait...')
-
-    const apiUrl = `https://apis-starlights-team.koyeb.app/starlight/youtube-mp3?url=${videoUrl}&format=mp3`
-    const res = await axios.get(apiUrl)
-
-    if (!res.data || !res.data.result || !res.data.result.url)
-      return m.reply('❌ Failed to get the download link.')
-
-    const { title, thumbnail, url } = res.data.result
-
-    await conn.sendMessage(m.chat, {
-      audio: { url },
-      mimetype: 'audio/mpeg',
-      ptt: false,
-      fileName: `${title}.mp3`
-    }, { quoted: m })
-
-    await conn.sendMessage(m.chat, {
-      image: { url: thumbnail },
-      caption: `🎵 *${title}* \n✅ Downloaded successfully!`
-    }, { quoted: m })
-
-  } catch (err) {
-    console.error(err)
-    m.reply('❌ Error: ' + err.message)
-  }
-})
+});
