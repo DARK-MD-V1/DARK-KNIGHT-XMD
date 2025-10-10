@@ -22,14 +22,11 @@ cmd({
         const ytUrl = data.url;
         const ago = data.ago;
 
-        const api = `https://apis-starlights-team.koyeb.app/starlight/youtube-mp3?url=$${ytUrl}&format=mp3`;
-        const { data: apiRes } = await axios.get(api);
-
-        if (!apiRes?.status || !apiRes.data?.dl_url) {
-            return reply("❌ ගීතය බාගත කළ නොහැක. වෙනත් එකක් උත්සහ කරන්න!");
+        const res = await axios.get(`https://apis-starlights-team.koyeb.app/starlight/youtube-mp3?url=${ytUrl}&format=mp3`;
+        
+        const data = res.data; if (!data || !data.dl_url) {
+        return reply("❌ ගීතය බාගත කළ නොහැක. වෙනත් එකක් උත්සහ කරන්න!");
         }
-
-        const data = apiRes.data;
 
         await conn.sendMessage(from, {
             image: { url: data.thumbnail },
