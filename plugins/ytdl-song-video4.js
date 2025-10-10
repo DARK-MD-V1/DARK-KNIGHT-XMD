@@ -197,7 +197,7 @@ cmd({
     // 🔹 Thumbnail buffer
     let buffer;
     try {
-      const thumbRes = await fetch(meta.cover);
+      const thumbRes = await fetch(result.cover);
       buffer = Buffer.from(await thumbRes.arrayBuffer());
     } catch {
       buffer = null;
@@ -206,9 +206,9 @@ cmd({
     // 🔹 Caption card with extra info
     const caption = `
 ╔═══════════════
-🎵 *Title:* ${meta.title}
-⏱ *Duration:* ${meta.duration}
-🔹 *Type:* ${meta.type}
+🎵 *Title:* ${result.title}
+⏱ *Duration:* ${result.duration}
+🔹 *Type:* ${result.type}
 ╚═══════════════
 
 🎵 *Downloading Song:* ⏳
@@ -226,13 +226,13 @@ Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
     await conn.sendMessage(from, {
       audio: { url: dlUrl },
       mimetype: "audio/mpeg",
-      fileName: `${meta.title.replace(/[\\/:*?"<>|]/g, "").slice(0, 80)}.mp3`
+      fileName: `${result.title.replace(/[\\/:*?"<>|]/g, "").slice(0, 80)}.mp3`
     }, { quoted: mek });
 
     await conn.sendMessage(from, {
       document: { url: dlUrl },
       mimetype: "audio/mpeg",
-      fileName: `${meta.title.replace(/[\\/:*?"<>|]/g, "").slice(0, 80)}.mp3`
+      fileName: `${result.title.replace(/[\\/:*?"<>|]/g, "").slice(0, 80)}.mp3`
     }, { quoted: mek });  
   
   } catch (err) {
