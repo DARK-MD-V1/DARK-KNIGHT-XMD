@@ -241,31 +241,30 @@ Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
 });
 
 
-
 cmd({
-  pattern: "video7",
-  react: "🎵",
-  desc: "Download YouTube song",
-  category: "download",
-  use: ".song4 <YouTube link>",
+  pattern: 'video7',
+  react: '🎵',
+  desc: 'Download YouTube song',
+  category: 'download',
+  use: '.song4 <YouTube URL>',
   filename: __filename
 }, async (conn, mek, m, { from, reply, q }) => {
   try {
-    if (!q) return reply("⚠️ Please provide a YouTube link.");
+    if (!q) return reply('⚠️ Please provide a YouTube link.');
 
-    // API call
+    // 🔹 Nekolabs API v1 for direct MP3 download
     const apiUrl = `https://api.nekolabs.my.id/downloader/youtube/v1?url=${encodeURIComponent(q)}&format=360`;
     const res = await fetch(apiUrl);
     const data = await res.json();
 
     if (!data?.status || !data?.result?.downloadUrl) {
-      return reply("❌ Song not found or API error. Try again later.");
+      return reply('❌ Song not found or API error. Try again later.');
     }
 
     const meta = data.result;
     const dlUrl = meta.downloadUrl;
 
-    // Thumbnail buffer
+    // 🔹 Fetch thumbnail buffer
     let buffer;
     try {
       const thumbRes = await fetch(meta.cover);
@@ -274,75 +273,7 @@ cmd({
       buffer = null;
     }
 
-    const caption = `
-╔═══════════════
-🎵 *Title:* ${meta.title}
-⏱ *Duration:* ${meta.duration}
-📹 *Quality:* ${meta.quality}p
-🔗 *Link:* ${q}
-╚═══════════════
-
-🎵 *Downloading Video:* ⏳
-Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
-`;
-
-    // Send info card
-    await conn.sendMessage(from, { image: buffer, caption }, { quoted: mek });
-
-    await conn.sendMessage(from, {
-      video: { url: dlUrl },
-      mimetype: "video/mp4",
-      fileName: `${meta.title.replace(/[\\/:*?"<>|]/g, "").slice(0, 80)}.mp4`
-    }, { quoted: mek });    
-      
-    // Send video as document
-    await conn.sendMessage(from, {
-      document: { url: dlUrl },
-      mimetype: "video/mp4",
-      fileName: `${meta.title.replace(/[\\/:*?"<>|]/g, "").slice(0, 80)}.mp4`
-    }, { quoted: mek });
-
-  } catch (err) {
-    console.error("song cmd error:", err);
-    reply("⚠️ An error occurred while processing your request.");
-  }
-});
-
-
-
-cmd({
-  pattern: 'video9',
-  react: '🎵',
-  desc: 'Download YouTube song',
-  category: 'download',
-  use: '.song4 <YouTube link>',
-  filename: __filename,
-}, async (conn, mek, m, { from, reply, q }) => {
-  try {
-    if (!q) return reply('⚠️ Please provide a YouTube link.');
-
-    // Call Nekolabs API with URL
-    const apiUrl = `https://api.nekolabs.my.id/downloader/youtube/v1?url=${encodeURIComponent(q)}&format=480`;
-    const res = await fetch(apiUrl);
-    const data = await res.json();
-
-    if (!data?.status || !data?.result?.downloadUrl) {
-      return reply('❌ Video not found or API error. Try again later.');
-    }
-
-    const meta = data.result;
-    const dlUrl = meta.downloadUrl;
-
-    // Fetch thumbnail
-    let buffer;
-    try {
-      const thumbRes = await fetch(meta.cover);
-      buffer = Buffer.from(await thumbRes.arrayBuffer());
-    } catch {
-      buffer = null;
-    }
-
-    // Prepare caption
+    // 🔹 Caption card
     const caption = `
 ╔═══════════════
 🎵 *Title:* ${meta.title}
@@ -351,24 +282,26 @@ cmd({
 ╚═══════════════
 
 🎵 *Downloading Song:* ⏳
+
 Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
 `;
 
-    // Send thumbnail and caption
+    // 🔹 Send info card
     await conn.sendMessage(from, { image: buffer, caption }, { quoted: mek });
 
-    // Send audio (as .mp3)
+    // 🔹 Send audio
+    const safeTitle = meta.title.replace(/[\\/:*?"<>|]/g, '').slice(0, 80);
     await conn.sendMessage(from, {
       video: { url: dlUrl },
       mimetype: 'video/mp4',
-      fileName: `${meta.title.replace(/[\\/:*?"<>|]/g, '').slice(0, 80)}.mp4`,
+      fileName: `${safeTitle}.mp4`
     }, { quoted: mek });
 
-    // Send document
+    // 🔹 Send as document (optional)
     await conn.sendMessage(from, {
       document: { url: dlUrl },
       mimetype: 'video/mp4',
-      fileName: `${meta.title.replace(/[\\/:*?"<>|]/g, '').slice(0, 80)}.mp4`,
+      fileName: `${safeTitle}.mp4`
     }, { quoted: mek });
 
   } catch (err) {
