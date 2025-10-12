@@ -3,7 +3,7 @@ const yts = require('yt-search')
 const axios = require("axios");
 
 cmd({
-    pattern: "song2",
+    pattern: "song4",
     desc: "To download songs.",
     react: "🎵",
     category: "download",
@@ -18,15 +18,15 @@ try {
     const url = data.url;
 
     let desc = `
-➥ *Title:* ${data.title} 
-➥ *Duration:* ${data.timestamp} 
-➥ *Views:* ${data.views} 
-➥ *Uploaded On:* ${data.ago} 
-➥ *Link:* ${data.url} 
+📑 *Title :* ${data.title} 
+⏱️ *Duration :* ${data.timestamp} 
+📊 *Views :* ${data.views} 
+📆 *Released :* ${data.ago} 
+🔗 *Link :* ${data.url} 
 
-🎵 *Downloading Song:* ⏳
+🎵 *Downloading Song..* ⏳
 
-*Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
 `;
 
     await conn.sendMessage(from, { image: { url: data.thumbnail }, caption: desc }, { quoted: mek });
@@ -43,8 +43,7 @@ try {
     await conn.sendMessage(from, {
         document: { url: downloadUrl },
         mimetype: "audio/mpeg",
-        fileName: json.result.title + ".mp3",
-        caption: "*© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*"
+        fileName: json.result.title + ".mp3"
     }, { quoted: mek });
 
 } catch (e) {
@@ -56,7 +55,7 @@ try {
 //===================video_dl=======================
 
 cmd({
-    pattern: "video2",
+    pattern: "video1",
     desc: "To download videos.",
     react: "🎬",
     category: "download",
@@ -71,15 +70,15 @@ try {
     const url = data.url;
 
     let desc = `
-➥ *Title:* ${data.title} 
-➥ *Duration:* ${data.timestamp} 
-➥ *Views:* ${data.views} 
-➥ *Uploaded On:* ${data.ago} 
-➥ *Link:* ${data.url} 
+📑 *Title :* ${data.title} 
+⏱️ *Duration :* ${data.timestamp} 
+📊 *Views :* ${data.views} 
+📆 *Released :* ${data.ago} 
+🔗 *Link :* ${data.url} 
 
-🎬 *Downloading Video:* ⏳
+🎬 *Downloading Video..* ⏳
 
-*Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
 `;
 
     await conn.sendMessage(from, { image: { url: data.thumbnail }, caption: desc }, { quoted: mek });
@@ -96,8 +95,7 @@ try {
     await conn.sendMessage(from, {
         document: { url: downloadUrl },
         mimetype: "video/mp4",
-        fileName: json.result.title + ".mp4",
-        caption: "*© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*"
+        fileName: json.result.title + ".mp4"
     }, { quoted: mek });
 
 } catch (e) {
