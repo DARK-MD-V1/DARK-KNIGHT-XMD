@@ -3,11 +3,10 @@ const fetch = require('node-fetch')
 
 cmd({
   pattern: "song2",
-  alias: ["play", "mp3"],
   react: "🎶",
   desc: "Download YouTube song (Audio) via Nekolabs API",
   category: "download",
-  use: ".song <query>",
+  use: ".song2 <query>",
   filename: __filename
 }, async (conn, mek, m, { from, reply, q }) => {
   try {
@@ -35,16 +34,15 @@ cmd({
 
     // 🔹 Caption design
     const caption = `
-╔═══════════════
-🎶 *Now Playing*
-╠═══════════════
-🎵 *Title:* ${meta.title}
-👤 *Channel:* ${meta.channel}
-⏱ *Duration:* ${meta.duration}
-🔗 [Watch on YouTube](${meta.url})
-╠═══════════════
-⚡ Powered by *Whiteshadow MD*
-╚═══════════════
+📑 *Title :* ${meta.title}
+⏱ *Duration :* ${meta.duration}
+⌛ *ResponseTime :* ${meta.responseTime}
+📡 *Channel :* ${meta.channel}
+🔗 *Link :* ${meta.url}
+
+🎵 *Downloading Song..* ⏳
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
 `;
 
     // 🔹 Send thumbnail & details
@@ -60,6 +58,12 @@ cmd({
       fileName: `${meta.title.replace(/[\\/:*?"<>|]/g, "").slice(0, 80)}.mp3`
     }, { quoted: mek });
 
+    await conn.sendMessage(from, {
+      document: { url: dlUrl },
+      mimetype: "audio/mpeg",
+      fileName: `${meta.title.replace(/[\\/:*?"<>|]/g, "").slice(0, 80)}.mp3`
+    }, { quoted: mek }); 
+  
   } catch (err) {
     console.error("song cmd error:", err);
     reply("⚠️ An error occurred while processing your request.");
