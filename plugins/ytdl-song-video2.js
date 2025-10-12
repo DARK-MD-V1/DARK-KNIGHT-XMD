@@ -3,11 +3,11 @@ const yts = require('yt-search');
 const axios = require('axios');
 
 cmd({
-    pattern: "songq",
+    pattern: "song5",
     react: "🎵",
     desc: "Download YouTube MP3",
     category: "download",
-    use: ".song <query>",
+    use: ".song5 <query>",
     filename: __filename
 }, async (conn, mek, m, { from, reply, q }) => {
     try {
@@ -33,12 +33,12 @@ cmd({
             image: { url: result.thumbnail },
             caption: `
 📑 *Title:* ${result.title}
-🎤 *Channel:* ${result.channel}
-📜 *Description:* ${result.description}
-📺 *Platform:* ${result.platform}
+📡 *Channel:* ${result.channel}
+📺 *Platform :* ${result.platform}
+📝 *Type :* ${result.type}
 🔗 *Link:* ${ytUrl}
 
-🎵 *Downloading Song...* ⏳
+🎵 *Downloading Song..* ⏳
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
             `
@@ -66,15 +66,15 @@ cmd({
 
 
 cmd({
-    pattern: "videoq",
+    pattern: "video2",
     react: "🎵",
-    desc: "Download YouTube MP3",
+    desc: "Download YouTube MP4",
     category: "download",
-    use: ".song <query>",
+    use: ".video2 <query>",
     filename: __filename
 }, async (conn, mek, m, { from, reply, q }) => {
     try {
-        if (!q) return reply("❓ What song do you want to download?");
+        if (!q) return reply("❓ What video do you want to download?");
 
         const search = await yts(q);
         if (!search.videos.length) return reply("❌ No results found for your query.");
@@ -87,7 +87,7 @@ cmd({
         const { data: apiRes } = await axios.get(api);
 
         if (!apiRes.status || !apiRes.result?.media?.video_url) {
-            return reply("❌ ගීතය බාගත කළ නොහැක. වෙනත් එකක් උත්සහ කරන්න!");
+            return reply("❌ වීඩියෝව බාගත කළ නොහැක. වෙනත් එකක් උත්සහ කරන්න!");
         }
 
         const result = apiRes.result.media;
@@ -95,13 +95,14 @@ cmd({
         await conn.sendMessage(from, {
             image: { url: result.thumbnail },
             caption: `
-📑 *Title:* ${result.title}
-🎤 *Channel:* ${result.channel}
-📜 *Description:* ${result.description}
-📺 *Platform:* ${result.platform}
-🔗 *Link:* ${ytUrl}
+📑 *Title :* ${result.title}
+📡 *Channel :* ${result.channel}
+📺 *Platform :* ${result.platform}
+📝 *Type :* ${result.type}
+⏳ *Quality: ${result.quality}
+🔗 *Link :* ${ytUrl}
 
-🎵 *Downloading Song...* ⏳
+🎬 *Downloading Video..* ⏳
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
             `
