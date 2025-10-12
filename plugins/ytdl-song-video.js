@@ -3,11 +3,11 @@ const yts = require('yt-search')
 const axios = require("axios");
 
 cmd({
-    pattern: "song6",
+    pattern: "song3",
     react: "🎵",
     desc: "Download YouTube MP3",
     category: "download",
-    use: ".song1 <query>",
+    use: ".song3 <query>",
     filename: __filename
 }, async (conn, mek, m, { from, reply, q }) => {
     try {
@@ -32,13 +32,13 @@ cmd({
         await conn.sendMessage(from, {
             image: { url: data.thumbnail },
             caption: `
-ℹ️ *Title :* ${data.title}
+📑 *Title :* ${data.title}
 ⏱️ *Duration :* ${data.timestamp} 
-🧬 *Views :* ${data.views}
-📅 *Released Date :* ${data.ago}
-🖇️ *Link :* ${data.url}
+📊 *Views :* ${data.views}
+📆 *Released :* ${data.ago}
+🔗 *Link :* ${data.url}
  
-🎵 *Downloading Song:* ⏳
+🎵 *Downloading Song..* ⏳
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: mek });
@@ -64,15 +64,15 @@ cmd({
 
 
 cmd({
-    pattern: "video6",
-    react: "🎵",
-    desc: "Download YouTube MP3",
+    pattern: "video",
+    react: "🎬",
+    desc: "Download YouTube MP4",
     category: "download",
-    use: ".song1 <query>",
+    use: ".video <query>",
     filename: __filename
 }, async (conn, mek, m, { from, reply, q }) => {
     try {
-        if (!q) return reply("❓ What song do you want to download?");
+        if (!q) return reply("❓ What video do you want to download?");
 
         const search = await yts(q);
         if (!search.videos.length) return reply("❌ No results found for your query.");
@@ -85,7 +85,7 @@ cmd({
         const { data: apiRes } = await axios.get(api);
 
         if (!apiRes?.dl_url) {
-            return reply("❌ ගීතය බාගත කළ නොහැක. වෙනත් එකක් උත්සහ කරන්න!");
+            return reply("❌ වීඩියෝව බාගත කළ නොහැක. වෙනත් එකක් උත්සහ කරන්න!");
         }
 
         const downloadUrl = apiRes.dl_url;
@@ -93,13 +93,13 @@ cmd({
         await conn.sendMessage(from, {
             image: { url: data.thumbnail },
             caption: `
-ℹ️ *Title :* ${data.title}
+📑 *Title :* ${data.title}
 ⏱️ *Duration :* ${data.timestamp} 
-🧬 *Views :* ${data.views}
-📅 *Released Date :* ${data.ago}
-🖇️ *Link :* ${data.url}
+📊 *Views :* ${data.views}
+📆 *Released :* ${data.ago}
+🔗 *Link :* ${data.url}
  
-🎵 *Downloading Song:* ⏳
+🎬 *Downloading Video..* ⏳
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: mek });
