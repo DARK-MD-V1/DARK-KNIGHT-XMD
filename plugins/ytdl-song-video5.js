@@ -3,7 +3,7 @@ const axios = require('axios');
 const yts = require('yt-search');
 
 cmd({
-    pattern: "song",
+    pattern: "song6",
     desc: "Download song from YouTube",
     category: "download",
     react: "🎵",
@@ -25,15 +25,15 @@ cmd({
         await conn.sendMessage(from, {
             image: { url: video.thumbnail },
             caption: `
- 🔖 *Title :* ${video.title}
- ⏱️ *Duration :* ${video.timestamp} 
- 🧬 *Views :* ${video.views}
- 📅 *Released Date :* ${video.ago}
- 🖇️ *Link :* ${video.url}
+📑 *Title :* ${video.title}
+⏱️ *Duration :* ${video.timestamp} 
+📊 *Views :* ${video.views}
+📆 *Released :* ${video.ago}
+🔗 *Link :* ${video.url}
 
- 🎵 *Downloading Song:* ⏳
+🎵 *Downloading Song..* ⏳
 
- Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
  `}, { quoted: m });
 
         // API link
@@ -75,7 +75,7 @@ cmd({
 
 
 cmd({
-    pattern: "video",
+    pattern: "video3",
     desc: "Download song from YouTube",
     category: "download",
     react: "🎬",
@@ -97,15 +97,15 @@ cmd({
         await conn.sendMessage(from, {
             image: { url: video.thumbnail },
             caption: `
- 🔖 *Title :* ${video.title}
- ⏱️ *Duration :* ${video.timestamp} 
- 🧬 *Views :* ${video.views}
- 📅 *Released Date :* ${video.ago}
- 🖇️ *Link :* ${video.url}
+📑 *Title :* ${video.title}
+⏱️ *Duration :* ${video.timestamp} 
+📊 *Views :* ${video.views}
+📆 *Released :* ${video.ago}
+🔗 *Link :* ${video.url}
 
- 🎬 *Downloading Video:* ⏳
+🎬 *Downloading Video..* ⏳
 
- Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
  `}, { quoted: m });
 
         // API link
