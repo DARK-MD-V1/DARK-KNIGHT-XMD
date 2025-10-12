@@ -36,7 +36,7 @@ cmd({
     const caption = `
 📑 *Title :* ${meta.title}
 ⏱ *Duration :* ${meta.duration}
-⌛ *ResponseTime :* ${meta.responseTime}
+⏰ *ResponseTime :* ${data.responseTime}
 📡 *Channel :* ${meta.channel}
 🔗 *Link :* ${meta.url}
 
@@ -73,7 +73,7 @@ cmd({
 
 cmd({
   pattern: "ytmp3",
-  react: "🎶",
+  react: "🎵",
   desc: "Download YouTube song (Audio) via Nekolabs API (v1 Direct)",
   category: "download",
   use: ".ytmp3 <YouTube link>",
@@ -110,12 +110,12 @@ cmd({
 
     // 🔹 Caption
     const caption = `
-🎵 *Title:* ${meta.title}
-🎧 *Format:* ${meta.format} (${meta.quality}kbps)
-⏱ *Duration:* ${meta.duration}
-⏰ *Response Time:* ${data.responseTime}
+📑 *Title :* ${meta.title}
+⏱ *Duration :* ${meta.duration}
+⏰ *ResponseTime :* ${data.responseTime}
+📝 *Format :* ${meta.format} (${meta.quality}kbps)
 
-📥 *Downloading Audio...*
+🎵 *Downloading Song..* 
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
 `;
