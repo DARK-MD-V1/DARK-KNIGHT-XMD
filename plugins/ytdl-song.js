@@ -37,7 +37,7 @@ cmd({
 📑 *Title :* ${data.title}
 ⏱️ *Duration :* ${data.timestamp} 
 📊 *Views :* ${data.views}
-📆 *Released Date :* ${data.ago}
+📆 *Released :* ${data.ago}
 🔗 *Link :* ${data.url}
  
 🎵 *Downloading Song..* ⏳
