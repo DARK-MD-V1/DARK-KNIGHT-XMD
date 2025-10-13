@@ -46,19 +46,28 @@ cmd(
 
 cmd({
     pattern: "gemini",
-    react: "📑",
-    desc: "ai chat.",
-    category: "main",
+    desc: "Chat with Gemini AI",
+    category: "ai",
+    react: "🧠",
     filename: __filename
 },
-async(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply}) => {
-try{
-let data = await fetchJson(`https://api-aswin-sparky.koyeb.app/api/search/gpt3?search=${q}`)
-return reply(`${data.data}
+async (conn, mek, m, { from, args, q, reply, react }) => {
+    try {
+        if (!q) return reply("Please provide a message for Gemini AI.\nExample: `.deepseek Hello`");
 
-> ㋛︎ ᴘᴏᴡᴇʀᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`)
-}catch(e){
-console.log(e)
-reply(`${e}`)
-}
-})
+        const apiUrl = `https://sadiya-tech-apis.vercel.app/ai/gemini?q=${encodeURIComponent(q)}&apikey=sadiya`;
+        const { data } = await axios.get(apiUrl);
+
+        if (!data || !data.result) {
+            await react("❌");
+            return reply("Gemini AI failed to respond. Please try again later.");
+        }
+
+        await reply(`🧠 *Gemini AI Response:*\n\n${data.result}`);
+        await react("✅");
+    } catch (e) {
+        console.error("Error in Gemini AI command:", e);
+        await react("❌");
+        reply("An error occurred while communicating with Gemini AI.");
+    }
+});
