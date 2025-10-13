@@ -68,7 +68,7 @@ async (conn, mek, m, { from, args, q, reply, react }) => {
     try {
         if (!q) return reply("Please provide a message for DeepSeek AI.\nExample: `.deepseek Hello`");
 
-        const apiUrl = `https://api.ryzendesu.vip/api/ai/deepseek?text=${encodeURIComponent(q)}`;
+        const apiUrl = `https://sadiya-tech-apis.vercel.app/ai/gemini?q=${encodeURIComponent(q)}&apikey=sadiya`;
         const { data } = await axios.get(apiUrl);
 
         if (!data || !data.answer) {
