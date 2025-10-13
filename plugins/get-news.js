@@ -1,6 +1,5 @@
 const axios = require('axios');
 const { cmd } = require('../command');
-const { fetchJson } = require("../lib/functions");
 
 cmd({
     pattern: "news",
@@ -45,44 +44,45 @@ async (conn, mek, m, { from, reply }) => {
 });
 
 
-
 cmd({
     pattern: "news2",
-    react: "📰",
-    desc: "Get hiru latest news.",
+    desc: "Get the latest Hiru News headlines.",
     category: "news",
-    use: ".hiru",
-    filename: __filename,
-    },
-    async (conn, mek, { from, reply }) => {
-        try {
-            
-            const apiUrl = `https://tharuzz-news-api.vercel.app/api/news/hiru?`;
-            const hiruData = await fetchJson(apiUrl);
+    react: "📰",
+    filename: __filename
+},
+async (conn, mek, m, { from, reply }) => {
+    try {
+        // Fetch from Tharuzz News API
+        const response = await axios.get('https://tharuzz-news-api.vercel.app/api/news/hiru');
+        const articles = response.data?.datas || [];
 
-            
-            if ( !hiruData.datas || hiruData.datas.length === 0) {
-                return reply("❌ පුවත් සොයාගත නොහැකි විය.");
+        if (!articles.length) return reply("⚠️ No news articles found.");
+
+        // Send each article (limit to 5)
+        for (let i = 0; i < Math.min(articles.length, 5); i++) {
+            const article = articles[i];
+            const message = `
+📰 *${article.title || "No Title"}*
+
+🧾 _${article.description || "No Description"}_
+
+🔗 ${article.link || "No Link"}
+
+© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+            `;
+
+            if (article.image) {
+                await conn.sendMessage(from, {
+                    image: { url: article.image },
+                    caption: message
+                });
+            } else {
+                await conn.sendMessage(from, { text: message });
             }
-
-          //  const results = hiruData.datas;
-            const news = hiruData.datas;
-            const caption = `
-📰 *Hiru News.* 📰
-
-📰 Title :* \`${news.title || 'N/A'}\`
-⚠️ *Description :* \`${news.desciption || 'N/A'}\`
-🔗 *Link :* ${news.link || 'N/A'}
-
-> ©ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`.trim();
-
-                await conn.sendMessage(from, { image: { url: news.image }, caption }, { quoted: mek });
-                
-                
-            
-        } catch (e) {
-            console.error("❌ News error: ", e);
-            return reply(`❌ News plugin error: ${e.message}`);
-        }
+        };
+    } catch (e) {
+        console.error("Error fetching news:", e);
+        reply("❌ Could not fetch news. Please try again later.");
     }
-);
+});
