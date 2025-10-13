@@ -40,7 +40,7 @@ async (conn, mek, m, { from, args, q, reply, react }) => {
     try {
         if (!q) return reply("Please provide a message for OpenAI.\nExample: `.openai Hello`");
 
-        const apiUrl = `https://vapis.my.id/api/openai?q=${encodeURIComponent(q)}`;
+        const apiUrl = `https://malvin-api.vercel.app/ai/openai?text=${encodeURIComponent(q)}`;
         const { data } = await axios.get(apiUrl);
 
         if (!data || !data.result) {
