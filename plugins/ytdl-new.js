@@ -83,7 +83,7 @@ cmd({
         const ytUrl = data.url;
 
         // 🧩 New API (Zenzxz)
-        const api = `https://api.zenzxz.my.id/downloader/ytmp3v2?url=${encodeURIComponent(ytUrl)}`;
+        const api = `https://api.zenzxz.my.id/downloader/ytmp4v2?url=${encodeURIComponent(ytUrl)}`;
         const { data: apiRes } = await axios.get(api);
 
         // ⚠️ Validate response
