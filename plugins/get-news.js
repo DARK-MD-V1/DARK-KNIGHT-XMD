@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { cmd } = require('../command');
+const { fetchJson } = require("../lib/functions");
 
 cmd({
     pattern: "news",
@@ -42,3 +43,46 @@ async (conn, mek, m, { from, reply }) => {
         reply("Could not fetch news. Please try again later.");
     }
 });
+
+
+
+cmd({
+    pattern: "news2",
+    react: "📰",
+    desc: "Get hiru latest news.",
+    category: "news",
+    use: ".hiru",
+    filename: __filename,
+    },
+    async (conn, mek, { from, reply }) => {
+        try {
+            
+            const apiUrl = `https://tharuzz-news-api.vercel.app/api/news/hiru?`;
+            const hiruData = await fetchJson(apiUrl);
+
+            
+            if ( !hiruData.datas || hiruData.datas.length === 0) {
+                return reply("❌ පුවත් සොයාගත නොහැකි විය.");
+            }
+
+          //  const results = hiruData.datas;
+            const news = hiruData.datas;
+            const caption = `
+📰 *Hiru News.* 📰
+
+📰 Title :* \`${news.title || 'N/A'}\`
+⚠️ *Description :* \`${news.desciption || 'N/A'}\`
+🔗 *Link :* ${news.link || 'N/A'}
+
+> ©ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`.trim();
+
+                await conn.sendMessage(from, { image: { url: news.image }, caption }, { quoted: mek });
+                
+                
+            
+        } catch (e) {
+            console.error("❌ News error: ", e);
+            return reply(`❌ News plugin error: ${e.message}`);
+        }
+    }
+);
