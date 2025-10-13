@@ -91,7 +91,10 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • tt2
 ┃★│ • tiks
 ┃★│ • twitter
+┃★│ • xnxx
+┃★│ • xvideo
 ┃★│ • ytmp3
+┃★│ • play
 ┃★│ • song
 ┃★│ • song1
 ┃★│ • song2
@@ -104,8 +107,6 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • video2
 ┃★│ • video3
 ┃★│ • video4
-┃★│ • xnxx
-┃★│ • xvideo
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 
