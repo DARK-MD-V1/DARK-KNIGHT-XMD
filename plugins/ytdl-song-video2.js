@@ -67,7 +67,7 @@ cmd({
 
 cmd({
     pattern: "video2",
-    react: "🎵",
+    react: "🎬",
     desc: "Download YouTube MP4",
     category: "download",
     use: ".video2 <query>",
