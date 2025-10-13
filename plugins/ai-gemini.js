@@ -53,7 +53,7 @@ cmd({
 },
 async (conn, mek, m, { from, args, q, reply, react }) => {
     try {
-        if (!q) return reply("Please provide a message for Gemini AI.\nExample: `.deepseek Hello`");
+        if (!q) return reply("Please provide a message for Gemini AI.\nExample: `.gemini Hello`");
 
         const apiUrl = `https://sadiya-tech-apis.vercel.app/ai/gemini?q=${encodeURIComponent(q)}&apikey=sadiya`;
         const { data } = await axios.get(apiUrl);
