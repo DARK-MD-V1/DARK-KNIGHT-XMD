@@ -76,7 +76,7 @@ async (conn, mek, m, { from, args, q, reply, react }) => {
             return reply("DeepSeek AI failed to respond. Please try again later.");
         }
 
-        await reply(`🧠 *DeepSeek AI Response:*\n\n${data.answer}`);
+        await reply(`🧠 *DeepSeek AI Response:*\n\n${data.result}`);
         await react("✅");
     } catch (e) {
         console.error("Error in DeepSeek AI command:", e);
