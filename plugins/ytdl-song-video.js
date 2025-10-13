@@ -108,7 +108,7 @@ cmd({
         await conn.sendMessage(from, {
             video: { url: downloadUrl },
             mimetype: "video/mp4",
-            ptt: false,
+            fileName: `${data.title}.mp4`
         }, { quoted: mek });
 
         // Optional: send as document
