@@ -58,29 +58,29 @@ async (conn, mek, m, { from, args, q, reply, react }) => {
 });
 
 cmd({
-    pattern: "deepseek",
-    desc: "Chat with DeepSeek AI",
+    pattern: "gpt",
+    desc: "Chat with Gpt AI",
     category: "ai",
     react: "🧠",
     filename: __filename
 },
 async (conn, mek, m, { from, args, q, reply, react }) => {
     try {
-        if (!q) return reply("Please provide a message for DeepSeek AI.\nExample: `.deepseek Hello`");
+        if (!q) return reply("Please provide a message for Gpt AI.\nExample: `.gpt Hello`");
 
-        const apiUrl = `https://sadiya-tech-apis.vercel.app/ai/gemini?q=${encodeURIComponent(q)}&apikey=sadiya`;
+        const apiUrl = `https://api-aswin-sparky.koyeb.app/api/search/gpt3?search=${encodeURIComponent(q)}`;
         const { data } = await axios.get(apiUrl);
 
-        if (!data || !data.result) {
+        if (!data || !data.data) {
             await react("❌");
-            return reply("DeepSeek AI failed to respond. Please try again later.");
+            return reply("Gpt AI failed to respond. Please try again later.");
         }
 
-        await reply(`🧠 *DeepSeek AI Response:*\n\n${data.result}`);
+        await reply(`🧠 *Gpt AI Response:*\n\n${data.data}`);
         await react("✅");
     } catch (e) {
-        console.error("Error in DeepSeek AI command:", e);
+        console.error("Error in Gpt AI command:", e);
         await react("❌");
-        reply("An error occurred while communicating with DeepSeek AI.");
+        reply("An error occurred while communicating with Gpt AI.");
     }
 });
