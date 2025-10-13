@@ -99,7 +99,7 @@ cmd({
 📡 *Channel :* ${result.channel}
 📺 *Platform :* ${result.platform}
 📝 *Type :* ${result.type}
-⏳ *Quality: ${result.quality}
+⏳ *Quality:* ${result.quality}
 🔗 *Link :* ${ytUrl}
 
 🎬 *Downloading Video..* ⏳
@@ -112,7 +112,7 @@ cmd({
         await conn.sendMessage(from, {
             video: { url: result.video_url },
             mimetype: "video/mp4",
-            ptt: false,
+            fileName: `${result.title}.mp4`
         }, { quoted: mek });
 
         // 📄 Send as Document
