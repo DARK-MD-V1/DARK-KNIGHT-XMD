@@ -71,7 +71,7 @@ async (conn, mek, m, { from, args, q, reply, react }) => {
         const apiUrl = `https://sadiya-tech-apis.vercel.app/ai/gemini?q=${encodeURIComponent(q)}&apikey=sadiya`;
         const { data } = await axios.get(apiUrl);
 
-        if (!data || !data.answer) {
+        if (!data || !data.result) {
             await react("❌");
             return reply("DeepSeek AI failed to respond. Please try again later.");
         }
