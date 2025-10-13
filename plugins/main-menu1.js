@@ -30,10 +30,10 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ╭━━〔 *🤖 Ai Menu* 〕━━┈⊷
 ┃★╭──────────────
 ┃★│ • ai
-┃★│ • deepseek
+┃★│ • gpt
+┃★│ • openai
 ┃★│ • gemini
 ┃★│ • gemini2
-┃★│ • openai
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 
@@ -77,6 +77,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • gdrive2
 ┃★│ • gitclone
 ┃★│ • image
+┃★│ • img
 ┃★│ • igimagedl
 ┃★│ • igvid
 ┃★│ • ig2
