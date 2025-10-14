@@ -3,7 +3,7 @@ const axios = require("axios");
 
 cmd({
     pattern: "news3",
-    desc: "Get the latest Sri Lankan news headlines in one message.",
+    desc: "Get the latest Sri Lankan news headlines.",
     category: "news",
     react: "📰",
     filename: __filename
@@ -19,39 +19,38 @@ async (conn, mek, m, { from, reply }) => {
             "https://supun-md-api-rho.vercel.app/api/news/adaderana"
         ];
 
-        let allNews = [];
-
         for (let api of newsAPIs) {
             const response = await axios.get(api);
             const data = response.data;
+
+            // Determine articles array (some APIs use 'results', others 'datas')
             const articles = data.results ? [data.results] : data.datas || [];
 
-            articles.forEach(article => {
-                if (!article.title) return; // skip empty titles
-                allNews.push({
-                    title: article.title,
-                    description: article.description || "No description available",
-                    url: article.url,
-                    date: article.date || "Date not provided",
-                    image: article.image || article.urlToImage || null
-                });
-            });
+            if (!articles.length) continue;
+
+            for (let article of articles) {
+                // Skip if no title
+                if (!article.title) continue;
+
+                const message = `
+📰 *${article.title}*
+⚠️ _${article.description || "No description available"}_
+🔗 _${article.url}_
+📅 _${article.date || "Date not provided"}_
+
+©ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+                `;
+
+                if (article.image || article.urlToImage) {
+                    await conn.sendMessage(from, {
+                        image: { url: article.image || article.urlToImage },
+                        caption: message
+                    });
+                } else {
+                    await conn.sendMessage(from, { text: message });
+                }
+            }
         }
-
-        if (!allNews.length) return reply("No news found at the moment.");
-
-        // Prepare single message
-        let message = "📰 *Latest Sri Lankan News Headlines*\n\n";
-        allNews.slice(0, 10).forEach((news, index) => { // show up to 10 news items
-            message += `${index + 1}. *${news.title}*\n`;
-            message += `⚠️ _${news.description}_\n`;
-            message += `🔗 _${news.url}_\n`;
-            message += `📅 _${news.date}_\n\n`;
-        });
-
-        // Send the message
-        await conn.sendMessage(from, { text: message });
-
     } catch (e) {
         console.error("Error fetching news:", e);
         reply("Could not fetch news. Please try again later.");
