@@ -25,13 +25,13 @@ cmd({
         }
 
         // Filter only PNG stickers
-        const pngResults = response.data.results.filter(pack => pack.thumbnailUrl?.endsWith(".png"));
+        const pngResults = response.data.results.filter(pack => pack.thumbnailUrl?.endsWith(".webp"));
 
         if (!pngResults.length) {
-            return reply("❌ No PNG stickers found. Try different keywords.");
+            return reply("❌ No webp stickers found. Try different keywords.");
         }
 
-        await reply(`✅ Found *${pngResults.length}* PNG results for *"${query}"*. Sending top 10...`);
+        await reply(`✅ Found *${pngResults.length}* webp results for *"${query}"*. Sending top 10...`);
 
         const selected = pngResults
             .sort(() => 0.10 - Math.random())
