@@ -520,6 +520,7 @@ cmd({
 ┃★│ • githubstalk
 ┃★│ • npm
 ┃★│ • news
+┃★│ • news2
 ┃★│ • mvdetail
 ┃★│ • praytime
 ┃★│ • sss
