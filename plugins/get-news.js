@@ -1,9 +1,10 @@
 const {cmd , commands} = require('../command');
 const axios = require("axios");
 
+
 cmd({
     pattern: "news3",
-    desc: "Get the latest Sri Lankan news headlines.",
+    desc: "Get the latest Sri Lankan news headlines (stylish paththata view).",
     category: "news",
     react: "📰",
     filename: __filename
@@ -21,43 +22,49 @@ async (conn, mek, m, { from, reply, args }) => {
         };
 
         if (!source || !sources[source]) {
-            let available = Object.keys(sources).map(s => `🔹 *${s}*`).join("\n");
-            return reply(`⚙️ Please specify a valid news source.\n\nAvailable sources:\n${available}\n\n📌 Example: *.news2 hiru*`);
+            const available = Object.keys(sources)
+                .map(s => `🔹 *${s}*`)
+                .join("\n");
+            return reply(
+                `⚙️ Please specify a valid news source.\n\nAvailable sources:\n${available}\n\n📌 Example: *.news6 hiru*`
+            );
         }
 
         const response = await axios.get(sources[source]);
         let articles = [];
         if (response.data.datas) {
-            articles = response.data.datas; // Hiru / Tharuzz API
+            articles = response.data.datas;
         } else if (response.data.results) {
-            articles = [response.data.results]; // Supun APIs
+            articles = [response.data.results];
         }
 
         if (!articles.length) return reply("⚠️ No news articles found.");
 
-        // Send articles as formatted messages (paththata style)
         for (let i = 0; i < Math.min(articles.length, 5); i++) {
             const article = articles[i];
-            const title = article.title || "No Title";
-            const description = article.description || "No Description";
+            const title = article.title?.trim() || "No Title";
+            const description = article.description?.trim() || "No Description";
             const link = article.url || article.link || "No Link";
-            const date = article.date || "";
+            const date = article.date?.trim() || "";
             const image = article.image;
 
+            // Paththata / stylish newspaper-style layout
             const message = `
-📌 *${title}*
-
-🗓 _${date}_
-
-📝 _${description}_
-
-🔗 ${link}
-
+╔═══════════════❖
+║ 📰 *${title}*
+╠═══════════════❖
+${date ? `║ 🗓 _${date}_\n` : ""}║ 📝 _${description}_
+║
+║ 🔗 ${link}
+╚═══════════════❖
 © ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
-            `;
+            `.trim();
 
             if (image) {
-                await conn.sendMessage(from, { image: { url: image }, caption: message });
+                await conn.sendMessage(from, {
+                    image: { url: image },
+                    caption: message
+                });
             } else {
                 await conn.sendMessage(from, { text: message });
             }
@@ -67,7 +74,6 @@ async (conn, mek, m, { from, reply, args }) => {
         reply("❌ Could not fetch news. Please try again later.");
     }
 });
-
 
 
 
