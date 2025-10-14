@@ -36,7 +36,7 @@ cmd({
                 await conn.sendMessage(
                     from,
                     {
-                        webp: { url: pack.thumbnailUrl }
+                        sticker: { url: pack.thumbnailUrl }
                     },
                     { quoted: mek }
                 );
