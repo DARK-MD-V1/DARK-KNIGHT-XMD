@@ -1,71 +1,80 @@
-const {cmd , commands} = require('../command');
+const { cmd, commands } = require('../command');
 const axios = require("axios");
 
 cmd({
     pattern: "news",
-    desc: "Get the latest news headlines.",
+    desc: "Get the latest Sri Lankan news from all major sources at once.",
     category: "news",
     react: "📰",
     filename: __filename
 },
 async (conn, mek, m, { from, reply }) => {
     try {
-        const urls = [
-            "https://supun-md-api-rho.vercel.app/api/news/gossiplank",
-            "https://supun-md-api-rho.vercel.app/api/news/lankadeepa",
-            "https://tharuzz-news-api.vercel.app/api/news/hiru",
-            "https://supun-md-api-rho.vercel.app/api/news/itn",
-            "https://supun-md-api-rho.vercel.app/api/news/sirasa",
-            "https://supun-md-api-rho.vercel.app/api/news/adaderana"
-        ];
+        const sources = {
+            gossiplanka: "https://supun-md-api-rho.vercel.app/api/news/gossiplank",
+            lankadeepa: "https://supun-md-api-rho.vercel.app/api/news/lankadeepa",
+            itn: "https://supun-md-api-rho.vercel.app/api/news/itn",
+            sirasa: "https://supun-md-api-rho.vercel.app/api/news/sirasa",
+            adaderana: "https://supun-md-api-rho.vercel.app/api/news/adaderana",
+            hiru: "https://tharuzz-news-api.vercel.app/api/news/hiru"
+        };
 
-        // Fetch all news sources in parallel
-        const responses = await Promise.allSettled(urls.map(url => axios.get(url)));
+        reply("📰 *Fetching latest news from all major Sri Lankan sources...*");
 
-        // Combine all articles into one array
-        let articles = [];
-        for (const res of responses) {
-            if (res.status === "fulfilled") {
-                const data = res.value.data.results || res.value.data.datas || [];
-                articles.push(...data);
+        // Loop through all sources
+        for (const [name, url] of Object.entries(sources)) {
+            try {
+                const res = await axios.get(url);
+                const data = res.data;
+
+                // Normalize API data
+                let articles = [];
+                if (Array.isArray(data.datas)) articles = data.datas;
+                else if (data.results) articles = [data.results];
+                else if (Array.isArray(data.result)) articles = data.result;
+
+                if (!articles.length) continue;
+
+                // Send only top 1 news from each source
+                const a = articles[0];
+                const title = a.title || a.heading || "No title";
+                const description = a.description || a.desc || "";
+                const image = a.image || a.img || a.thumbnail || null;
+                const urlLink = a.url || a.link || "No link available";
+                const date = a.date ? `🗓️ ${a.date}` : "";
+
+                const message = `
+📢 *${name.toUpperCase()} NEWS*
+─────────────────────
+🗞️ *${title}*
+${date}
+
+📝 ${description}
+
+🔗 ${urlLink}
+
+© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙆-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+                `;
+
+                if (image) {
+                    await conn.sendMessage(from, { image: { url: image }, caption: message });
+                } else {
+                    await conn.sendMessage(from, { text: message });
+                }
+
+            } catch (err) {
+                console.error(`Error fetching from ${name}:`, err.message);
             }
         }
 
-        if (!articles.length) return reply("❌ No news articles found.");
+        reply("✅ *All news sources updated successfully!*");
 
-        // Limit to 5 latest articles
-        articles = articles.slice(0, 5);
-
-        for (const article of articles) {
-            const title = article.title || "No title available";
-            const description = article.description || "No description available";
-            const url = article.url || "No link available";
-            const date = article.date || "Unknown date";
-            const image = article.image || article.urlToImage || null;
-
-            const message = `
-📰 *${title}*
-
-⚠️ _${description}_
-
-🔗 _${url}_
-
-📅 _${date}_
-
-©ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
-`;
-
-            if (image) {
-                await conn.sendMessage(from, { image: { url: image }, caption: message });
-            } else {
-                await conn.sendMessage(from, { text: message });
-            }
-        }
     } catch (e) {
-        console.error("Error fetching news:", e);
+        console.error("Error fetching Lanka news:", e);
         reply("⚠️ Could not fetch news. Please try again later.");
     }
 });
+
 
 
 cmd({
