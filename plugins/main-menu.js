@@ -174,7 +174,7 @@ cmd({
 ┃★│ • gitclone
 ┃★│ • image
 ┃★│ • img
-┃★│ • igimagedl
+┃★│ • instagram
 ┃★│ • igvid
 ┃★│ • ig2
 ┃★│ • mediafire
@@ -183,6 +183,7 @@ cmd({
 ┃★│ • pindl2
 ┃★│ • ringtone
 ┃★│ • spotify
+┃★│ • spotify2
 ┃★│ • tiktok
 ┃★│ • tt2
 ┃★│ • tiks
