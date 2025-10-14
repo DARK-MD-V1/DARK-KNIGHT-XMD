@@ -5,7 +5,7 @@ const newsApis = [
     { name: "📰 GOSSIPLANKA-News 📰", url: "https://supun-md-api-rho.vercel.app/api/news/gossiplank" },
     { name: "📰 LANKADEEPA-News 📰", url: "https://supun-md-api-rho.vercel.app/api/news/lankadeepa" },
     { name: "📰 ITN-News 📰", url: "https://supun-md-api-rho.vercel.app/api/news/itn" },
-    { name: "📰 SIRASA-News📰", url: "https://supun-md-api-rho.vercel.app/api/news/sirasa" },
+    { name: "📰 SIRASA-News 📰", url: "https://supun-md-api-rho.vercel.app/api/news/sirasa" },
     { name: "📰 ADADERANA-News 📰", url: "https://supun-md-api-rho.vercel.app/api/news/adaderana" },
     { name: "📰 HIRU-News 📰", url: "https://tharuzz-news-api.vercel.app/api/news/hiru" }
 ];
