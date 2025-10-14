@@ -26,27 +26,30 @@ async (conn, mek, m, { from, reply, args }) => {
         }
 
         const response = await axios.get(sources[source]);
-        // Each API has slightly different JSON structure, normalize it
         let articles = [];
         if (response.data.datas) {
-            articles = response.data.datas; // Hiru / Tharuzz
+            articles = response.data.datas; // Hiru / Tharuzz API
         } else if (response.data.results) {
-            articles = [response.data.results]; // Supun APIs return single object
+            articles = [response.data.results]; // Supun APIs
         }
 
         if (!articles.length) return reply("⚠️ No news articles found.");
 
+        // Send articles as formatted messages (paththata style)
         for (let i = 0; i < Math.min(articles.length, 5); i++) {
             const article = articles[i];
             const title = article.title || "No Title";
             const description = article.description || "No Description";
             const link = article.url || article.link || "No Link";
+            const date = article.date || "";
             const image = article.image;
 
             const message = `
-📰 *${title}*
+📌 *${title}*
 
-🧾 _${description}_
+🗓 _${date}_
+
+📝 _${description}_
 
 🔗 ${link}
 
@@ -64,6 +67,7 @@ async (conn, mek, m, { from, reply, args }) => {
         reply("❌ Could not fetch news. Please try again later.");
     }
 });
+
 
 
 
