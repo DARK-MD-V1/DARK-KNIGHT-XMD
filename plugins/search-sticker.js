@@ -1,7 +1,6 @@
 const { cmd } = require("../command");
 const axios = require("axios");
 
-
 cmd({
     pattern: "searchsti",
     react: "🦋",
@@ -25,10 +24,16 @@ cmd({
             return reply("❌ No images found. Try different keywords.");
         }
 
-        const results = response.data.results;
-        await reply(`✅ Found *${results.length}* results for *"${query}"*. Sending top 10...`);
+        // Filter only PNG stickers
+        const pngResults = response.data.results.filter(pack => pack.thumbnailUrl?.endsWith(".png"));
 
-        const selected = results
+        if (!pngResults.length) {
+            return reply("❌ No PNG stickers found. Try different keywords.");
+        }
+
+        await reply(`✅ Found *${pngResults.length}* PNG results for *"${query}"*. Sending top 10...`);
+
+        const selected = pngResults
             .sort(() => 0.10 - Math.random())
             .slice(0, 10);
 
@@ -42,7 +47,7 @@ cmd({
                     { quoted: mek }
                 );
             } catch (err) {
-                console.warn(`⚠️ Failed to send Sticker: ${thumbnailUrl}`);
+                console.warn(`⚠️ Failed to send Sticker: ${pack.thumbnailUrl}`);
             }
 
             await new Promise(resolve => setTimeout(resolve, 1000));
