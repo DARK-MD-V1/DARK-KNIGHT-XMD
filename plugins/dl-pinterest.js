@@ -1,81 +1,9 @@
 const { cmd } = require('../command');
 const axios = require('axios');
 
+
 cmd({
     pattern: "pindl",
-    alias: ["pinterestdl"],
-    desc: "Download up to 5 media items from Pinterest",
-    category: "download",
-    filename: __filename
-}, async (conn, mek, m, { args, from, reply }) => {
-    try {
-        if (args.length < 1) return reply('❎ Please provide a Pinterest URL.');
-        const pinterestUrl = args[0];
-
-        // Validate URL
-        if (!/^https?:\/\/(www\.)?pinterest\.com/.test(pinterestUrl))
-            return reply('❎ Please provide a valid Pinterest link.');
-
-        // Fetch from API
-        const response = await axios.get(`https://api.siputzx.my.id/api/s/pinterest?query=${encodeURIComponent(pinterestUrl)}`);
-        const data = response.data;
-
-        if (!data.status || !Array.isArray(data.data) || data.data.length === 0)
-            return reply('❎ Failed to fetch media from Pinterest.');
-
-        // Limit to first 5 results
-        const pins = data.data.slice(0, 5);
-
-        for (let i = 0; i < pins.length; i++) {
-            const pin = pins[i];
-            const mediaUrl = pin.video_url || pin.gif_url || pin.image_url;
-            const mediaType = pin.video_url
-                ? 'Video'
-                : pin.gif_url
-                ? 'GIF'
-                : 'Image';
-
-            const title = pin.grid_title || 'No title available';
-            const description = pin.description?.trim() || 'No description';
-            const username = pin.pinner?.full_name || pin.pinner?.username || 'Unknown';
-            const boardName = pin.board?.name || 'Unknown Board';
-            const reactions = pin.reaction_counts?.[1] || 0;
-
-            const caption = `
-╭━━━〔 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 〕━┈⊷
-┃▸╭───────────
-┃▸┊๏ *ᴘɪɴᴛᴇʀᴇsᴛ ᴅʟ* (${i + 1}/${pins.length})
-┃▸╰───────────···๏
-╰────────────────┈⊷
-╭━━┈┈┈┈┈┈┈┈┈━⪼
-┇๏ *ᴛɪᴛʟᴇ* - ${title}
-┇๏ *ᴅᴇsᴄʀɪᴘᴛɪᴏɴ* - ${description}
-┇๏ *ᴍᴇᴅɪᴀ ᴛʏᴘᴇ* - ${mediaType}
-┇๏ *ᴘɪɴɴᴇʀ* - ${username}
-┇๏ *ʙᴏᴀʀᴅ* - ${boardName}
-┇๏ *ʟɪᴋᴇs* - ${reactions}
-╰━━┈┈┈┈┈┈┈┈┈━⪼
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ♡*`;
-
-            if (pin.video_url) {
-                await conn.sendMessage(from, { video: { url: mediaUrl }, caption }, { quoted: mek });
-            } else if (pin.gif_url) {
-                await conn.sendMessage(from, { video: { url: mediaUrl }, caption, gifPlayback: true }, { quoted: mek });
-            } else if (pin.image_url) {
-                await conn.sendMessage(from, { image: { url: mediaUrl }, caption }, { quoted: mek });
-            }
-        }
-
-    } catch (e) {
-        console.error(e);
-        await conn.sendMessage(from, { react: { text: '❌', key: mek.key } });
-        reply('❎ An error occurred while processing your request.');
-    }
-});
-
-
-cmd({
-    pattern: "pindl3",
     alias: ["pinterestdl"],
     desc: "Download media from Pinterest (first 5 results)",
     category: "download",
@@ -112,13 +40,17 @@ cmd({
 
             const caption = `
 ╭━━━〔 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 〕━┈⊷
-┃▸ *Title:* ${title}
-┃▸ *Type:* ${pin.type}
-┃▸ *Uploader:* ${username}
-┃▸ *Board:* ${board}
-┃▸ *Likes:* ${likes}
-╰─────────────────────⊷
-${description}
+┃▸╭───────────
+┃▸┊๏ *ᴘɪɴᴛᴇʀᴇsᴛ ᴅʟ*
+┃▸╰───────────···๏
+╰────────────────┈⊷
+╭━━┈┈┈┈┈┈┈┈┈━⪼
+┇๏ *ᴛɪᴛʟᴇ* - ${title}
+┇๏ *ᴍᴇᴅɪᴀ ᴛʏᴘᴇ* - ${mediaUrl}
+┇๏ *ᴘɪɴɴᴇʀ* - ${username}
+┇๏ *ʙᴏᴀʀᴅ* - ${board}
+┇๏ *ʟɪᴋᴇs* - ${likes}
+╰━━┈┈┈┈┈┈┈┈┈━⪼
 > *© Pᴏᴡᴇʀᴇᴅ Bʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ♡*`;
 
             if (isVideo) {
