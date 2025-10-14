@@ -22,7 +22,7 @@ async (conn, mek, m, { from, args, q, reply }) => {
             return reply("*No songs found!*");
 
         let txt = `🎧 *SPOTIFY SEARCH RESULTS*\n\n`;
-        data.result.slice(0, 10).forEach((s, i) => {
+        data.result.slice(0, 30).forEach((s, i) => {
             const durationSec = Math.floor(s.duration / 1000);
             const min = Math.floor(durationSec / 60).toString().padStart(2, '0');
             const sec = (durationSec % 60).toString().padStart(2, '0');
