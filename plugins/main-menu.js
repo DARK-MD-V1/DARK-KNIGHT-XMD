@@ -179,7 +179,7 @@ cmd({
 ┃★│ • ig2
 ┃★│ • mediafire
 ┃★│ • mfire2
-┃★│ • pinterestdl
+┃★│ • pinterest
 ┃★│ • pindl2
 ┃★│ • ringtone
 ┃★│ • spotify
