@@ -3,7 +3,7 @@ const axios = require('axios');
 
 cmd({
     pattern: "spotify",
-    desc: "Search and download Spotify music as MP3",
+    desc: "Search Spotify tracks",
     category: "downloader",
     react: "🎵",
     filename: __filename
@@ -14,69 +14,28 @@ async (conn, mek, m, { from, args, q, reply }) => {
 
         reply("🔍 *Searching Spotify... Please wait!*");
 
-        // call Sadiya API
         const { data } = await axios.get(`https://sadiya-tech-apis.vercel.app/search/spotify`, {
-            params: {
-                q: q,
-                apikey: "sadiya"
-            }
+            params: { q, apikey: "sadiya" }
         });
 
-        // check API response
         if (!data.status || !data.result || data.result.length === 0)
-            return reply("*No results found for your query. Try another song name.*");
+            return reply("*No songs found!*");
 
-        // pick the first song result
-        const song = data.result[0];
+        let txt = `🎧 *SPOTIFY SEARCH RESULTS*\n\n`;
+        data.result.slice(0, 10).forEach((s, i) => {
+            const durationSec = Math.floor(s.duration / 1000);
+            const min = Math.floor(durationSec / 60).toString().padStart(2, '0');
+            const sec = (durationSec % 60).toString().padStart(2, '0');
+            txt += `*${i + 1}. ${s.title}*\n👤 Artist: ${s.artist}\n⏱️ Duration: ${min}:${sec}\n🔥 Popularity: ${s.popularity}\n🔗 ${s.url}\n\n`;
+        });
 
-        const {
-            title,
-            artists,
-            album,
-            duration,
-            preview_url,
-            external_url,
-            image
-        } = song;
+        txt += `> *© Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*`;
 
-        const durationSec = Math.floor(duration / 1000);
-        const minutes = Math.floor(durationSec / 60).toString().padStart(2, '0');
-        const seconds = (durationSec % 60).toString().padStart(2, '0');
-        const formattedDuration = `${minutes}:${seconds}`;
-
-        const caption = `
-*⫷⦁ SPOTIFY SEARCH & DOWNLOADER ⦁⫸*
-
-🎵 *Title:* ${title}
-🧑‍🎤 *Artist:* ${artists}
-💿 *Album:* ${album}
-⏱️ *Duration:* ${formattedDuration}
-
-🔗 *Spotify:* ${external_url}
-
-> *© Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*
-`.trim();
-
-        // send cover image + info
-        await conn.sendMessage(from, {
-            image: { url: image },
-            caption: caption
-        }, { quoted: mek });
-
-        // If preview available
-        if (preview_url) {
-            await conn.sendMessage(from, {
-                audio: { url: preview_url },
-                mimetype: "audio/mpeg",
-                ptt: false
-            }, { quoted: mek });
-        } else {
-            reply("*⚠️ Sorry, this track has no MP3 preview available.*");
-        }
+        await conn.sendMessage(from, { text: txt }, { quoted: mek });
 
     } catch (e) {
-        console.error("Spotify Search Error:", e);
-        reply("*⚠️ Oops! Something went wrong while fetching the Spotify track.*");
+        console.error(e);
+        reply("*Error fetching Spotify data.*");
     }
 });
 
