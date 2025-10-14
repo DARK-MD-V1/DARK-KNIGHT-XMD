@@ -25,7 +25,7 @@ cmd({
             if (!articles || !articles.length) continue;
 
             // Send top 3 articles from each source
-            for (let i = 0; i < Math.min(articles.length, 2); i++) {
+            for (let i = 0; i < Math.min(articles.length, 10); i++) {
                 const article = articles[i];
                 let message = `
 Source: *${api.name}*
