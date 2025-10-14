@@ -4,65 +4,72 @@ const axios = require('axios');
 cmd({
     pattern: "pindl",
     alias: ["pinterestdl"],
-    desc: "Download media from Pinterest (supports multiple pins)",
+    desc: "Download up to 5 media items from Pinterest",
     category: "download",
     filename: __filename
-}, async (conn, mek, m, { args, quoted, from, reply }) => {
+}, async (conn, mek, m, { args, from, reply }) => {
     try {
-        if (!args[0]) {
-            return reply('❎ Please provide a Pinterest URL.\n\nExample: `.pindl https://pin.it/example`');
-        }
-
+        if (args.length < 1) return reply('❎ Please provide a Pinterest URL.');
         const pinterestUrl = args[0];
-        const apiUrl = `https://api.siputzx.my.id/api/s/pinterest?query=${encodeURIComponent(pinterestUrl)}`;
 
-        const { data } = await axios.get(apiUrl);
+        // Validate URL
+        if (!/^https?:\/\/(www\.)?pinterest\.com/.test(pinterestUrl))
+            return reply('❎ Please provide a valid Pinterest link.');
 
-        // ✅ Check if valid response
-        if (!data?.status || !Array.isArray(data?.data) || data.data.length === 0) {
-            return reply('❎ Could not fetch Pinterest media. Please check the URL or try again later.');
-        }
+        // Fetch from API
+        const response = await axios.get(`https://api.siputzx.my.id/api/s/pinterest?query=${encodeURIComponent(pinterestUrl)}`);
+        const data = response.data;
 
-        const pins = data.data;
+        if (!data.status || !Array.isArray(data.data) || data.data.length === 0)
+            return reply('❎ Failed to fetch media from Pinterest.');
 
-        // 🔄 Loop through each pin
-        for (const pin of pins) {
-            const title = pin.grid_title || 'No title';
-            const desc = pin.description?.trim() || 'No description';
-            const pinner = pin.pinner?.full_name || pin.pinner?.username || 'Unknown';
-            const mediaType = pin.type || 'unknown';
+        // Limit to first 5 results
+        const pins = data.data.slice(0, 5);
 
-            // Choose media URL
+        for (let i = 0; i < pins.length; i++) {
+            const pin = pins[i];
             const mediaUrl = pin.video_url || pin.gif_url || pin.image_url;
-            if (!mediaUrl) continue;
+            const mediaType = pin.video_url
+                ? 'Video'
+                : pin.gif_url
+                ? 'GIF'
+                : 'Image';
 
-            // Format caption
+            const title = pin.grid_title || 'No title available';
+            const description = pin.description?.trim() || 'No description';
+            const username = pin.pinner?.full_name || pin.pinner?.username || 'Unknown';
+            const boardName = pin.board?.name || 'Unknown Board';
+            const reactions = pin.reaction_counts?.[1] || 0;
+
             const caption = `
 ╭━━━〔 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 〕━┈⊷
-┃▸ *Pinterest Downloader*
-┃▸───────────────
-┃▸ *Title:* ${title}
-┃▸ *Type:* ${mediaType}
-┃▸ *Author:* ${pinner}
-┃▸ *Uploaded:* ${pin.created_at || 'Unknown'}
-╰──────────────────⊷
-> *© Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ♡*
-`;
+┃▸╭───────────
+┃▸┊๏ *ᴘɪɴᴛᴇʀᴇsᴛ ᴅʟ* (${i + 1}/${pins.length})
+┃▸╰───────────···๏
+╰────────────────┈⊷
+╭━━┈┈┈┈┈┈┈┈┈━⪼
+┇๏ *ᴛɪᴛʟᴇ* - ${title}
+┇๏ *ᴅᴇsᴄʀɪᴘᴛɪᴏɴ* - ${description}
+┇๏ *ᴍᴇᴅɪᴀ ᴛʏᴘᴇ* - ${mediaType}
+┇๏ *ᴘɪɴɴᴇʀ* - ${username}
+┇๏ *ʙᴏᴀʀᴅ* - ${boardName}
+┇๏ *ʟɪᴋᴇs* - ${reactions}
+╰━━┈┈┈┈┈┈┈┈┈━⪼
+> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ♡*`;
 
-            // 🖼️ or 🎥 Send media depending on type
             if (pin.video_url) {
                 await conn.sendMessage(from, { video: { url: mediaUrl }, caption }, { quoted: mek });
-            } else {
+            } else if (pin.gif_url) {
+                await conn.sendMessage(from, { video: { url: mediaUrl }, caption, gifPlayback: true }, { quoted: mek });
+            } else if (pin.image_url) {
                 await conn.sendMessage(from, { image: { url: mediaUrl }, caption }, { quoted: mek });
             }
         }
 
-        await reply(`✅ Sent ${pins.length} Pinterest media file${pins.length > 1 ? 's' : ''}.`);
-
     } catch (e) {
-        console.error('PinterestDL Error:', e);
+        console.error(e);
         await conn.sendMessage(from, { react: { text: '❌', key: mek.key } });
-        reply('❎ An error occurred while processing your request. Try again later.');
+        reply('❎ An error occurred while processing your request.');
     }
 });
 
