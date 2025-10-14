@@ -73,8 +73,6 @@ cmd({
     }
 });
 
-const { cmd } = require('../command');
-const axios = require('axios');
 
 cmd({
     pattern: "pindl3",
