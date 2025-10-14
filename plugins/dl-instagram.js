@@ -101,75 +101,69 @@ cmd({
     await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
   }
 });
-
 // VIDEO SECTION
 
 cmd({
   pattern: "igvid",
   alias: ["ig"],
   react: '📥',
-  desc: "Download Instagram videos and reels.",
+  desc: "Download Instagram videos.",
   category: "download",
   use: ".igvid <Instagram video URL>",
   filename: __filename
 }, async (conn, mek, m, { from, reply, args }) => {
   try {
-    // Validate URL
     const igUrl = args[0];
     if (!igUrl || !igUrl.includes("instagram.com")) {
-      return reply('⚠️ Please provide a valid Instagram video URL.\n\nExample: `.igvid https://www.instagram.com/reel/...`');
+      return reply('⚠️ Please provide a valid Instagram video URL.\n\nExample:\n`.igvid https://www.instagram.com/reel/...`');
     }
 
     // React while processing
     await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
 
-    // API URL
+    // Call the new NexOracle API
     const apiUrl = `https://api.nexoracle.com/downloader/insta?apikey=free_key@maher_apis&url=${encodeURIComponent(igUrl)}`;
+    const response = await axios.get(apiUrl);
 
-    // Fetch from API
-    const { data } = await axios.get(apiUrl);
-
-    if (!data || data.status !== 200 || !data.result) {
-      return reply('❌ Unable to fetch Instagram video. Please check the URL and try again.');
+    if (!response.data || response.data.status !== 200 || !response.data.result) {
+      return reply('❌ Unable to fetch the video. Please check the URL and try again.');
     }
 
-    const result = data.result;
-    const post = result.post_info || {};
-    const media = result.media_details?.[0] || {};
-    const videoUrl = media.url || result.url_list?.[0];
+    const result = response.data.result;
+    const media = result.media_details;
+
+    if (!media || media.length === 0) {
+      return reply('❌ No downloadable video found for this post.');
+    }
+
+    // Get the first video URL
+    const video = media.find(x => x.type === "video") || media[0];
+    const videoUrl = video.url;
 
     if (!videoUrl) {
-      return reply('⚠️ No downloadable video found for this post.');
+      return reply('❌ Could not find video URL.');
     }
 
-    // Basic info
-    const username = post.owner_username || "Unknown User";
-    const fullname = post.owner_fullname || "";
-    const caption = post.caption || "";
-    const likes = post.likes ? post.likes.toLocaleString() : "0";
-    const views = media.video_view_count ? media.video_view_count.toLocaleString() : "0";
-    const thumbnail = media.thumbnail || null;
-
-    // Notify user
-    await reply(`📥 *Downloading Instagram Reel by @${username}... Please wait.*`);
-
-    // Download the video
-    const videoResponse = await axios.get(videoUrl, { responseType: "arraybuffer" });
-    const videoBuffer = Buffer.from(videoResponse.data, "binary");
-
-    // Prepare caption
-    const captionText = 
-      `🎬 *Instagram Reel Downloader*\n\n` +
-      `👤 *User*: ${fullname ? `${fullname} (@${username})` : `@${username}`}\n` +
-      `❤️ *Likes*: ${likes}\n👁️ *Views*: ${views}\n\n` +
-      (caption ? `📝 *Caption*: ${caption}\n\n` : "") +
+    // Get info for caption
+    const info = result.post_info || {};
+    const captionText =
+      `📥 *Instagram Video*\n\n` +
+      `👤 *User*: ${info.owner_fullname || info.owner_username || "Unknown"}\n` +
+      `💬 *Caption*: ${info.caption || "No caption"}\n` +
+      `❤️ *Likes*: ${info.likes || 0}\n\n` +
       `> © ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
-    // Send the video
+    await reply(`📥 *Downloading ${info.owner_username ? `from ${info.owner_username}` : "video"}...*`);
+
+    // Download the video
+    const videoResponse = await axios.get(videoUrl, { responseType: 'arraybuffer' });
+    const videoBuffer = Buffer.from(videoResponse.data, 'binary');
+
+    // Send to chat
     await conn.sendMessage(from, {
       video: videoBuffer,
       caption: captionText,
-      jpegThumbnail: thumbnail ? await (await axios.get(thumbnail, { responseType: "arraybuffer" })).data : null,
+      thumbnail: { url: video.thumbnail || '' },
       contextInfo: {
         mentionedJid: [m.sender],
         forwardingScore: 999,
@@ -182,12 +176,12 @@ cmd({
       }
     }, { quoted: mek });
 
-    // React success
+    // Success reaction
     await conn.sendMessage(from, { react: { text: '✅', key: m.key } });
 
   } catch (error) {
     console.error("Instagram download error:", error);
-    reply('❌ Failed to download the Instagram video. Please try again later.');
+    reply('❌ Unable to download the video. Please try again later.');
     await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
   }
 });
