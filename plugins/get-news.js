@@ -3,17 +3,13 @@ const axios = require("axios");
 
 cmd({
     pattern: "news4",
-    desc: "Get the latest Sri Lankan news headlines in carousel view.",
+    desc: "Get the latest Sri Lankan news headlines (all sources).",
     category: "news",
     react: "📰",
     filename: __filename
 },
-async (conn, mek, m, { from, reply, args }) => {
+async (conn, mek, m, { from, reply }) => {
     try {
-        const axios = require("axios");
-        const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = require("@whiskeysockets/baileys");
-
-        const source = (args[0] || "").toLowerCase();
         const sources = {
             hiru: "https://tharuzz-news-api.vercel.app/api/news/hiru",
             gossiplanka: "https://supun-md-api-rho.vercel.app/api/news/gossiplank",
@@ -23,74 +19,46 @@ async (conn, mek, m, { from, reply, args }) => {
             adaderana: "https://supun-md-api-rho.vercel.app/api/news/adaderana"
         };
 
-        if (!source || !sources[source]) {
-            let available = Object.keys(sources).map(s => `🔹 *${s}*`).join("\n");
-            return reply(`⚙️ Please specify a valid news source.\n\nAvailable sources:\n${available}\n\n📌 Example: *.news2 hiru*`);
+        const allArticles = [];
+
+        // 🔹 Loop through all sources and collect articles
+        for (const [name, url] of Object.entries(sources)) {
+            try {
+                const res = await axios.get(url);
+                let articles = res.data.datas || res.data.results || [];
+                if (!Array.isArray(articles)) articles = [articles];
+
+                // Add source name for labeling
+                articles.slice(0, 2).forEach(a => allArticles.push({ ...a, source: name }));
+            } catch (err) {
+                console.log(`⚠️ Failed to fetch from ${name}`);
+            }
         }
 
-        const response = await axios.get(sources[source]);
-        let articles = [];
-        if (response.data.datas) {
-            articles = response.data.datas;
-        } else if (response.data.results) {
-            articles = [response.data.results];
-        }
+        if (!allArticles.length) return reply("❌ Could not fetch any news articles.");
 
-        if (!articles.length) return reply("⚠️ No news articles found.");
-
-        // Limit to top 5
-        articles = articles.slice(0, 5);
-
-        // Build interactive carousel cards
-        const cards = [];
-        for (let i = 0; i < articles.length; i++) {
-            const a = articles[i];
-            const title = a.title || "No Title";
-            const desc = a.description || "No Description";
-            const link = a.url || a.link || "No Link";
-            const image = a.image || "https://i.ibb.co/ZzV5VhP/news-default.jpg";
-
-            cards.push({
-                header: proto.Message.InteractiveMessage.Header.create({
-                    ...(await prepareWAMessageMedia({ image: { url: image } }, { upload: conn.waUploadToServer })),
-                    title: `📰 ${title}`,
-                    subtitle: "Tap below to read more",
-                    hasMediaAttachment: true
-                }),
-                body: { text: `🧾 ${desc}\n\n🔗 ${link}` },
-                nativeFlowMessage: {}
-            });
-        }
-
-        const msg = generateWAMessageFromContent(
-            from,
-            {
-                viewOnceMessage: {
-                    message: {
-                        interactiveMessage: {
-                            body: { text: `🗞 *Latest ${source.toUpperCase()} News*` },
-                            carouselMessage: {
-                                cards,
-                                messageVersion: 1
-                            },
-                            contextInfo: {
-                                mentionedJid: [m.sender],
-                                forwardingScore: 999,
-                                isForwarded: true,
-                                forwardedNewsletterMessageInfo: {
-                                    newsletterJid: '120363412075023554@newsletter',
-                                    newsletterName: `📰 DARK-KNIGHT-XMD NEWS`,
-                                    serverMessageId: 123
-                                }
-                            }
-                        }
-                    }
-                }
+        // 🔸 Make carousel cards (limit 10 total)
+        const cards = allArticles.slice(0, 10).map(article => ({
+            header: {
+                hasMediaAttachment: !!article.image,
+                ...(article.image ? {
+                    imageMessage: { url: article.image }
+                } : {})
             },
-            { quoted: m }
-        );
+            body: {
+                text: `📰 *${article.title || "No Title"}*\n\n${article.description?.slice(0, 100) || "No Description"}\n\n🔗 ${article.url || article.link || ""}`
+            },
+            footer: {
+                text: `📡 Source: ${article.source.toUpperCase()}`
+            }
+        }));
 
-        await conn.relayMessage(msg.key.remoteJid, msg.message, { messageId: msg.key.id });
+        await conn.sendMessage(from, {
+            interactiveMessage: {
+                body: { text: "🗞️ *Top Sri Lankan News Updates*" },
+                carouselMessage: { cards }
+            }
+        });
 
     } catch (e) {
         console.error("Error fetching news:", e);
