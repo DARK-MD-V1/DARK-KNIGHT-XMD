@@ -1,72 +1,82 @@
 const axios = require("axios");
 const { cmd } = require("../command");
-const path = require("path");
 
 cmd({
   pattern: "instagram",
-  alias: ["insta"],  
+  alias: ["insta"],
   react: '📥',
-  desc: "Download Instagram posts (images or videos).",
+  desc: "Download Instagram posts (image or video) using Sadiya API.",
   category: "download",
-  use: ".igdl <Instagram post URL>",
+  use: ".insta <Instagram post URL>",
   filename: __filename
 }, async (conn, mek, m, { from, reply, args }) => {
   try {
     const igUrl = args[0];
     if (!igUrl || !igUrl.includes("instagram.com")) {
-      return reply('Please provide a valid Instagram post URL. Example: `.igdl https://instagram.com/...`');
+      return reply('❌ Please provide a valid Instagram post URL.\n\nExample: `.insta https://www.instagram.com/reel/...`');
     }
 
+    // React: processing
     await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
 
-    // API call
+    // Call Sadiya API
     const apiUrl = `https://sadiya-tech-apis.vercel.app/download/igdl?url=${encodeURIComponent(igUrl)}&apikey=sadiya`;
     const response = await axios.get(apiUrl);
 
-    if (!response.data || !response.data.status || !response.data.result?.dl_link) {
-      return reply('❌ Unable to fetch the post. Please check the URL and try again.');
+    if (!response.data || !response.data.status || !response.data.result || !response.data.result.dl_link) {
+      return reply('❌ Failed to fetch download link. Please check the URL and try again.');
     }
 
-    const mediaUrl = response.data.result.dl_link;
+    const downloadUrl = response.data.result.dl_link;
 
-    // Determine if video or image based on file extension
-    const ext = path.extname(mediaUrl).toLowerCase();
-    const isVideo = ext === '.mp4' || ext === '.mov';
+    // Download file buffer
+    const fileResponse = await axios.get(downloadUrl, { responseType: 'arraybuffer' });
+    const fileBuffer = Buffer.from(fileResponse.data, 'binary');
 
-    await reply(`📥 *Downloading Instagram post... Please wait.*`);
+    // Try to detect video or image from URL extension
+    const isVideo = downloadUrl.includes(".mp4");
 
-    const mediaResponse = await axios.get(mediaUrl, { responseType: 'arraybuffer' });
-    if (!mediaResponse.data) {
-      return reply('❌ Failed to download the media. Please try again later.');
-    }
-
-    const mediaBuffer = Buffer.from(mediaResponse.data, 'binary');
-
-    const messageOptions = {
-      caption: `📥 *Instagram Post*\n\n` +
-        `> Downloaded ✅\n\n` +
-        `> © ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`,
-      contextInfo: {
-        mentionedJid: [m.sender],
-        forwardingScore: 999,
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-          newsletterJid: '120363400240662312@newsletter',
-          newsletterName: '『 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 』',
-          serverMessageId: 143
-        }
-      }
-    };
+    const captionText =
+      `📥 *Instagram Downloader*\n\n` +
+      `🔗 *Url* Downloaded. ✅\n` +
+      `> © ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
     if (isVideo) {
-      await conn.sendMessage(from, { video: mediaBuffer, ...messageOptions }, { quoted: mek });
+      await conn.sendMessage(from, {
+        video: fileBuffer,
+        caption: captionText,
+        contextInfo: {
+          mentionedJid: [m.sender],
+          forwardingScore: 999,
+          isForwarded: true,
+          forwardedNewsletterMessageInfo: {
+            newsletterJid: '120363400240662312@newsletter',
+            newsletterName: '『 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 』',
+            serverMessageId: 143
+          }
+        }
+      }, { quoted: mek });
     } else {
-      await conn.sendMessage(from, { image: mediaBuffer, ...messageOptions }, { quoted: mek });
+      await conn.sendMessage(from, {
+        image: fileBuffer,
+        caption: captionText,
+        contextInfo: {
+          mentionedJid: [m.sender],
+          forwardingScore: 999,
+          isForwarded: true,
+          forwardedNewsletterMessageInfo: {
+            newsletterJid: '120363400240662312@newsletter',
+            newsletterName: '『 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 』',
+            serverMessageId: 143
+          }
+        }
+      }, { quoted: mek });
     }
 
     await conn.sendMessage(from, { react: { text: '✅', key: m.key } });
+
   } catch (error) {
-    console.error('Error downloading Instagram post:', error);
+    console.error('❌ Error downloading Instagram media:', error);
     reply('❌ Unable to download the post. Please try again later.');
     await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
   }
