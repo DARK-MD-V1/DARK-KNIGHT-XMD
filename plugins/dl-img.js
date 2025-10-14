@@ -2,11 +2,11 @@ const { cmd } = require("../command");
 const axios = require("axios");
 
 cmd({
-    pattern: "image",
+    pattern: "img",
     react: "🦋",
     desc: "Search and download Google images",
     category: "download",
-    use: ".image <keywords>",
+    use: ".img <keywords>",
     filename: __filename
 }, async (conn, mek, m, { reply, args, from }) => {
     try {
@@ -17,7 +17,7 @@ cmd({
 
         await reply(`🔍 Searching images for *"${query}"*...`);
 
-        const url = `https://apis.davidcyriltech.my.id/googleimage?query=${encodeURIComponent(query)}`;
+        const url = `https://supun-md-api-rho.vercel.app/api/search/googleImage?q=${encodeURIComponent(query)}`;
         const response = await axios.get(url);
 
         if (!response.data?.success || !response.data.results?.length) {
@@ -57,17 +57,17 @@ cmd({
 
 
 cmd({
-    pattern: "img",
+    pattern: "image",
     react: "🖼️",
     desc: "Search and download Images",
     category: "download",
-    use: ".img <keywords>",
+    use: ".image <keywords>",
     filename: __filename
 }, async (conn, mek, m, { reply, args, from }) => {
     try {
         const query = args.join(" ");
         if (!query) {
-            return reply("🖼️ Please provide a search term!\nExample: *.img car*");
+            return reply("🖼️ Please provide a search term!\nExample: *.image car*");
         }
 
         await reply(`🔍 Searching Images for *"${query}"*...`);
