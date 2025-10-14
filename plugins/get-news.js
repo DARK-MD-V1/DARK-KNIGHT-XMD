@@ -3,68 +3,38 @@ const axios = require("axios");
 
 cmd({
     pattern: "news4",
-    desc: "Get the latest Sri Lankan news headlines (all sources).",
+    desc: "Get the latest Sri Lankan news headlines via buttons.",
     category: "news",
     react: "📰",
     filename: __filename
 },
 async (conn, mek, m, { from, reply }) => {
     try {
-        const sources = {
-            hiru: "https://tharuzz-news-api.vercel.app/api/news/hiru",
-            gossiplanka: "https://supun-md-api-rho.vercel.app/api/news/gossiplank",
-            lankadeepa: "https://supun-md-api-rho.vercel.app/api/news/lankadeepa",
-            itn: "https://supun-md-api-rho.vercel.app/api/news/itn",
-            sirasa: "https://supun-md-api-rho.vercel.app/api/news/sirasa",
-            adaderana: "https://supun-md-api-rho.vercel.app/api/news/adaderana"
+        // Button list
+        const buttons = [
+            { buttonId: "news_hiru", buttonText: { displayText: "Hiru News" }, type: 1 },
+            { buttonId: "news_adaderana", buttonText: { displayText: "Ada Derana" }, type: 1 },
+            { buttonId: "news_sirasa", buttonText: { displayText: "Sirasa" }, type: 1 },
+            { buttonId: "news_lankadeepa", buttonText: { displayText: "Lankadeepa" }, type: 1 },
+            { buttonId: "news_gossiplank", buttonText: { displayText: "Gossip Lanka" }, type: 1 },
+            { buttonId: "news_itn", buttonText: { displayText: "ITN" }, type: 1 },
+            { buttonId: "news3", buttonText: { displayText: "All Sources" }, type: 1 },
+        ];
+
+        const buttonMessage = {
+            text: "🗞️ *Select a news source to get latest headlines:*",
+            buttons: buttons,
+            headerType: 1
         };
 
-        const allArticles = [];
-
-        // 🔹 Loop through all sources and collect articles
-        for (const [name, url] of Object.entries(sources)) {
-            try {
-                const res = await axios.get(url);
-                let articles = res.data.datas || res.data.results || [];
-                if (!Array.isArray(articles)) articles = [articles];
-
-                // Add source name for labeling
-                articles.slice(0, 2).forEach(a => allArticles.push({ ...a, source: name }));
-            } catch (err) {
-                console.log(`⚠️ Failed to fetch from ${name}`);
-            }
-        }
-
-        if (!allArticles.length) return reply("❌ Could not fetch any news articles.");
-
-        // 🔸 Make carousel cards (limit 10 total)
-        const cards = allArticles.slice(0, 10).map(article => ({
-            header: {
-                hasMediaAttachment: !!article.image,
-                ...(article.image ? {
-                    imageMessage: { url: article.image }
-                } : {})
-            },
-            body: {
-                text: `📰 *${article.title || "No Title"}*\n\n${article.description?.slice(0, 100) || "No Description"}\n\n🔗 ${article.url || article.link || ""}`
-            },
-            footer: {
-                text: `📡 Source: ${article.source.toUpperCase()}`
-            }
-        }));
-
-        await conn.sendMessage(from, {
-            interactiveMessage: {
-                body: { text: "🗞️ *Top Sri Lankan News Updates*" },
-                carouselMessage: { cards }
-            }
-        });
+        await conn.sendMessage(from, buttonMessage);
 
     } catch (e) {
-        console.error("Error fetching news:", e);
-        reply("❌ Could not fetch news. Please try again later.");
+        console.error("Error sending buttons:", e);
+        reply("❌ Could not load news buttons. Please try again later.");
     }
 });
+
 
 
 cmd({
