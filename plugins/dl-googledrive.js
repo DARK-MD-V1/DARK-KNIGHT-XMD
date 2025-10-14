@@ -142,17 +142,19 @@ cmd({
 
     await conn.sendMessage(from, { react: { text: "⬇️", key: m.key } });
 
-    const apiUrl = `https://api.fgmods.xyz/api/downloader/gdrive?url=${q}&apikey=mnp3grlZ`;
+    // New Sadiya Tech API
+    const apiUrl = `https://sadiya-tech-apis.vercel.app/download/gdrivedl?url=${encodeURIComponent(q)}&apikey=sadiya`;
     const response = await axios.get(apiUrl);
-    const downloadUrl = response.data.result.downloadUrl;
 
-    if (downloadUrl) {
+    if (response.data.status && response.data.result) {
+      const { downloadUrl, mimetype, fileName } = response.data.result;
+
       await conn.sendMessage(from, { react: { text: "⬆️", key: m.key } });
 
       await conn.sendMessage(from, {
         document: { url: downloadUrl },
-        mimetype: response.data.result.mimetype,
-        fileName: response.data.result.fileName,
+        mimetype: mimetype,
+        fileName: fileName,
         caption: "*© Powered By 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*"
       }, { quoted: m });
 
