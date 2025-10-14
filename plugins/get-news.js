@@ -2,114 +2,61 @@ const {cmd , commands} = require('../command');
 const axios = require("axios");
 
 cmd({
-    pattern: "news4",
-    desc: "Get the latest Sri Lankan news headlines via buttons.",
+    pattern: "news3",
+    desc: "Get the latest Sri Lankan news headlines in one message.",
     category: "news",
     react: "📰",
     filename: __filename
 },
 async (conn, mek, m, { from, reply }) => {
     try {
-        // Button list
-        const buttons = [
-            { buttonId: "news_hiru", buttonText: { displayText: "Hiru News" }, type: 1 },
-            { buttonId: "news_adaderana", buttonText: { displayText: "Ada Derana" }, type: 1 },
-            { buttonId: "news_sirasa", buttonText: { displayText: "Sirasa" }, type: 1 },
-            { buttonId: "news_lankadeepa", buttonText: { displayText: "Lankadeepa" }, type: 1 },
-            { buttonId: "news_gossiplank", buttonText: { displayText: "Gossip Lanka" }, type: 1 },
-            { buttonId: "news_itn", buttonText: { displayText: "ITN" }, type: 1 },
-            { buttonId: "news3", buttonText: { displayText: "All Sources" }, type: 1 },
+        const newsAPIs = [
+            "https://supun-md-api-rho.vercel.app/api/news/gossiplank",
+            "https://supun-md-api-rho.vercel.app/api/news/lankadeepa",
+            "https://tharuzz-news-api.vercel.app/api/news/hiru",
+            "https://supun-md-api-rho.vercel.app/api/news/itn",
+            "https://supun-md-api-rho.vercel.app/api/news/sirasa",
+            "https://supun-md-api-rho.vercel.app/api/news/adaderana"
         ];
 
-        const buttonMessage = {
-            text: "🗞️ *Select a news source to get latest headlines:*",
-            buttons: buttons,
-            headerType: 1
-        };
+        let allNews = [];
 
-        await conn.sendMessage(from, buttonMessage);
+        for (let api of newsAPIs) {
+            const response = await axios.get(api);
+            const data = response.data;
+            const articles = data.results ? [data.results] : data.datas || [];
 
-    } catch (e) {
-        console.error("Error sending buttons:", e);
-        reply("❌ Could not load news buttons. Please try again later.");
-    }
-});
-
-
-
-cmd({
-    pattern: "news3",
-    desc: "Get the latest Sri Lankan news headlines (stylish paththata view).",
-    category: "news",
-    react: "📰",
-    filename: __filename
-},
-async (conn, mek, m, { from, reply, args }) => {
-    try {
-        const source = (args[0] || "").toLowerCase();
-        const sources = {
-            hiru: "https://tharuzz-news-api.vercel.app/api/news/hiru",
-            gossiplanka: "https://supun-md-api-rho.vercel.app/api/news/gossiplank",
-            lankadeepa: "https://supun-md-api-rho.vercel.app/api/news/lankadeepa",
-            itn: "https://supun-md-api-rho.vercel.app/api/news/itn",
-            sirasa: "https://supun-md-api-rho.vercel.app/api/news/sirasa",
-            adaderana: "https://supun-md-api-rho.vercel.app/api/news/adaderana"
-        };
-
-        if (!source || !sources[source]) {
-            const available = Object.keys(sources)
-                .map(s => `🔹 *${s}*`)
-                .join("\n");
-            return reply(
-                `⚙️ Please specify a valid news source.\n\nAvailable sources:\n${available}\n\n📌 Example: *.news6 hiru*`
-            );
-        }
-
-        const response = await axios.get(sources[source]);
-        let articles = [];
-        if (response.data.datas) {
-            articles = response.data.datas;
-        } else if (response.data.results) {
-            articles = [response.data.results];
-        }
-
-        if (!articles.length) return reply("⚠️ No news articles found.");
-
-        for (let i = 0; i < Math.min(articles.length, 5); i++) {
-            const article = articles[i];
-            const title = article.title?.trim() || "No Title";
-            const description = article.description?.trim() || "No Description";
-            const link = article.url || article.link || "No Link";
-            const date = article.date?.trim() || "";
-            const image = article.image;
-
-            // Paththata / stylish newspaper-style layout
-            const message = `
-╔═══════════════❖
-║ 📰 *${title}*
-╠═══════════════❖
-${date ? `║ 🗓 _${date}_\n` : ""}║ 📝 _${description}_
-║
-║ 🔗 ${link}
-╚═══════════════❖
-© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
-            `.trim();
-
-            if (image) {
-                await conn.sendMessage(from, {
-                    image: { url: image },
-                    caption: message
+            articles.forEach(article => {
+                if (!article.title) return; // skip empty titles
+                allNews.push({
+                    title: article.title,
+                    description: article.description || "No description available",
+                    url: article.url,
+                    date: article.date || "Date not provided",
+                    image: article.image || article.urlToImage || null
                 });
-            } else {
-                await conn.sendMessage(from, { text: message });
-            }
+            });
         }
+
+        if (!allNews.length) return reply("No news found at the moment.");
+
+        // Prepare single message
+        let message = "📰 *Latest Sri Lankan News Headlines*\n\n";
+        allNews.slice(0, 10).forEach((news, index) => { // show up to 10 news items
+            message += `${index + 1}. *${news.title}*\n`;
+            message += `⚠️ _${news.description}_\n`;
+            message += `🔗 _${news.url}_\n`;
+            message += `📅 _${news.date}_\n\n`;
+        });
+
+        // Send the message
+        await conn.sendMessage(from, { text: message });
+
     } catch (e) {
         console.error("Error fetching news:", e);
-        reply("❌ Could not fetch news. Please try again later.");
+        reply("Could not fetch news. Please try again later.");
     }
 });
-
 
 
 cmd({
