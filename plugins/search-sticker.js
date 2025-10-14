@@ -27,16 +27,16 @@ cmd({
         const results = response.data.results;
         await reply(`✅ Found *${results.length}* results for *"${query}"*. Sending top 10...`);
 
-        const selectedImages = results
+        const selected = results
             .sort(() => 0.10 - Math.random())
             .slice(0, 10);
 
-        for (const thumbnailUrl of selectedImages) {
+        for (const pack of selected) {
             try {
                 await conn.sendMessage(
                     from,
                     {
-                        image: { url: thumbnailUrl }
+                        image: { url: pack.thumbnailUrl }
                     },
                     { quoted: mek }
                 );
