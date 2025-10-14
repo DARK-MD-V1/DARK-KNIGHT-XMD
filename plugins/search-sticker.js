@@ -4,15 +4,15 @@ const axios = require("axios");
 cmd({
     pattern: "searchsti",
     react: "✨",
-    desc: "Search sticker packs from Stickerly",
+    desc: "Send top 5 sticker packs from Stickerly",
     category: "download",
-    use: ".sticker <keywords>",
+    use: ".searchsti <keywords>",
     filename: __filename
 }, async (conn, mek, m, { reply, args, from }) => {
     try {
         const query = args.join(" ");
         if (!query) {
-            return reply("💫 Please provide a search query\nExample: .sticker baby");
+            return reply("💫 Please provide a search query\nExample: .searchsti baby");
         }
 
         await reply(`🔍 Searching sticker packs for *"${query}"*...`);
@@ -24,40 +24,20 @@ cmd({
             return reply("❌ No sticker packs found. Try different keywords.");
         }
 
-        const results = response.data.results;
-        await reply(`✅ Found *${results.length}* sticker packs for *"${query}"*. Sending top 5...`);
+        const packs = response.data.results.slice(0, 5); // top 5 packs
 
-        const selectedPacks = results.slice(0, 5);
-
-        for (const pack of selectedPacks) {
-            const caption = `
-🧩 *${pack.name}*
-👤 Author: ${pack.author}
-🖼️ Stickers: ${pack.stickerCount}
-👁️ Views: ${pack.viewCount}
-📤 Downloads: ${pack.exportCount}
-🎞️ Animated: ${pack.isAnimated ? "Yes" : "No"}
-🔗 Link: ${pack.url}
-
-> © Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
-Requested by: @${m.sender.split('@')[0]}
-`;
-
+        for (const pack of packs) {
             try {
                 await conn.sendMessage(
                     from,
-                    {
-                        image: { url: pack.thumbnailUrl },
-                        caption,
-                        contextInfo: { mentionedJid: [m.sender] }
-                    },
+                    { image: { url: pack.thumbnailUrl } },
                     { quoted: mek }
                 );
             } catch (err) {
                 console.warn(`⚠️ Failed to send sticker pack: ${pack.name}`);
             }
 
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second gap
         }
 
     } catch (error) {
@@ -65,6 +45,7 @@ Requested by: @${m.sender.split('@')[0]}
         reply(`❌ Error: ${error.message || "Failed to fetch sticker packs"}`);
     }
 });
+
 
 
 cmd({
