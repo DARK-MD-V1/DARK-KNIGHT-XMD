@@ -1,56 +1,69 @@
 const {cmd , commands} = require('../command');
 const axios = require("axios");
 
-const newsApis = [
-    { name: "📰 GOSSIPLANKA-News 📰", url: "https://supun-md-api-rho.vercel.app/api/news/gossiplank" },
-    { name: "📰 LANKADEEPA-News 📰", url: "https://supun-md-api-rho.vercel.app/api/news/lankadeepa" },
-    { name: "📰 ITN-News 📰", url: "https://supun-md-api-rho.vercel.app/api/news/itn" },
-    { name: "📰 SIRASA-News 📰", url: "https://supun-md-api-rho.vercel.app/api/news/sirasa" },
-    { name: "📰 ADADERANA-News 📰", url: "https://supun-md-api-rho.vercel.app/api/news/adaderana" },
-    { name: "📰 HIRU-News 📰", url: "https://tharuzz-news-api.vercel.app/api/news/hiru" }
-];
-
 cmd({
     pattern: "news",
-    desc: "Get the latest Sri Lankan news headlines.",
+    desc: "Get the latest news headlines.",
     category: "news",
     react: "📰",
     filename: __filename
-}, async (conn, mek, m, { from, reply }) => {
+},
+async (conn, mek, m, { from, reply }) => {
     try {
-        for (let api of newsApis) {
-            const response = await axios.get(api.url);
-            let articles = response.data.results || response.data.datas || response.data;
+        const urls = [
+            "https://supun-md-api-rho.vercel.app/api/news/gossiplank",
+            "https://supun-md-api-rho.vercel.app/api/news/lankadeepa",
+            "https://tharuzz-news-api.vercel.app/api/news/hiru",
+            "https://supun-md-api-rho.vercel.app/api/news/itn",
+            "https://supun-md-api-rho.vercel.app/api/news/sirasa",
+            "https://supun-md-api-rho.vercel.app/api/news/adaderana"
+        ];
 
-            if (!articles || !articles.length) continue;
+        // Fetch all news sources in parallel
+        const responses = await Promise.allSettled(urls.map(url => axios.get(url)));
 
-            // Send top 3 articles from each source
-            for (let i = 0; i < Math.min(articles.length, 10); i++) {
-                const article = articles[i];
-                let message = `
-Source: *${api.name}*
+        // Combine all articles into one array
+        let articles = [];
+        for (const res of responses) {
+            if (res.status === "fulfilled") {
+                const data = res.value.data.results || res.value.data.datas || [];
+                articles.push(...data);
+            }
+        }
 
-📑 *${article.title || "No title"}*
+        if (!articles.length) return reply("❌ No news articles found.");
 
-⚠️ _${article.description || "No description"}_
+        // Limit to 5 latest articles
+        articles = articles.slice(0, 5);
 
-🔗 _${article.url || "No URL"}_
+        for (const article of articles) {
+            const title = article.title || "No title available";
+            const description = article.description || "No description available";
+            const url = article.url || "No link available";
+            const date = article.date || "Unknown date";
+            const image = article.image || article.urlToImage || null;
 
-📅 _${article.date || "No Date"}_
+            const message = `
+📰 *${title}*
+
+⚠️ _${description}_
+
+🔗 _${url}_
+
+📅 _${date}_
 
 ©ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
-                `;
+`;
 
-                if (article.image || article.urlToImage) {
-                    await conn.sendMessage(from, { image: { url: article.image || article.urlToImage }, caption: message });
-                } else {
-                    await conn.sendMessage(from, { text: message });
-                }
+            if (image) {
+                await conn.sendMessage(from, { image: { url: image }, caption: message });
+            } else {
+                await conn.sendMessage(from, { text: message });
             }
         }
     } catch (e) {
         console.error("Error fetching news:", e);
-        reply("Could not fetch news. Please try again later.");
+        reply("⚠️ Could not fetch news. Please try again later.");
     }
 });
 
@@ -98,55 +111,3 @@ async (conn, mek, m, { from, reply }) => {
         reply("Could not fetch news. Please try again later.");
     }
 });
-
-
-cmd({
-    pattern: "news3",
-    desc: "Get the latest news headlines.",
-    category: "news",
-    react: "📰",
-    filename: __filename
-},
-async (conn, mek, m, { from, reply }) => {
-    try {
-        
-        const response = await axios.get(
-            `https://supun-md-api-rho.vercel.app/api/news/gossiplank`,
-            `https://supun-md-api-rho.vercel.app/api/news/lankadeepa`,
-            `https://tharuzz-news-api.vercel.app/api/news/hiru`,
-            `https://supun-md-api-rho.vercel.app/api/news/itn`,
-            `https://supun-md-api-rho.vercel.app/api/news/sirasa`,
-            `https://supun-md-api-rho.vercel.app/api/news/adaderana`);
-        const articles = response.data.results || response.data.datas;
-
-        if (!articles.length) return reply("No news articles found.");
-
-        // Send each article as a separate message with image and title
-        for (let i = 0; i < Math.min(articles.length, 5); i++) {
-            const article = articles[i];
-            let message = `
-📰 *${article.title}*
-
-⚠️ _${article.description}_
-
-🔗 _${article.url || "No Link"}_
-
-📅 _${article.date || "No Date"}_
-
-  ©ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
-            `;
-
-            if (article.image || article.urlToImage) {
-                // Send image with caption
-                await conn.sendMessage(from, { image: { url: article.urlToImage }, caption: message });
-            } else {
-                // Send text message if no image is available
-                await conn.sendMessage(from, { text: message });
-            }
-        };
-    } catch (e) {
-        console.error("Error fetching news:", e);
-        reply("Could not fetch news. Please try again later.");
-    }
-});
-        
