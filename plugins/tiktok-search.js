@@ -32,7 +32,7 @@ cmd({
     }
 
     // Get up to 7 random results
-    const results = data.data.slice(0, 7).sort(() => Math.random() - 0.5);
+    const results = data.data.slice(0, 5).sort(() => Math.random() - 0.5);
 
     for (const video of results) {
       const message = `🌸 *TikTok Video Result*:\n\n`
