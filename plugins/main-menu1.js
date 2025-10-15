@@ -34,6 +34,8 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • openai
 ┃★│ • gemini
 ┃★│ • gemini2
+┃★│ • aiimg
+┃★│ • aiimg2
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 
@@ -397,6 +399,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • praytime
 ┃★│ • sss
 ┃★│ • srepo
+┃★│ • stickers
 ┃★│ • ttstalk
 ┃★│ • twtstalk
 ┃★│ • yts
