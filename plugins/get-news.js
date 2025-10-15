@@ -1,5 +1,75 @@
-const { cmd, commands } = require('../command');
+const { cmd } = require('../command');
 const axios = require("axios");
+
+cmd({
+    pattern: "news3",
+    desc: "Get the latest Sri Lankan news headlines from multiple sources.",
+    category: "news",
+    react: "📰",
+    filename: __filename
+},
+async (conn, mek, m, { from, reply }) => {
+    try {
+        // All news sources
+        const sources = [
+            { name: "Gossip Lanka", url: "https://supun-md-api-rho.vercel.app/api/news/gossiplank" },
+            { name: "Lankadeepa", url: "https://supun-md-api-rho.vercel.app/api/news/lankadeepa" },
+            { name: "ITN", url: "https://supun-md-api-rho.vercel.app/api/news/itn" },
+            { name: "Sirasa", url: "https://supun-md-api-rho.vercel.app/api/news/sirasa" },
+            { name: "Ada Derana", url: "https://supun-md-api-rho.vercel.app/api/news/adaderana" },
+            { name: "Hiru News", url: "https://tharuzz-news-api.vercel.app/api/news/hiru" }
+        ];
+
+        reply("📡 *Fetching latest news from all sources...*");
+
+        for (const src of sources) {
+            try {
+                const res = await axios.get(src.url);
+                const data = res.data;
+
+                // Handle both 'results' and 'datas' formats
+                let result = data.results || (data.datas ? data.datas[0] : null);
+
+                if (!result) {
+                    await conn.sendMessage(from, { text: `❌ No news found for *${src.name}*.` });
+                    continue;
+                }
+
+                // Build message
+                let msg = `
+🗞️ *${src.name} - Latest News*
+
+📰 *${result.title || "No title"}*
+${result.description ? `📄 ${result.description}\n` : ""}
+${result.date ? `🕒 ${result.date}\n` : ""}
+${result.url ? `🔗 ${result.url}\n` : ""}
+
+━━━━━━━━━━━━━━━
+© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+                `;
+
+                // If image available, send image + caption
+                const image = result.image || result.thumbnail || null;
+                if (image) {
+                    await conn.sendMessage(from, { image: { url: image }, caption: msg });
+                } else {
+                    await conn.sendMessage(from, { text: msg });
+                }
+
+                // Small delay between messages to avoid spam blocking
+                await new Promise(res => setTimeout(res, 1500));
+
+            } catch (err) {
+                console.error(`Error fetching from ${src.name}:`, err.message);
+                await conn.sendMessage(from, { text: `⚠️ Error loading news from *${src.name}*.` });
+            }
+        }
+
+    } catch (e) {
+        console.error("Global Error:", e);
+        reply("⚠️ Could not fetch news. Please try again later.");
+    }
+});
 
 cmd({
     pattern: "news",
