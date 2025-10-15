@@ -12,11 +12,11 @@ async (conn, mek, m, { from, reply }) => {
     try {
         // All news sources
         const sources = [
-            { name: "Gossip Lanka", url: "https://supun-md-api-rho.vercel.app/api/news/gossiplank" },
-            { name: "Lankadeepa", url: "https://supun-md-api-rho.vercel.app/api/news/lankadeepa" },
-            { name: "ITN", url: "https://supun-md-api-rho.vercel.app/api/news/itn" },
-            { name: "Sirasa", url: "https://supun-md-api-rho.vercel.app/api/news/sirasa" },
-            { name: "Ada Derana", url: "https://supun-md-api-rho.vercel.app/api/news/adaderana" },
+            { name: "Gossip Lanka News", url: "https://supun-md-api-rho.vercel.app/api/news/gossiplank" },
+            { name: "Lankadeepa News", url: "https://supun-md-api-rho.vercel.app/api/news/lankadeepa" },
+            { name: "ITN News", url: "https://supun-md-api-rho.vercel.app/api/news/itn" },
+            { name: "Sirasa News", url: "https://supun-md-api-rho.vercel.app/api/news/sirasa" },
+            { name: "Ada Derana News", url: "https://supun-md-api-rho.vercel.app/api/news/adaderana" },
             { name: "Hiru News", url: "https://tharuzz-news-api.vercel.app/api/news/hiru" }
         ];
 
@@ -37,12 +37,17 @@ async (conn, mek, m, { from, reply }) => {
 
                 // Build message
                 let msg = `
-🗞️ *${src.name} - Latest News*
+📰 *${src.name} - Latest*
 
-📰 *${result.title || "No title"}*
-${result.description ? `📄 ${result.description}\n` : ""}
-${result.date ? `🕒 ${result.date}\n` : ""}
-${result.url ? `🔗 ${result.url}\n` : ""}
+━━━━━━━━━━━━━━━
+
+🗞️ *${result.title || "No Title"}*
+
+📆 _${result.date || "No Date"}_
+
+📝 _${result.description || "No Description"}_
+
+🔗 _${result.url || "No Url"}_
 
 ━━━━━━━━━━━━━━━
 © ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
@@ -65,6 +70,8 @@ ${result.url ? `🔗 ${result.url}\n` : ""}
             }
         }
 
+        reply("✅ *All news sources updated successfully!*");
+        
     } catch (e) {
         console.error("Global Error:", e);
         reply("⚠️ Could not fetch news. Please try again later.");
@@ -75,7 +82,7 @@ cmd({
     pattern: "news",
     desc: "Get the latest Sri Lankan news from all major sources at once.",
     category: "news",
-    react: "📰",
+     react: "📰",
     filename: __filename
 },
 async (conn, mek, m, { from, reply }) => {
