@@ -284,6 +284,9 @@ cmd({
 ┃★│ • newgc
 ┃★│ • out 
 ┃★│ • poll
+┃★│ • getonline
+┃★│ • opentime
+┃★│ • closetime
 ┃★│ • resetglink
 ┃★│ • tagadmins
 ┃★│ • unlock 
@@ -450,6 +453,7 @@ cmd({
 ┃★│ • ssweb
 ┃★│ • person
 ┃★│ • timenow
+┃★│ • timezone
 ┃★│ • tempnumber
 ┃★│ • tempmail
 ┃★│ • vcc
@@ -517,8 +521,10 @@ cmd({
 ┃★│ • cid
 ┃★│ • country
 ┃★│ • chinfo
+┃★│ • currency
 ┃★│ • define
 ┃★│ • fancy 
+┃★│ • getnumber
 ┃★│ • githubstalk
 ┃★│ • npm
 ┃★│ • news
