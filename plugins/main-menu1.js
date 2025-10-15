@@ -180,6 +180,9 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • newgc
 ┃★│ • out 
 ┃★│ • poll
+┃★│ • getonline
+┃★│ • opentime
+┃★│ • closetime
 ┃★│ • resetglink
 ┃★│ • tagadmins
 ┃★│ • unlock 
@@ -330,6 +333,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • ssweb
 ┃★│ • person
 ┃★│ • timenow
+┃★│ • timezone
 ┃★│ • tempnumber
 ┃★│ • tempmail
 ┃★│ • vcc
@@ -389,8 +393,10 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • cid
 ┃★│ • country
 ┃★│ • chinfo
+┃★│ • currency
 ┃★│ • define
 ┃★│ • fancy 
+┃★│ • getnumber
 ┃★│ • githubstalk
 ┃★│ • npm
 ┃★│ • news
