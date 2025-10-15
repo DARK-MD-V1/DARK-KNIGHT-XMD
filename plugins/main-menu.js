@@ -122,6 +122,8 @@ cmd({
 ┃★│ • openai
 ┃★│ • gemini
 ┃★│ • gemini2
+┃★│ • aiimg
+┃★│ • aiimg2
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 > ${config.DESCRIPTION}`,
@@ -525,6 +527,7 @@ cmd({
 ┃★│ • praytime
 ┃★│ • sss
 ┃★│ • srepo
+┃★│ • stickers
 ┃★│ • ttstalk
 ┃★│ • twtstalk
 ┃★│ • yts
