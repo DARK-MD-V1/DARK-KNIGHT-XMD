@@ -3,6 +3,7 @@ const axios = require("axios");
 
 cmd({
     pattern: "searchsti",
+    alias: ["stickers"],
     react: "🦋",
     desc: "Search and download Google images",
     category: "download",
