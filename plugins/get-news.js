@@ -20,6 +20,8 @@ async (conn, mek, m, { from, reply }) => {
             { name: "Hiru News", url: "https://tharuzz-news-api.vercel.app/api/news/hiru" }
         ];
 
+        const defaultImage = "https://files.catbox.moe/hspst7.jpg";
+        
         reply("📡 *Fetching latest news from all sources...*");
 
         for (const src of sources) {
@@ -54,7 +56,7 @@ async (conn, mek, m, { from, reply }) => {
                 `;
 
                 // If image available, send image + caption
-                const image = result.image || result.thumbnail || null;
+                const image = result.image || result.thumbnail || defaultImage;
                 if (image) {
                     await conn.sendMessage(from, { image: { url: image }, caption: msg });
                 } else {
