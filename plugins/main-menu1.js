@@ -32,6 +32,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • ai
 ┃★│ • gpt
 ┃★│ • openai
+┃★│ • openai2
 ┃★│ • gemini
 ┃★│ • gemini2
 ┃★│ • aiimg
@@ -389,6 +390,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 
 ╭━━〔 🔍 *Search Menu* 〕━━┈⊷
 ┃★╭──────────────      
+┃★│ • app
 ┃★│ • check
 ┃★│ • cid
 ┃★│ • country
