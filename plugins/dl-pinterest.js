@@ -76,7 +76,7 @@ cmd({
 cmd({
     pattern: "pindl2",
     alias: ["pinterest2"],
-    desc: "Download media from Pinterest (via Aswin Sparky API)",
+    desc: "Download images or videos from Pinterest (via Aswin Sparky API)",
     category: "download",
     filename: __filename
 }, async (conn, mek, m, { args, from, reply }) => {
@@ -86,6 +86,7 @@ cmd({
         const pinterestUrl = args[0];
         await conn.sendMessage(from, { react: { text: '⏳', key: mek.key } });
 
+        // Call the Aswin Sparky API
         const apiUrl = `https://api-aswin-sparky.koyeb.app/api/downloader/pin?url=${encodeURIComponent(pinterestUrl)}`;
         const response = await axios.get(apiUrl);
 
@@ -94,22 +95,31 @@ cmd({
         }
 
         const result = response.data.data;
-        const title = result.title && result.title.trim() !== "" ? result.title : "No title available";
-        const description = result.description && result.description.trim() !== "" ? result.description : "No description";
+        const title = result.title?.trim() || "No title available";
+        const description = result.description?.trim() || "No description";
         const mediaArray = result.media_urls;
 
         if (!mediaArray || mediaArray.length === 0) {
             return reply('❎ No downloadable media found.');
         }
 
-        // Get best quality (prefer original > large > medium)
-        const bestMedia = mediaArray.find(m => m.quality === "original") ||
-                          mediaArray.find(m => m.quality === "large") ||
-                          mediaArray[0];
+        // Try to find a video first
+        const videoMedia = mediaArray.find(m => m.type.toLowerCase() === 'video');
+        const imageMedia = mediaArray.find(m => m.type.toLowerCase() === 'image' && m.quality === 'original')
+                            || mediaArray.find(m => m.type.toLowerCase() === 'image' && m.quality === 'large')
+                            || mediaArray[0];
 
-        const mediaUrl = bestMedia.url;
-        const type = bestMedia.type || "unknown";
-        const quality = bestMedia.quality || "N/A";
+        // Choose media
+        let mediaUrl, type, quality;
+        if (videoMedia) {
+            mediaUrl = videoMedia.url;
+            type = 'video';
+            quality = videoMedia.quality || 'HD';
+        } else {
+            mediaUrl = imageMedia.url;
+            type = 'image';
+            quality = imageMedia.quality || 'N/A';
+        }
 
         const caption = `╭━━━〔 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 〕━━━┈⊷
 ┃▸╭───────────
@@ -124,7 +134,7 @@ cmd({
 ╰━━❑━⪼
 > *© Pᴏᴡᴇʀᴇᴅ Bʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ♡*`;
 
-        if (type.toLowerCase().includes('video')) {
+        if (type === 'video') {
             await conn.sendMessage(from, { video: { url: mediaUrl }, caption }, { quoted: mek });
         } else {
             await conn.sendMessage(from, { image: { url: mediaUrl }, caption }, { quoted: mek });
@@ -138,3 +148,4 @@ cmd({
         reply('❎ An error occurred while downloading the Pinterest media.');
     }
 });
+
