@@ -40,6 +40,34 @@ async (conn, mek, m, { from, args, q, reply, react }) => {
     try {
         if (!q) return reply("Please provide a message for OpenAI.\nExample: `.openai Hello`");
 
+        const apiUrl = `https://supun-md-api-xmjh.vercel.app/api/ai/openai?q=${encodeURIComponent(q)}`;
+        const { data } = await axios.get(apiUrl);
+
+        if (!data || !data.results) {
+            await react("❌");
+            return reply("OpenAI failed to respond. Please try again later.");
+        }
+
+        await reply(`🧠 *OpenAI Response:*\n\n${data.results}`);
+        await react("✅");
+    } catch (e) {
+        console.error("Error in OpenAI command:", e);
+        await react("❌");
+        reply("An error occurred while communicating with OpenAI.");
+    }
+});
+
+cmd({
+    pattern: "openai2",
+    desc: "Chat with OpenAI",
+    category: "ai",
+    react: "🧠",
+    filename: __filename
+},
+async (conn, mek, m, { from, args, q, reply, react }) => {
+    try {
+        if (!q) return reply("Please provide a message for OpenAI.\nExample: `.openai Hello`");
+
         const apiUrl = `https://malvin-api.vercel.app/ai/openai?text=${encodeURIComponent(q)}`;
         const { data } = await axios.get(apiUrl);
 
