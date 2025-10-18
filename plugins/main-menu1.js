@@ -37,12 +37,14 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • gemini2
 ┃★│ • aiimg
 ┃★│ • aiimg2
+┃★│ • topromt
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 
 ╭━━〔 🔄 *Convert Menu* 〕━━┈⊷
 ┃★╭────────────── 
 ┃★│ • attp
+┃★│ • brat
 ┃★│ • aivoice
 ┃★│ • convert
 ┃★│ • binary
@@ -62,7 +64,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • toptt
 ┃★│ • tomp3
 ┃★│ • topdf
-┃★│ • translate
+┃★│ • trabnslate
 ┃★│ • urlencode
 ┃★│ • urldecode
 ┃★│ • vsticker
@@ -88,6 +90,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • mfire2
 ┃★│ • pinterest
 ┃★│ • pindl2
+┃★│ • pins
 ┃★│ • ringtone
 ┃★│ • spotify
 ┃★│ • spotify2
@@ -397,6 +400,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • app
 ┃★│ • check
 ┃★│ • cid
+┃★│ • cjid
 ┃★│ • country
 ┃★│ • chinfo
 ┃★│ • currency
