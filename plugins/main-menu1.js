@@ -304,6 +304,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ╭━━〔 🏠 *Main Menu* 〕━━┈⊷
 ┃★╭──────────────
 ┃★│ • alive
+┃★│ • live
 ┃★│ • menu
 ┃★│ • menu2
 ┃★│ • ping 
@@ -353,6 +354,9 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • bug
 ┃★│ • spam
 ┃★│ • creact
+┃★│ • ban
+┃★│ • unban
+┃★│ • listban
 ┃★│ • setsudo
 ┃★│ • delsudo
 ┃★│ • listsudo
