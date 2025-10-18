@@ -186,6 +186,7 @@ cmd({
 ┃★│ • mfire2
 ┃★│ • pinterest
 ┃★│ • pindl2
+┃★│ • pins
 ┃★│ • ringtone
 ┃★│ • spotify
 ┃★│ • spotify2
