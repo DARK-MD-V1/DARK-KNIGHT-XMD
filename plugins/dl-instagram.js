@@ -86,83 +86,97 @@ cmd({
 cmd({
   pattern: "igvid",
   alias: ["ig"],
-  react: '📥',
-  desc: "Download Instagram videos.",
+  react: "📥",
+  desc: "Download Instagram videos or photos.",
   category: "download",
-  use: ".igvid <Instagram video URL>",
+  use: ".igvid <Instagram URL>",
   filename: __filename
 }, async (conn, mek, m, { from, reply, args }) => {
   try {
     const igUrl = args[0];
     if (!igUrl || !igUrl.includes("instagram.com")) {
-      return reply('⚠️ Please provide a valid Instagram video URL.\n\nExample:\n`.igvid https://www.instagram.com/reel/...`');
+      return reply(
+        "⚠️ Please provide a valid Instagram post or reel URL.\n\nExample:\n`.igvid https://www.instagram.com/reel/...`"
+      );
     }
 
     // React while processing
-    await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
+    await conn.sendMessage(from, { react: { text: "⏳", key: m.key } });
 
-    // Call the new NexOracle API
-    const apiUrl = `https://api.nexoracle.com/downloader/insta?apikey=free_key@maher_apis&url=${encodeURIComponent(igUrl)}`;
-    const response = await axios.get(apiUrl);
+    // Fetch from Aswin Sparky API
+    const apiUrl = `https://api-aswin-sparky.koyeb.app/api/downloader/igdl?url=${encodeURIComponent(igUrl)}`;
+    const { data } = await axios.get(apiUrl);
 
-    if (!response.data || response.data.status !== 200 || !response.data.result) {
-      return reply('❌ Unable to fetch the video. Please check the URL and try again.');
+    // Validate API response
+    if (!data || !data.status || !data.data || data.data.length === 0) {
+      return reply("❌ Unable to fetch media. Please check the link and try again.");
     }
 
-    const result = response.data.result;
-    const media = result.media_details;
+    // Extract first media item
+    const media = data.data[0];
+    const fileUrl = media.url;
+    const thumb = media.thumbnail || null;
+    const type = media.type || "unknown";
 
-    if (!media || media.length === 0) {
-      return reply('❌ No downloadable video found for this post.');
+    if (!fileUrl) {
+      return reply("❌ No media file found in the response.");
     }
 
-    // Get the first video URL
-    const video = media.find(x => x.type === "video") || media[0];
-    const videoUrl = video.url;
-
-    if (!videoUrl) {
-      return reply('❌ Could not find video URL.');
-    }
-
-    // Get info for caption
-    const info = result.post_info || {};
+    // Build caption
     const captionText =
-      `📥 *Instagram Video*\n\n` +
-      `👤 *User*: ${info.owner_fullname || info.owner_username || "Unknown"}\n` +
-      `💬 *Caption*: ${info.caption || "No caption"}\n` +
-      `❤️ *Likes*: ${info.likes || 0}\n\n` +
+      `📥 *Instagram ${type === "video" ? "Video" : "Photo"}*\n\n` +
+      `🔗 *Link:* ${igUrl}\n` +
+      `📸 *Type:* ${type}\n\n` +
       `> © ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
-    await reply(`📥 *Downloading ${info.owner_username ? `from ${info.owner_username}` : "video"}...*`);
+    await reply(`📥 *Downloading ${type}...*`);
 
-    // Download the video
-    const videoResponse = await axios.get(videoUrl, { responseType: 'arraybuffer' });
-    const videoBuffer = Buffer.from(videoResponse.data, 'binary');
+    // Fetch media file as buffer
+    const mediaResponse = await axios.get(fileUrl, { responseType: "arraybuffer" });
+    const buffer = Buffer.from(mediaResponse.data, "binary");
 
-    // Send to chat
-    await conn.sendMessage(from, {
-      video: videoBuffer,
-      caption: captionText,
-      thumbnail: { url: video.thumbnail || '' },
-      contextInfo: {
-        mentionedJid: [m.sender],
-        forwardingScore: 999,
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-          newsletterJid: '120363400240662312@newsletter',
-          newsletterName: '『 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 』',
-          serverMessageId: 143
+    // Send based on media type
+    if (type === "video") {
+      await conn.sendMessage(from, {
+        video: buffer,
+        caption: captionText,
+        thumbnail: thumb ? { url: thumb } : undefined,
+        contextInfo: {
+          mentionedJid: [m.sender],
+          forwardingScore: 999,
+          isForwarded: true,
+          forwardedNewsletterMessageInfo: {
+            newsletterJid: "120363400240662312@newsletter",
+            newsletterName: "『 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 』",
+            serverMessageId: 143
+          }
         }
-      }
-    }, { quoted: mek });
+      }, { quoted: mek });
+    } else {
+      await conn.sendMessage(from, {
+        image: buffer,
+        caption: captionText,
+        thumbnail: thumb ? { url: thumb } : undefined,
+        contextInfo: {
+          mentionedJid: [m.sender],
+          forwardingScore: 999,
+          isForwarded: true,
+          forwardedNewsletterMessageInfo: {
+            newsletterJid: "120363400240662312@newsletter",
+            newsletterName: "『 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 』",
+            serverMessageId: 143
+          }
+        }
+      }, { quoted: mek });
+    }
 
     // Success reaction
-    await conn.sendMessage(from, { react: { text: '✅', key: m.key } });
+    await conn.sendMessage(from, { react: { text: "✅", key: m.key } });
 
   } catch (error) {
     console.error("Instagram download error:", error);
-    reply('❌ Unable to download the video. Please try again later.');
-    await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
+    reply("❌ Unable to download the media. Please try again later.");
+    await conn.sendMessage(from, { react: { text: "❌", key: m.key } });
   }
 });
 
