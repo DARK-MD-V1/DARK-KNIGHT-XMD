@@ -32,8 +32,7 @@ cmd({
 1️⃣  *SD Qᴜᴀʟɪᴛʏ*
 2️⃣  *HD Qᴜᴀʟɪᴛʏ*
 3️⃣  *Aᴜᴅɪᴏ (MP3)*
-4️⃣  *Aᴜᴅɪᴏ ᴀs ᴅᴏᴄᴜᴍᴇɴᴛ*
-5️⃣  *Vᴏɪᴄᴇ ɴᴏᴛᴇ*
+4️⃣  *Aᴜᴅɪᴏ*
 
 ↪️ *Reply with the number to download your choice.*`;
 
@@ -80,15 +79,6 @@ cmd({
 
           case "4":
             await conn.sendMessage(senderID, {
-              document: { url: audio },
-              mimetype: "audio/mpeg",
-              fileName: "Twitter_Audio.mp3",
-              caption: "📥 *Audio Downloaded as Document*"
-            }, { quoted: receivedMsg });
-            break;
-
-          case "5":
-            await conn.sendMessage(senderID, {
               audio: { url: audio },
               mimetype: "audio/mp4",
               ptt: false
@@ -96,7 +86,7 @@ cmd({
             break;
 
           default:
-            reply("❌ Invalid option! Please reply with 1, 2, 3, 4, or 5.");
+            reply("❌ Invalid option! Please reply with 1, 2, 3, or 4.");
         }
       }
     });
@@ -177,7 +167,7 @@ cmd({
             }, { quoted: receivedMsg });
             break;
 
-          case "5":
+          case "3":
             await conn.sendMessage(senderID, {
               audio: { url: HD || SD },
               mimetype: "audio/mp4",
