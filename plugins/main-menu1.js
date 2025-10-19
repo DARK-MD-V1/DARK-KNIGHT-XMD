@@ -98,6 +98,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • tt2
 ┃★│ • tiks
 ┃★│ • twitter
+┃★│ • twitt2
 ┃★│ • xnxx
 ┃★│ • xvideo
 ┃★│ • ytmp3
@@ -170,6 +171,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • promote
 ┃★│ • demote
 ┃★│ • ginfo
+┃★│ • gstates
 ┃★│ • hidetag
 ┃★│ • tagall
 ┃★│ • join
@@ -180,7 +182,9 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • leave
 ┃★│ • glink
 ┃★│ • lock 
+┃★│ • unlock
 ┃★│ • mute
+┃★│ • unmute
 ┃★│ • newgc
 ┃★│ • out 
 ┃★│ • poll
@@ -188,9 +192,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • opentime
 ┃★│ • closetime
 ┃★│ • resetglink
-┃★│ • tagadmins
-┃★│ • unlock 
-┃★│ • unmute
+┃★│ • tagadmins 
 ┃★│ • upgdesc
 ┃★│ • upgname
 ┃★╰──────────────
@@ -388,6 +390,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • savecontact
 ┃★│ • setting
 ┃★│ • jid
+┃★│ • jid2
 ┃★│ • gjid
 ┃★│ • forward
 ┃★│ • send
