@@ -1,11 +1,72 @@
 const axios = require('axios');
-const config = require('../config')
-const {cmd , commands} = require('../command')
-const googleTTS = require('google-tts-api')
+const config = require('../config');
+const { cmd, commands } = require('../command');
+const googleTTS = require('google-tts-api');
+
 
 cmd({
     pattern: "trt",
     alias: ["translate"],
+    desc: "🌍 Translate text between languages",
+    react: "⚡",
+    category: "other",
+    filename: __filename
+},
+async (conn, mek, m, { from, q, reply }) => {
+    try {
+        const args = q.split(' ');
+        if (args.length < 2) {
+            return reply("❗ Please provide a language code and text.\n\n📝 Usage: *.trt [lang code] [text]*\n\nExample: *.trt ml Hello bro*");
+        }
+
+        const targetLang = args[0];
+        const textToTranslate = args.slice(1).join(' ');
+
+        // ✅ Aswin Sparky Translate API
+        const apiUrl = `https://api-aswin-sparky.koyeb.app/api/search/translate?text=${encodeURIComponent(textToTranslate)}&lang=${targetLang}`;
+
+        const { data } = await axios.get(apiUrl);
+
+        if (!data.status || !data.result) {
+            return reply("⚠️ Unable to fetch translation. Please check your input or try again later.");
+        }
+
+        const translation = data.result;
+
+        const msg = `> *🌍 DARK-KNIGHT-XMD TRANSLATION*\n\n` +
+                    `> 🔤 *Original*: ${textToTranslate}\n\n` +
+                    `> 🔠 *Translated*: ${translation}\n\n` +
+                    `> 🌐 *Language*: ${targetLang.toUpperCase()}`;
+
+        await reply(msg);
+
+        // 🗣 Optional: Add TTS voice output
+        try {
+            const ttsUrl = googleTTS.getAudioUrl(translation, {
+                lang: targetLang,
+                slow: false,
+                host: 'https://translate.google.com',
+            });
+
+            await conn.sendMessage(
+                from,
+                { audio: { url: ttsUrl }, mimetype: 'audio/mpeg', ptt: true },
+                { quoted: mek }
+            );
+        } catch (ttsErr) {
+            console.log("TTS Error:", ttsErr.message);
+        }
+
+    } catch (e) {
+        console.error(e);
+        reply("⚠️ An error occurred while translating your text. Please try again later 🤕");
+    }
+});
+
+
+cmd({
+    pattern: "trt2",
+    alias: ["translate2"],
     desc: "🌍 Translate text between languages",
     react: "⚡",
     category: "other",
