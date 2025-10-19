@@ -194,6 +194,7 @@ cmd({
 ┃★│ • tt2
 ┃★│ • tiks
 ┃★│ • twitter
+┃★│ • twitt2
 ┃★│ • xnxx
 ┃★│ • xvideo
 ┃★│ • ytmp3
@@ -274,6 +275,7 @@ cmd({
 ┃★│ • promote
 ┃★│ • demote
 ┃★│ • ginfo
+┃★│ • gstates
 ┃★│ • hidetag
 ┃★│ • tagall
 ┃★│ • join
@@ -284,7 +286,9 @@ cmd({
 ┃★│ • leave
 ┃★│ • glink
 ┃★│ • lock 
+┃★│ • unlock
 ┃★│ • mute
+┃★│ • unmute
 ┃★│ • newgc
 ┃★│ • out 
 ┃★│ • poll
@@ -292,9 +296,7 @@ cmd({
 ┃★│ • opentime
 ┃★│ • closetime
 ┃★│ • resetglink
-┃★│ • tagadmins
-┃★│ • unlock 
-┃★│ • unmute
+┃★│ • tagadmins 
 ┃★│ • upgdesc
 ┃★│ • upgname
 ┃★╰──────────────
@@ -512,6 +514,7 @@ cmd({
 ┃★│ • savecontact
 ┃★│ • setting
 ┃★│ • jid
+┃★│ • jid2
 ┃★│ • gjid
 ┃★│ • forward
 ┃★│ • send
