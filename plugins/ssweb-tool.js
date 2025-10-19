@@ -1,39 +1,35 @@
-// code by ⿻ ⌜ MALVIN ⌟⿻⃮͛
-
 const axios = require("axios");
 const config = require('../settings');
 const { cmd } = require('../command');
 
 cmd({
   pattern: "sss",
-  alias: ["ssweb"],
   react: "💫",
-  desc: "Download screenshot of a given link.",
-  category: "other",
-  use: ".ss <link>",
+  desc: "Capture a full-page screenshot of a website.",
+  category: "utility",
+  use: ".sss <url>",
   filename: __filename,
-}, 
-async (conn, mek, m, {
-  from, l, quoted, body, isCmd, command, args, q, isGroup, sender, 
-  senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, 
-  groupMetadata, groupName, participants, isItzcp, groupAdmins, 
-  isBotAdmins, isAdmins, reply 
-}) => {
-  if (!q) {
-    return reply("Please provide a URL to capture a screenshot.");
-  }
-
+}, async (conn, mek, msg, { from, args, reply }) => {
   try {
-    // created by malvin tech 
-    const response = await axios.get(`https://api.davidcyriltech.my.id/ssweb?url=${q}`);
-    const screenshotUrl = response.data.screenshotUrl;
+    const url = args[0];
+    if (!url) {
+      return reply("❌ Please provide a valid URL. Example: `.screenshot https://github.com`");
+    }
 
-    // give credit and use
-    const imageMessage = {
+    // Validate the URL
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      return reply("❌ Invalid URL. Please include 'http://' or 'https://'.");
+    }
+
+    // Generate the screenshot URL using Thum.io API
+    const screenshotUrl = `https://image.thum.io/get/fullpage/${url}`;
+
+    // Send the screenshot as an image message
+    await conn.sendMessage(from, {
       image: { url: screenshotUrl },
-      caption: "*WEB SS DOWNLOADER*\n\n> *© Powered By 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*",
+      caption: `*WEB SS DOWNLOADER*\n\n> *© Powered By 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*`,
       contextInfo: {
-        mentionedJid: [m.sender],
+        mentionedJid: [msg.sender], // Fix: Use `msg.sender` instead of `m.sender`
         forwardingScore: 999,
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
@@ -42,13 +38,10 @@ async (conn, mek, m, {
           serverMessageId: 143,
         },
       },
-    };
+    }, { quoted: mek });
 
-    await conn.sendMessage(from, imageMessage, { quoted: m });
   } catch (error) {
-    console.error(error);
-    reply("Failed to capture the screenshot. Please try again.");
+    console.error("Error:", error); // Log the error for debugging
+    reply("❌ Failed to capture the screenshot. Please try again.");
   }
 });
-
-
