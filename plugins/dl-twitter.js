@@ -91,7 +91,7 @@ cmd({
             await conn.sendMessage(senderID, {
               audio: { url: audio },
               mimetype: "audio/mp4",
-              ptt: true
+              ptt: false
             }, { quoted: receivedMsg });
             break;
 
@@ -139,9 +139,9 @@ cmd({
 🌐 *Download Options:*
 1️⃣  *SD Qᴜᴀʟɪᴛʏ*
 2️⃣  *HD Qᴜᴀʟɪᴛʏ*
-5️⃣  *Vᴏɪᴄᴇ (as Audio)*
+3️⃣  *Aᴜᴅɪᴏ (MP3)*
 
-↪️ *Reply with 1, 2 or 5 to choose your format.*`;
+↪️ *Reply with 1, 2 or 3 to choose your format.*`;
 
     const sentMsg = await conn.sendMessage(from, {
       image: { url: thumbnail },
@@ -181,7 +181,7 @@ cmd({
             await conn.sendMessage(senderID, {
               audio: { url: HD || SD },
               mimetype: "audio/mp4",
-              ptt: true
+              ptt: false
             }, { quoted: receivedMsg });
             break;
 
