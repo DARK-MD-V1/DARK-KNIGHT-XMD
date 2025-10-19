@@ -3,48 +3,10 @@ const config = require('../config');
 const { cmd, commands } = require('../command');
 const googleTTS = require('google-tts-api');
 
+
 cmd({
     pattern: "trt",
     alias: ["translate"],
-    desc: "🌍 Translate text between languages",
-    react: "⚡",
-    category: "other",
-    filename: __filename
-},
-async (conn, mek, m, { from, q, reply }) => {
-    try {
-        if (!q) return reply("❗ Please provide a language code and text. Usage: .translate [language code] [text]");
-
-        const args = q.split(' ');
-        if (args.length < 2) return reply("❗ Please provide a language code and text. Usage: .translate [language code] [text]");
-
-        const targetLang = args[0];
-        const textToTranslate = args.slice(1).join(' ');
-
-        const url = `https://api-aswin-sparky.koyeb.app/api/search/translate?text=${encodeURIComponent(textToTranslate)}&lang=${targetLang}`;
-
-        const response = await axios.get(url);
-        const translation = response.data.result;
-
-        const translationMessage = `> *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 TRANSLATION*
-
-> 🔤 *Original*: ${textToTranslate}
-
-> 🔠 *Translated*: ${translation}
-
-> 🌐 *Language*: ${targetLang.toUpperCase()}`;
-
-        return reply(translationMessage);
-    } catch (e) {
-        console.log(e);
-        return reply("⚠️ An error occurred while translating your text. Please try again later 🤕");
-    }
-});
-
-
-cmd({
-    pattern: "trt2",
-    alias: ["translate2"],
     desc: "🌍 Translate text between languages",
     react: "⚡",
     category: "other",
