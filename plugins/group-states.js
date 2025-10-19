@@ -1,8 +1,8 @@
 const { cmd } = require('../command');
 
 cmd({
-    pattern: "groupstats",
-    alias: ["gstats"],
+    pattern: "groupstates",
+    alias: ["gstates"],
     desc: "Safe group analytics",
     category: "group",
     react: "📊",
