@@ -72,8 +72,9 @@ cmd({
 
           case "3":
             await conn.sendMessage(senderID, {
-              audio: { url: audio },
-              mimetype: "audio/mpeg"
+              audio: { url: video_sd || video_hd },
+              mimetype: "audio/mp4",
+              ptt: false
             }, { quoted: receivedMsg });
             break;
 
