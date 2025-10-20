@@ -21,16 +21,16 @@ async (conn, mek, m, { from, reply }) => {
         // Build the message text
         let newsMessage = `📰 *Ada Derana – Latest Headlines*\n\n`;
 
-        for (let i = 0; i < Math.min(articles.length, 15); i++) {
+        for (let i = 0; i < Math.min(articles.length, 20); i++) {
             const a = articles[i];
             newsMessage += `
-━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━
 🗞️ *${i + 1}. ${a.title || "No Title"}*
 
 📝 _${a.description || "No Description"}_
 
 🔗 _${a.link || "No URL"}_
-━━━━━━━━━━━━━━━━━━\n`;
+━━━━━━━━━━━━━━━━━\n`;
         }
 
         newsMessage += `
