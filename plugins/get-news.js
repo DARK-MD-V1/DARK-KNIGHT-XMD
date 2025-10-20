@@ -1,8 +1,57 @@
 const { cmd } = require('../command');
-const axios = require("axios");
+const axios = require('axios');
 
 cmd({
     pattern: "news",
+    desc: "Get the latest Ada Derana Sinhala news headlines (all in one message).",
+    category: "news",
+    react: "📰",
+    filename: __filename
+},
+async (conn, mek, m, { from, reply }) => {
+    try {
+        const response = await axios.get("https://tharuzz-news-api.vercel.app/api/news/derana");
+        const articles = response.data.datas;
+
+        if (!articles || !articles.length) return reply("❌ No news articles found.");
+
+        // Fixed banner image
+        const headerImage = "https://files.catbox.moe/hspst7.jpg";
+
+        // Build the message text
+        let newsMessage = `📰 *Ada Derana – Latest Headlines*\n\n`;
+
+        for (let i = 0; i < Math.min(articles.length, 15); i++) {
+            const a = articles[i];
+            newsMessage += `
+━━━━━━━━━━━━━━━━━━
+🗞️ *${i + 1}. ${a.title || "No Title"}*
+
+📝 _${a.description || "No Description"}_
+
+🔗 _${a.link || "No URL"}_
+━━━━━━━━━━━━━━━━━━\n`;
+        }
+
+        newsMessage += `
+© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳  
+🌐 Source: Ada Derana`;
+
+        // Send all news with the fixed image
+        await conn.sendMessage(from, {
+            image: { url: headerImage },
+            caption: newsMessage
+        });
+
+    } catch (e) {
+        console.error("Error fetching news:", e);
+        reply("⚠️ Could not fetch Derana news. Please try again later.");
+    }
+});
+
+
+cmd({
+    pattern: "news1",
     desc: "Get the latest Sri Lankan news headlines from multiple sources.",
     category: "news",
     react: "📰",
