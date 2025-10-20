@@ -1,4 +1,5 @@
 const {cmd , commands} = require('../command')
+const fetch = require('node-fetch')
 const yts = require('yt-search')
 const axios = require("axios");
 
@@ -125,64 +126,146 @@ cmd({
     }
 });
 
+// new song commands
 
 cmd({
-    pattern: "song2",
-    react: "🎵",
-    desc: "Download YouTube MP3",
-    category: "download",
-    use: ".song2 <query>",
-    filename: __filename
+  pattern: "play",
+  react: "🎵",
+  desc: "Download YouTube song (Audio) via Nekolabs API",
+  category: "download",
+  use: ".play <query>",
+  filename: __filename
 }, async (conn, mek, m, { from, reply, q }) => {
+  try {
+    if (!q) return reply("⚠️ Please provide a song name or YouTube link.");
+
+    // 🔹 API Call
+    const apiUrl = `https://api.nekolabs.my.id/downloader/youtube/play/v1?q=${encodeURIComponent(q)}`;
+    const res = await fetch(apiUrl);
+    const data = await res.json();
+
+    // 🔹 Validate response
+    if (!data?.success || !data?.result?.downloadUrl) {
+      return reply("❌ Song not found or API error. Try again later.");
+    }
+
+    const meta = data.result.metadata;
+    const dlUrl = data.result.downloadUrl;
+
+    // 🔹 Try to fetch thumbnail
+    let buffer = null;
     try {
-        if (!q) return reply("❓ What song do you want to download?");
+      const thumbRes = await fetch(meta.cover);
+      buffer = Buffer.from(await thumbRes.arrayBuffer());
+    } catch {}
 
-        // 🔍 Search YouTube video
-        const search = await yts(q);
-        if (!search.videos.length) return reply("❌ No results found for your query.");
-
-        const data = search.videos[0];
-        const ytUrl = data.url;
-
-        // 🧩 New API (Zenzxz)
-        const api = `https://api.zenzxz.my.id/downloader/ytmp3v2?url=${encodeURIComponent(ytUrl)}`;
-        const { data: apiRes } = await axios.get(api);
-
-        // ⚠️ Validate response
-        if (!apiRes?.status || !apiRes.download_url) {
-            return reply("❌ Unable to download this song. Try another one!");
-        }
-
-        // 🖼️ Send song info first
-        await conn.sendMessage(from, {
-            image: { url: apiRes.thumbnail || data.thumbnail },
-            caption: `
-📑 *Title:* ${data.title}
-⏱️ *Duration:* ${data.timestamp}
-📊 *Views:* ${data.views}
-📆 *Released:* ${data.ago}
-🔗 *Link:* ${ytUrl}
+    // 🔹 Caption design
+    const caption = `
+📑 *Title :* ${meta.title}
+⏱ *Duration :* ${meta.duration}
+⏰ *ResponseTime :* ${data.responseTime}
+📡 *Channel :* ${meta.channel}
+🔗 *Link :* ${meta.url}
 
 🎵 *Downloading Song..* ⏳
 
-> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
-        }, { quoted: mek });
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+`;
 
-        // 🎶 Send as audio
-        await conn.sendMessage(from, {
-            audio: { url: apiRes.download_url },
-            mimetype: "audio/mpeg",
-            ptt: false,
-        }, { quoted: mek });
+    // 🔹 Send thumbnail & details
+    await conn.sendMessage(from, {
+      image: buffer,
+      caption
+    }, { quoted: mek });
 
-        // 📄 Send also as document
-        await conn.sendMessage(from, {
-            document: { url: apiRes.download_url },
-            mimetype: "audio/mpeg",
-            fileName: `${apiRes.title || data.title}.mp3`
-        }, { quoted: mek });
+    // 🔹 Send audio
+    await conn.sendMessage(from, {
+      audio: { url: dlUrl },
+      mimetype: "audio/mpeg",
+      fileName: `${meta.title.replace(/[\\/:*?"<>|]/g, "").slice(0, 80)}.mp3`
+    }, { quoted: mek });
 
-    } catch (error) {
-        reply(`❌ An error occurred: ${error.message}`);
+    await conn.sendMessage(from, {
+      document: { url: dlUrl },
+      mimetype: "audio/mpeg",
+      fileName: `${meta.title.replace(/[\\/:*?"<>|]/g, "").slice(0, 80)}.mp3`
+    }, { quoted: mek }); 
+  
+  } catch (err) {
+    console.error("song cmd error:", err);
+    reply("⚠️ An error occurred while processing your request.");
+  }
+});
+
+
+cmd({
+  pattern: "ytmp3",
+  react: "🎵",
+  desc: "Download YouTube song (Audio) via Nekolabs API (v1 Direct)",
+  category: "download",
+  use: ".ytmp3 <YouTube link>",
+  filename: __filename
+}, async (conn, mek, m, { from, reply, q }) => {
+  try {
+    if (!q) return reply("⚠️ Please provide a valid YouTube link.");
+
+    // ✅ Validate YouTube URL
+    const ytRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//;
+    if (!ytRegex.test(q)) return reply("⚠️ Please provide a valid YouTube URL.");
+
+    reply("🎧 Fetching song info... Please wait!");
+
+    // 🔹 API Request
+    const apiUrl = `https://api.nekolabs.my.id/downloader/youtube/v1?url=${encodeURIComponent(q)}&format=mp3`;
+    const res = await fetch(apiUrl);
+    const data = await res.json();
+
+    // 🔹 Validate response
+    if (!data?.success || !data?.result?.downloadUrl) {
+      return reply("❌ Failed to fetch song details or invalid API response.");
     }
+
+    const meta = data.result;
+    const dlUrl = meta.downloadUrl;
+
+    // 🔹 Fetch thumbnail
+    let buffer = null;
+    try {
+      const thumbRes = await fetch(meta.cover);
+      buffer = Buffer.from(await thumbRes.arrayBuffer());
+    } catch {}
+
+    // 🔹 Caption
+    const caption = `
+📑 *Title :* ${meta.title}
+⏱ *Duration :* ${meta.duration}
+⏰ *ResponseTime :* ${data.responseTime}
+📝 *Format :* ${meta.format} (${meta.quality}kbps)
+
+🎵 *Downloading Song..*⏳
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+`;
+
+    // 🔹 Send thumbnail
+    await conn.sendMessage(from, { image: buffer, caption }, { quoted: mek });
+
+    // 🔹 Send audio
+    await conn.sendMessage(from, {
+      audio: { url: dlUrl },
+      mimetype: "audio/mpeg",
+      fileName: `${meta.title.replace(/[\\/:*?"<>|]/g, "").slice(0, 80)}.mp3`
+    }, { quoted: mek });
+
+    // (Optional) Send as document
+    await conn.sendMessage(from, {
+      document: { url: dlUrl },
+      mimetype: "audio/mpeg",
+      fileName: `${meta.title.replace(/[\\/:*?"<>|]/g, "").slice(0, 80)}.mp3`
+    }, { quoted: mek });
+
+  } catch (err) {
+    console.error("song cmd error:", err);
+    reply("⚠️ An error occurred while processing your request.");
+  }
 });
