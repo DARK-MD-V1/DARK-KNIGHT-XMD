@@ -340,6 +340,7 @@ cmd({
 ┃★│ • getimage
 ┃★│ • imgscan
 ┃★│ • image
+┃★│ • topixel
 ┃★│ • adedit
 ┃★│ • bluredit
 ┃★│ • greyedit
