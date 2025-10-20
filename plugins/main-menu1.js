@@ -48,6 +48,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • brat
 ┃★│ • aivoice
 ┃★│ • convert
+┃★│ • enhance
 ┃★│ • binary
 ┃★│ • dbinary
 ┃★│ • base64
@@ -65,6 +66,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • toptt
 ┃★│ • tomp3
 ┃★│ • topdf
+┃★│ • videonote
 ┃★│ • trabnslate
 ┃★│ • urlencode
 ┃★│ • urldecode
