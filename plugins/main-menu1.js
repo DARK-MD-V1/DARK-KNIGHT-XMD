@@ -420,6 +420,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • githubstalk
 ┃★│ • npm
 ┃★│ • news
+┃★│ • news1
 ┃★│ • news2
 ┃★│ • mvdetail
 ┃★│ • praytime
