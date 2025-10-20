@@ -1,99 +1,92 @@
-const { cmd } = require('../command');
-const os = require("os");
-const { runtime } = require('../lib/functions');
+
+const fetch = require('node-fetch');
 const config = require('../config');
+const { cmd } = require('../command');
 
 cmd({
     pattern: "alive2",
-    desc: "Check bot is alive or not with interactive buttons",
-    category: "main",
-    react: "⚡",
-    filename: __filename
+    alias: ["sc", "script", "info"],
+    desc: "Fetch GitHub repository information",
+    react: "📂",
+    category: "info",
+    filename: __filename,
 },
-async (conn, mek, m, { from, sender, reply }) => {
+async (conn, mek, m, { from, reply }) => {
+    const githubRepoURL = 'https://github.com/cnw-db/Whiteshadow-vx.git';
+    const channelLink = "https://whatsapp.com/channel/0029Vaj3Xnu17EmtDxTNnQ0G";
+
     try {
-        const status = `
-╭───〔 *🤖 ${config.BOT_NAME} STATUS* 〕───◉
-│✨ *Bot is Active & Online!*
-│
-│🧠 *Owner:* ${config.OWNER_NAME}
-│⚡ *Version:* 2.0.0
-│📝 *Prefix:* [${config.PREFIX}]
-│📳 *Mode:* [${config.MODE}]
-│💾 *RAM:* ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}MB / ${(os.totalmem() / 1024 / 1024).toFixed(2)}MB
-│🖥️ *Host:* ${os.hostname()}
-│⌛ *Uptime:* ${runtime(process.uptime())}
-╰────────────────────◉
+        // Repo username / name extract
+        const cleanUrl = githubRepoURL.replace(/\.git$/, "").replace(/\/+$/, "");
+        const match = cleanUrl.match(/github\.com\/([^/]+)\/([^/]+)/);
+        if (!match) return reply("⚠️ Invalid GitHub repo URL set in code!");
+
+        const [, username, repoName] = match;
+        const response = await fetch(`https://api.github.com/repos/${username}/${repoName}`);
+        if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
+
+        const repoData = await response.json();
+
+        // Caption
+        const caption = `📦 *Repository*: ${repoData.name}
+👑 *Owner*: ${repoData.owner.login}
+⭐ *Stars*: ${repoData.stargazers_count}
+🍴 *Forks*: ${repoData.forks_count}
+🛠 *Issues*: ${repoData.open_issues_count}
+📅 *Updated*: ${new Date(repoData.updated_at).toLocaleDateString()}
+🔗 *URL*: ${repoData.html_url}
+
+📝 *Description*: ${repoData.description || 'No description'}
+
 > ${config.DESCRIPTION}`;
 
-        // Fake VCard
-        const FakeVCard = {
-            key: {
-                fromMe: false,
-                participant: "0@s.whatsapp.net",
-                remoteJid: "status@broadcast"
-            },
-            message: {
-                contactMessage: {
-                    displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
-                    vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Meta\nORG:META AI;\nTEL;type=CELL;type=VOICE;waid=13135550002:+13135550002\nEND:VCARD`
-                }
-            }
-        };
+        // Send with Buttons
+        await conn.sendMessage(from, {
+            image: { url: config.MENU_IMAGE_URL || "https://files.catbox.moe/cz2592.jpeg" },
+            caption,
+            footer: `👑 ${config.BOT_NAME || 'WHITESHADOW-MD'} 👑`,
+            buttons: [
+                { buttonId: "stars_info", buttonText: { displayText: `⭐ Stars (${repoData.stargazers_count})` }, type: 1 },
+                { buttonId: "forks_info", buttonText: { displayText: `🍴 Forks (${repoData.forks_count})` }, type: 1 },
+                { buttonId: "channel_btn", buttonText: { displayText: "📢 Join Channel" }, type: 1 }
+            ],
+            headerType: 4
+        }, { quoted: mek });
 
-        // Buttons
-        const buttons = [
-            { buttonId: 'alive_version', buttonText: { displayText: 'Version' }, type: 1 },
-            { buttonId: 'alive_uptime', buttonText: { displayText: 'Uptime' }, type: 1 },
-            { buttonId: 'alive_ping', buttonText: { displayText: 'Ping' }, type: 1 },
-            { buttonId: 'alive_support', buttonText: { displayText: 'Support' }, type: 1 }
-        ];
+        // Send audio jingle
+        await conn.sendMessage(from, {
+            audio: { url: "https://files.catbox.moe/mpt43m.mp3" },
+            mimetype: "audio/mp4",
+            ptt: true
+        }, { quoted: mek });
 
-        const buttonMessage = {
-            image: { url: config.MENU_IMAGE_URL },
-            caption: status,
-            footer: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
-            buttons: buttons,
-            headerType: 4,
-            contextInfo: {
-                mentionedJid: [m.sender],
-                forwardingScore: 1000,
-                isForwarded: true,
-                quoted: FakeVCard
-            }
-        };
+    } catch (error) {
+        console.error("Repo command error:", error);
+        reply(`❌ Error: ${error.message}`);
+    }
+});
 
-        await conn.sendMessage(from, buttonMessage);
 
-        // Listen for button clicks
-        conn.on('message.upsert', async ({ messages }) => {
-            const msg = messages[0];
-            if (!msg.message) return;
-
-            const buttonId = msg.message?.buttonsResponseMessage?.selectedButtonId;
-            if (!buttonId) return;
-
-            switch(buttonId) {
-                case 'alive_version':
-                    await conn.sendMessage(from, { text: `⚡ Version: 2.0.0` }, { quoted: msg });
-                    break;
-                case 'alive_uptime':
-                    await conn.sendMessage(from, { text: `⌛ Uptime: ${runtime(process.uptime())}` }, { quoted: msg });
-                    break;
-                case 'alive_ping':
-                    const start = Date.now();
-                    await conn.sendMessage(from, { text: '🏓 Pinging...' }, { quoted: msg });
-                    const latency = Date.now() - start;
-                    await conn.sendMessage(from, { text: `🏓 Pong! ${latency}ms` }, { quoted: msg });
-                    break;
-                case 'alive_support':
-                    await conn.sendMessage(from, { text: `💬 Contact Support: wa.me/${config.OWNER_NUMBER}` }, { quoted: msg });
-                    break;
-            }
-        });
-
+// ----------------------
+// 🎯 Handle Button Events
+// ----------------------
+cmd({
+    on: "button",
+    fromMe: false
+}, async (conn, mek, m, { from, buttonId, reply }) => {
+    try {
+        if (buttonId === "stars_info") {
+            return reply("🌟 Stars show repo popularity. More stars = more users love this project!");
+        }
+        if (buttonId === "forks_info") {
+            return reply("🍴 Forks mean how many developers copied this repo to work on.");
+        }
+        if (buttonId === "channel_btn") {
+            return conn.sendMessage(from, {
+                text: "📢 Join our WhatsApp Channel:\nhttps://whatsapp.com/channel/0029Vaj3Xnu17EmtDxTNnQ0G"
+            }, { quoted: mek });
+        }
     } catch (e) {
-        console.error("Alive Error:", e);
-        reply(`An error occurred: ${e.message}`);
+        console.error("Button handler error:", e);
     }
 });
