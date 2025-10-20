@@ -5,7 +5,7 @@ const config = require('../config');
 
 cmd({
     pattern: "alive2",
-    desc: "Check bot is alive or not",
+    desc: "Check bot is alive or not with interactive buttons",
     category: "main",
     react: "⚡",
     filename: __filename
@@ -43,10 +43,10 @@ async (conn, mek, m, { from, sender, reply }) => {
 
         // Buttons
         const buttons = [
-            { buttonId: `${config.PREFIX}version`, buttonText: { displayText: 'Version' }, type: 1 },
-            { buttonId: `${config.PREFIX}uptime`, buttonText: { displayText: 'Uptime' }, type: 1 },
-            { buttonId: `${config.PREFIX}ping`, buttonText: { displayText: 'Ping' }, type: 1 },
-            { buttonId: `${config.PREFIX}support`, buttonText: { displayText: 'Support' }, type: 1 }
+            { buttonId: 'alive_version', buttonText: { displayText: 'Version' }, type: 1 },
+            { buttonId: 'alive_uptime', buttonText: { displayText: 'Uptime' }, type: 1 },
+            { buttonId: 'alive_ping', buttonText: { displayText: 'Ping' }, type: 1 },
+            { buttonId: 'alive_support', buttonText: { displayText: 'Support' }, type: 1 }
         ];
 
         const buttonMessage = {
@@ -64,6 +64,33 @@ async (conn, mek, m, { from, sender, reply }) => {
         };
 
         await conn.sendMessage(from, buttonMessage);
+
+        // Listen for button clicks
+        conn.on('message.upsert', async ({ messages }) => {
+            const msg = messages[0];
+            if (!msg.message) return;
+
+            const buttonId = msg.message?.buttonsResponseMessage?.selectedButtonId;
+            if (!buttonId) return;
+
+            switch(buttonId) {
+                case 'alive_version':
+                    await conn.sendMessage(from, { text: `⚡ Version: 2.0.0` }, { quoted: msg });
+                    break;
+                case 'alive_uptime':
+                    await conn.sendMessage(from, { text: `⌛ Uptime: ${runtime(process.uptime())}` }, { quoted: msg });
+                    break;
+                case 'alive_ping':
+                    const start = Date.now();
+                    await conn.sendMessage(from, { text: '🏓 Pinging...' }, { quoted: msg });
+                    const latency = Date.now() - start;
+                    await conn.sendMessage(from, { text: `🏓 Pong! ${latency}ms` }, { quoted: msg });
+                    break;
+                case 'alive_support':
+                    await conn.sendMessage(from, { text: `💬 Contact Support: wa.me/${config.OWNER_NUMBER}` }, { quoted: msg });
+                    break;
+            }
+        });
 
     } catch (e) {
         console.error("Alive Error:", e);
