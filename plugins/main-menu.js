@@ -126,6 +126,7 @@ cmd({
 ┃★│ • aiimg
 ┃★│ • aiimg2
 ┃★│ • aianime
+┃★│ • imgedit
 ┃★│ • topromt
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
