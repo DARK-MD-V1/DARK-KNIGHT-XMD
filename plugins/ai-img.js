@@ -72,3 +72,35 @@ cmd({
     reply(`An error occurred: ${error.response?.data?.message || error.message || "Unknown error"}`);
   }
 });
+
+
+cmd({
+  pattern: "aianime",
+  react: "🎨",
+  desc: "Get a random anime image.",
+  category: "main",
+  filename: __filename
+}, async (conn, mek, m, { reply }) => {
+  try {
+    await reply("> *FETCHING RANDOM ANIME IMAGE...✨*");
+
+    const apiUrl = "https://lance-frank-asta.onrender.com/api/anime-random";
+
+    const response = await axios.get(apiUrl);
+
+    if (!response.data?.status || !response.data.random?.imgAnime) {
+      return reply("Error: Could not fetch an anime image. Try again later.");
+    }
+
+    const anime = response.data.random;
+
+    await conn.sendMessage(m.chat, {
+      image: { url: anime.imgAnime },
+      caption: `💫 *Random Anime Image*\n👤 Name: ${anime.name}\n🎬 Movie/Anime: ${anime.movie}\n🎨 Color: ${anime.colorBg}`
+    });
+
+  } catch (error) {
+    console.error("AnimeImage Error:", error);
+    reply(`An error occurred: ${error.response?.data?.message || error.message || "Unknown error"}`);
+  }
+});
