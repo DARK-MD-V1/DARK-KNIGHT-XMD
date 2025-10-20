@@ -3,8 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 cmd({
-    pattern: "get",
-    alias: ["source", "js"],
+    pattern: "getjs",
     desc: "Fetch the full source code of a command",
     category: "owner",
     react: "📜",
