@@ -125,6 +125,7 @@ cmd({
 ┃★│ • gemini2
 ┃★│ • aiimg
 ┃★│ • aiimg2
+┃★│ • aianime
 ┃★│ • topromt
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
@@ -188,6 +189,7 @@ cmd({
 ┃★│ • pindl2
 ┃★│ • pins
 ┃★│ • ringtone
+┃★│ • ring2
 ┃★│ • spotify
 ┃★│ • spotify2
 ┃★│ • tiktok
@@ -331,6 +333,7 @@ cmd({
 ┃★│ • imagine2
 ┃★│ • imagine3
 ┃★│ • wallpaper
+┃★│ • wallpaper2
 ┃★│ • randomwall
 ┃★│ • getimage
 ┃★│ • imgscan
@@ -431,6 +434,7 @@ cmd({
 ┃★│ • ping 
 ┃★│ • ping2 
 ┃★│ • repo
+┃★│ • system
 ┃★│ • version
 ┃★│ • uptime
 ┃★│ • restart
