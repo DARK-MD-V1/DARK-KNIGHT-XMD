@@ -37,6 +37,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • gemini2
 ┃★│ • aiimg
 ┃★│ • aiimg2
+┃★│ • aianime
 ┃★│ • topromt
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
@@ -92,6 +93,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • pindl2
 ┃★│ • pins
 ┃★│ • ringtone
+┃★│ • ring2
 ┃★│ • spotify
 ┃★│ • spotify2
 ┃★│ • tiktok
@@ -223,6 +225,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • imagine2
 ┃★│ • imagine3
 ┃★│ • wallpaper
+┃★│ • wallpaper2
 ┃★│ • randomwall
 ┃★│ • getimage
 ┃★│ • imgscan
@@ -315,6 +318,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • ping 
 ┃★│ • ping2 
 ┃★│ • repo
+┃★│ • system
 ┃★│ • version
 ┃★│ • uptime
 ┃★│ • restart
