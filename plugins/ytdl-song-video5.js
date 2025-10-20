@@ -63,63 +63,72 @@ cmd({
     }
 });
 
+
 cmd({
     pattern: "video4",
     react: "🎬",
-    desc: "Download YouTube MP4",
+    desc: "Download YouTube video as MP4 (360p)",
     category: "download",
-    use: ".video4 <query>",
+    use: ".video4 <query or YouTube link>",
     filename: __filename
 }, async (conn, mek, m, { from, reply, q }) => {
     try {
-        if (!q) return reply("❓ What video do you want to download?");
+        if (!q) return reply("❓ Please provide a YouTube link or search query!");
 
-        // 🔍 Search YouTube video
-        const search = await yts(q);
-        if (!search.videos.length) return reply("❌ No results found for your query.");
+        // 🔍 YouTube Search (if not a direct link)
+        let ytUrl;
+        if (q.includes('youtube.com') || q.includes('youtu.be')) {
+            ytUrl = q;
+        } else {
+            const search = await yts(q);
+            if (!search.videos.length) return reply("❌ No videos found for your query.");
+            ytUrl = search.videos[0].url;
+        }
 
-        const data = search.videos[0];
-        const ytUrl = data.url;
+        reply("🔎 Fetching video info... Please wait!");
 
-        // 🧩 New API (Zenzxz)
+        // 🧩 Fetch data from Zenzxz API
         const api = `https://api.zenzxz.my.id/api/downloader/ytmp4?url=${encodeURIComponent(ytUrl)}&resolution=360p`;
         const { data: apiRes } = await axios.get(api);
 
         // ⚠️ Validate response
-        if (!apiRes?.status || !apiRes.download_url) {
-            return reply("❌ Unable to download this video. Try another one!");
+        if (!apiRes?.success || !apiRes?.data?.download_url) {
+            return reply("❌ Failed to fetch download link. Try again later!");
         }
 
-        // 🖼️ Send song info first
+        const vid = apiRes.data;
+
+        // 🖼️ Send video info card
         await conn.sendMessage(from, {
-            image: { url: apiRes.thumbnail || data.thumbnail },
+            image: { url: vid.thumbnail },
             caption: `
-📑 *Title:* ${data.title}
-⏱️ *Duration:* ${data.timestamp}
-📊 *Views:* ${data.views}
-📆 *Released:* ${data.ago}
+🎬 *${vid.title}*
+
+📀 *Quality:* ${vid.format || "360p"}
+⏱️ *Duration:* ${vid.duration ? `${Math.floor(vid.duration / 60)}m ${vid.duration % 60}s` : "N/A"}
 🔗 *Link:* ${ytUrl}
 
-🎵 *Downloading Video..* ⏳
-
-> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+> 🎥 *Downloading your video...* ⏳
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ⚡
+`
         }, { quoted: mek });
 
-        // 🎶 Send as audio
+        // 🎞️ Send video
         await conn.sendMessage(from, {
-            video: { url: apiRes.download_url },
+            video: { url: vid.download_url },
             mimetype: "video/mp4",
-            ptt: false,
+            caption: `✅ *Here is your video!* 🎬\n🎵 ${vid.title}`
         }, { quoted: mek });
 
-        // 📄 Send also as document
+        // 💾 Also send as document (optional)
         await conn.sendMessage(from, {
-            document: { url: apiRes.download_url },
+            document: { url: vid.download_url },
             mimetype: "video/mp4",
-            fileName: `${apiRes.title || data.title}.mp4`
+            fileName: `${vid.title.replace(/[^\w\s]/gi, '')}.mp4`
         }, { quoted: mek });
 
-    } catch (error) {
-        reply(`❌ An error occurred: ${error.message}`);
+    } catch (e) {
+        console.error(e);
+        reply(`❌ Error: ${e.message}`);
     }
 });
