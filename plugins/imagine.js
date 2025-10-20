@@ -49,7 +49,7 @@ cmd({
 
     await reply("> *CREATING IMAGINE ...🔥*");
 
-    const apiUrl = `https://api.siputzx.my.id/api/ai/stable-diffusion?prompt=${encodeURIComponent(q)}`;
+    const apiUrl = `https://api.siputzx.my.id/api/ai/magicstudio?prompt=${encodeURIComponent(q)}`;
 
     const response = await axios.get(apiUrl, { responseType: "arraybuffer" });
 
