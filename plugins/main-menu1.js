@@ -38,6 +38,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • aiimg
 ┃★│ • aiimg2
 ┃★│ • aianime
+┃★│ • imgedit
 ┃★│ • topromt
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
