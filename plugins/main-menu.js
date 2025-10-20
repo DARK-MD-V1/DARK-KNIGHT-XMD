@@ -140,6 +140,7 @@ cmd({
 ┃★│ • brat
 ┃★│ • aivoice
 ┃★│ • convert
+┃★│ • enhance
 ┃★│ • binary
 ┃★│ • dbinary
 ┃★│ • base64
@@ -157,6 +158,7 @@ cmd({
 ┃★│ • toptt
 ┃★│ • tomp3
 ┃★│ • topdf
+┃★│ • videonote
 ┃★│ • translate
 ┃★│ • urlencode
 ┃★│ • urldecode
