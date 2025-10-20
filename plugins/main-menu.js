@@ -548,6 +548,7 @@ cmd({
 ┃★│ • githubstalk
 ┃★│ • npm
 ┃★│ • news
+┃★│ • news1
 ┃★│ • news2
 ┃★│ • mvdetail
 ┃★│ • praytime
