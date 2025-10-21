@@ -43,38 +43,42 @@ cmd({
 
 
 cmd({
-  pattern: "videonote",
-  alias: ["videon"],
-  desc: "Send video note from URL",
-  category: "media",
-  use: '.videonote',
-  filename: __filename
-},
-async (conn, m, mdata, { from, reply }) => {
-  try {
-    const videoUrl = 'https://files.catbox.moe/h6d32b.mp4'; // 🟢 Replace with your video URL
+    pattern: "getvideo",
+    desc: "Convert video URL to WhatsApp video",
+    alias: ["videoget", "getvid"],
+    category: "media",
+    react: "🎥",
+    filename: __filename
+}, async (conn, mek, m, { from, reply, text }) => {
+    try {
+        if (!text) return reply('Please provide a video URL\nExample: !getvideo https://example.com/video.mp4');
 
-    reply("📥 Downloading video...");
+        const videoUrl = text.trim();
 
-    const response = await axios.get(videoUrl, {
-      responseType: 'arraybuffer'
-    });
+        // Validate URL
+        if (!videoUrl.match(/^https?:\/\/.+\.(mp4|mov|webm|mkv|avi|m4v)(\?.*)?$/i)) {
+            return reply('❌ Invalid video URL! Must be direct link to a video (mp4/mov/webm/mkv/avi/m4v)');
+        }
 
-    const buffer = Buffer.from(response.data);
+        // Verify the video exists
+        try {
+            const response = await axios.head(videoUrl);
+            if (!response.headers['content-type']?.startsWith('video/')) {
+                return reply('❌ URL does not point to a valid video');
+            }
+        } catch (e) {
+            return reply('❌ Could not access video URL. Please check the link');
+        }
 
-    await conn.sendMessage(from, {
-      video: buffer,
-      mimetype: 'video/mp4',
-      caption: '🎥 *Here is your video note!*',
-    }, {
-      quoted: m,
-      contextInfo: {
-        isVideoNote: true // 🎯 Make it appear as a round video
-      }
-    });
+        // Send the video
+        await conn.sendMessage(from, {
+            video: { url: videoUrl },
+            caption: 'Here is your video from the URL'
+        }, { quoted: mek });
 
-  } catch (err) {
-    console.error(err);
-    reply("❌ Error sending video note.");
-  }
+    } catch (error) {
+        console.error('GetVideo Error:', error);
+        reply('❌ Failed to process video. Error: ' + error.message);
+    }
 });
+
