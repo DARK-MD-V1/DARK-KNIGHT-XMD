@@ -67,8 +67,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • toptt
 ┃★│ • tomp3
 ┃★│ • topdf
-┃★│ • videonote
-┃★│ • trabnslate
+┃★│ • translate
 ┃★│ • urlencode
 ┃★│ • urldecode
 ┃★│ • vsticker
@@ -231,6 +230,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • wallpaper2
 ┃★│ • randomwall
 ┃★│ • getimage
+┃★│ • getvideo
 ┃★│ • imgscan
 ┃★│ • image
 ┃★│ • topixel
