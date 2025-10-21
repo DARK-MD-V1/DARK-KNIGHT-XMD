@@ -159,7 +159,6 @@ cmd({
 ┃★│ • toptt
 ┃★│ • tomp3
 ┃★│ • topdf
-┃★│ • videonote
 ┃★│ • translate
 ┃★│ • urlencode
 ┃★│ • urldecode
@@ -339,6 +338,7 @@ cmd({
 ┃★│ • wallpaper2
 ┃★│ • randomwall
 ┃★│ • getimage
+┃★│ • getvideo
 ┃★│ • imgscan
 ┃★│ • image
 ┃★│ • topixel
