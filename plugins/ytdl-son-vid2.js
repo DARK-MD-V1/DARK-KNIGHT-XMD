@@ -97,3 +97,92 @@ cmd({
         reply("❌ An error occurred while processing your request. Please try again later.");
     }
 });
+
+
+
+cmd({
+    pattern: "video2",
+    react: "🎬",
+    desc: "Download YouTube mp4",
+    category: "download",
+    use: ".video <query>",
+    filename: __filename
+}, async (conn, mek, m, { from, reply, q }) => {
+    try {
+        if (!q) return reply("❓ What video do you want to download?");
+
+        const search = await yts(q);
+        if (!search.videos.length) return reply("❌ No results found for your query.");
+
+        const data = search.videos[0];
+        const ytUrl = data.url;
+
+        // NekoLabs API for 360p video
+        const api = `https://api.nekolabs.my.id/downloader/youtube/v1?url=${encodeURIComponent(ytUrl)}&format=360`;
+        const { data: apiRes } = await axios.get(api);
+
+        if (!apiRes?.success || !apiRes.result?.downloadUrl) {
+            return reply("❌ Unable to download the video. Try another one.");
+        }
+
+        const result = apiRes.result;
+
+        const caption = `
+📑 *Title:* ${result.title}
+⏱️ *Duration:* ${result.duration}
+🎞️ *Quality:* ${result.quality}p
+🔗 *Link:* ${ytUrl}
+
+🔢 *Reply Below Number*
+
+1️⃣ *Video Type*
+2️⃣ *Document Type*
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
+
+        const sentMsg = await conn.sendMessage(from, {
+            image: { url: result.cover },
+            caption
+        }, { quoted: m });
+
+        const messageID = sentMsg.key.id;
+
+        conn.ev.on("messages.upsert", async (msgData) => {
+            const receivedMsg = msgData.messages[0];
+            if (!receivedMsg?.message) return;
+
+            const receivedText = receivedMsg.message.conversation || receivedMsg.message.extendedTextMessage?.text;
+            const senderID = receivedMsg.key.remoteJid;
+            const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
+
+            if (isReplyToBot) {
+                await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
+
+                switch (receivedText.trim()) {
+                    case "1":
+                        await conn.sendMessage(senderID, {
+                            video: { url: result.downloadUrl },
+                            mimetype: "video/mp4",
+                            ptt: false,
+                        }, { quoted: receivedMsg });
+                        break;
+
+                    case "2":
+                        await conn.sendMessage(senderID, {
+                            document: { url: result.downloadUrl },
+                            mimetype: "video/mp4",
+                            fileName: `${result.title}.mp4`
+                        }, { quoted: receivedMsg });
+                        break;
+
+                    default:
+                        reply("❌ Invalid option! Reply with 1, or 2.");
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error("Video Command Error:", error);
+        reply("❌ An error occurred while processing your request.");
+    }
+});
