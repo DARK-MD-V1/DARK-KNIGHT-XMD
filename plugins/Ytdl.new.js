@@ -64,3 +64,69 @@ cmd({
         reply(`❌ An error occurred: ${error.message}`);
     }
 });
+
+
+
+cmd({
+    pattern: "test2",
+    react: "🎥",
+    desc: "Download YouTube video as MP4",
+    category: "download",
+    use: ".video <query>",
+    filename: __filename
+}, async (conn, mek, m, { from, reply, q }) => {
+    try {
+        if (!q) return reply("❓ What video do you want to download?");
+
+        const search = await yts(q);
+        if (!search.videos.length) return reply("❌ No results found for your query.");
+
+        const data = search.videos[0];
+        const ytUrl = data.url;
+
+        // 🆕 Use Zenzxz API for MP4
+        const api = `https://api.zenzxz.my.id/api/downloader/ytmp4?url=${encodeURIComponent(ytUrl)}&resolution=720p`;
+        const { data: apiRes } = await axios.get(api);
+
+        if (!apiRes?.success || !apiRes.data?.download_url) {
+            return reply("❌ Unable to download the video. Please try another one!");
+        }
+
+        const result = apiRes.data;
+
+        // 🎬 Send video info with thumbnail first
+        await conn.sendMessage(from, {
+            image: { url: result.thumbnail },
+            caption: `
+🎬 *Title:* ${result.title}
+🕒 *Duration:* ${(result.duration / 60).toFixed(2)} minutes
+📊 *Views:* ${data.views}
+📆 *Released:* ${data.ago}
+🎥 *Quality:* ${result.format}
+🔗 *Link:* ${data.url}
+
+🎞️ *Downloading video...* ⏳
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+        }, { quoted: mek });
+
+        // 🎥 Send as playable video
+        await conn.sendMessage(from, {
+            video: { url: result.download_url },
+            mimetype: "video/mp4",
+            caption: `🎬 ${result.title}`,
+        }, { quoted: mek });
+
+        // 📁 Also send as downloadable file
+        await conn.sendMessage(from, {
+            document: { url: result.download_url },
+            mimetype: "video/mp4",
+            fileName: `${result.title}.mp4`
+        }, { quoted: mek });
+
+    } catch (error) {
+        console.error(error);
+        reply(`❌ An error occurred: ${error.message}`);
+    }
+});
+
