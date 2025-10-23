@@ -30,10 +30,11 @@ cmd({
         const result = apiRes.result;
 
         const caption = `
-📑 *Title:* ${result.title}
-⏱️ *Duration:* ${result.duration}
-🎵 *Quality:* ${result.quality} kbps
-🔗 *Link:* ${ytUrl}
+📑 *Title:* ${data.title}
+⏱️ *Duration:* ${data.timestamp}
+📆 *Uploaded:* ${data.ago}
+📊 *Views:* ${data.views}
+🔗 *Link:* ${data.url}
 
 🔢 *Reply Below Number*
 
@@ -128,10 +129,11 @@ cmd({
         const result = apiRes.result;
 
         const caption = `
-📑 *Title:* ${result.title}
-⏱️ *Duration:* ${result.duration}
-🎞️ *Quality:* ${result.quality}p
-🔗 *Link:* ${ytUrl}
+📑 *Title:* ${data.title}
+⏱️ *Duration:* ${data.timestamp}
+📆 *Uploaded:* ${data.ago}
+📊 *Views:* ${data.views}
+🔗 *Link:* ${data.url}
 
 🔢 *Reply Below Number*
 
