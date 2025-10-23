@@ -68,9 +68,9 @@ cmd({
 
 
 cmd({
-    pattern: "test2",
+    pattern: "teset2",
     react: "🎥",
-    desc: "Download YouTube video as MP4",
+    desc: "Download YouTube video in MP4 format (720p)",
     category: "download",
     use: ".video <query>",
     filename: __filename
@@ -84,8 +84,8 @@ cmd({
         const data = search.videos[0];
         const ytUrl = data.url;
 
-        // 🆕 Use Zenzxz API for MP4
-        const api = `https://api.zenzxz.my.id/api/downloader/ytmp4?url=${encodeURIComponent(ytUrl)}&resolution=720p`;
+        // 🆕 Using Zenzxz API v2
+        const api = `https://api.zenzxz.my.id/api/downloader/ytmp4v2?url=${encodeURIComponent(ytUrl)}&resolution=720`;
         const { data: apiRes } = await axios.get(api);
 
         if (!apiRes?.success || !apiRes.data?.download_url) {
@@ -94,15 +94,15 @@ cmd({
 
         const result = apiRes.data;
 
-        // 🎬 Send video info with thumbnail first
+        // 📸 Send thumbnail + info first
         await conn.sendMessage(from, {
             image: { url: result.thumbnail },
             caption: `
 🎬 *Title:* ${result.title}
 🕒 *Duration:* ${(result.duration / 60).toFixed(2)} minutes
-📊 *Views:* ${data.views}
-📆 *Released:* ${data.ago}
 🎥 *Quality:* ${result.format}
+📆 *Released:* ${data.ago}
+📊 *Views:* ${data.views}
 🔗 *Link:* ${data.url}
 
 🎞️ *Downloading video...* ⏳
@@ -110,14 +110,14 @@ cmd({
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: mek });
 
-        // 🎥 Send as playable video
+        // 🎥 Send playable video
         await conn.sendMessage(from, {
             video: { url: result.download_url },
             mimetype: "video/mp4",
             caption: `🎬 ${result.title}`,
         }, { quoted: mek });
 
-        // 📁 Also send as downloadable file
+        // 📁 Send as document for download
         await conn.sendMessage(from, {
             document: { url: result.download_url },
             mimetype: "video/mp4",
@@ -129,4 +129,3 @@ cmd({
         reply(`❌ An error occurred: ${error.message}`);
     }
 });
-
