@@ -41,7 +41,11 @@ cmd({
 📡 *Channel :* ${meta.channel}
 🔗 *Link :* ${meta.url}
 
-🎵 *Downloading Song..* ⏳
+🔢 *Reply Below Number*
+
+1️⃣ *Audio Type*
+2️⃣ *Document Type*
+3️⃣ *Voice Note*
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
