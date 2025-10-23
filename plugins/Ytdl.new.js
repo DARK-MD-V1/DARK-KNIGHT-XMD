@@ -53,23 +53,19 @@ cmd({
 
         const messageID = sentMsg.key.id;
 
-        // Reply listener (removed after one use)
-        const handler = async (msgData) => {
-            const receivedMsg = msgData.messages[0];
-            if (!receivedMsg?.message) return;
+    // 🧠 Reply-based selector
+    conn.ev.on("messages.upsert", async (msgData) => {
+      const receivedMsg = msgData.messages[0];
+      if (!receivedMsg?.message) return;
 
-            const receivedText = receivedMsg.message.conversation || receivedMsg.message.extendedTextMessage?.text;
-            const senderID = receivedMsg.key.remoteJid;
-            const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
+      const receivedText = receivedMsg.message.conversation || receivedMsg.message.extendedTextMessage?.text;
+      const senderID = receivedMsg.key.remoteJid;
+      const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
 
-            if (!isReplyToBot) return;
+      if (isReplyToBot) {
+        await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
 
-            // Remove listener to avoid multiple triggers
-            conn.ev.off("messages.upsert", handler);
-
-            await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
-
-            switch (receivedText.trim()) {
+        switch (receivedText.trim()) {
                 case "1":
                     await conn.sendMessage(senderID, {
                         audio: { url: result.download_url },
@@ -94,18 +90,18 @@ cmd({
                     }, { quoted: receivedMsg });
                     break;
 
-                default:
-                    reply("❌ Invalid option! Please reply with 1, 2, or 3.");
-            }
-        };
+          default:
+            reply("❌ Invalid option! Please reply with 1, 2, or 3.");
+        }
+      }
+    });
 
-        conn.ev.on("messages.upsert", handler);
-
-    } catch (error) {
-        console.error("Song Plugin Error:", error);
-        reply("❌ An error occurred while processing your request. Please try again later.");
-    }
+  } catch (error) {
+    console.error("Song Command Error:", error);
+    reply("❌ An error occurred while processing your request. Please try again later.");
+  }
 });
+              
 
 
 
