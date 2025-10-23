@@ -129,3 +129,68 @@ cmd({
         reply(`❌ An error occurred: ${error.message}`);
     }
 });
+
+
+
+cmd({
+    pattern: "test2",
+    react: "🎥",
+    desc: "Download YouTube MP4 video",
+    category: "download",
+    use: ".video <query>",
+    filename: __filename
+}, async (conn, mek, m, { from, reply, q }) => {
+    try {
+        if (!q) return reply("❓ What video do you want to download?");
+
+        const search = await yts(q);
+        if (!search.videos.length) return reply("❌ No results found for your query.");
+
+        const data = search.videos[0];
+        const ytUrl = data.url;
+
+        // 🆕 Using Sadiya-Tech API for MP4 download
+        const api = `https://sadiya-tech-apis.vercel.app/download/ytdl?url=${encodeURIComponent(ytUrl)}&format=360&apikey=sadiya`;
+        const { data: apiRes } = await axios.get(api);
+
+        if (!apiRes?.status || !apiRes.result?.download) {
+            return reply("❌ වීඩියෝව බාගත කළ නොහැක. වෙනත් එකක් උත්සහ කරන්න!");
+        }
+
+        const result = apiRes.result;
+
+        // 🖼️ Send info message with thumbnail
+        await conn.sendMessage(from, {
+            image: { url: result.thumbnail },
+            caption: `
+🎬 *Title:* ${result.title}
+🕒 *Duration:* ${(result.duration / 60).toFixed(2)} minutes
+🎥 *Quality:* ${result.quality || result.format}p
+📆 *Released:* ${data.ago}
+📊 *Views:* ${data.views}
+🔗 *Link:* ${data.url}
+
+🎞️ *Downloading video...* ⏳
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+        }, { quoted: mek });
+
+        // 🎥 Send playable video
+        await conn.sendMessage(from, {
+            video: { url: result.download },
+            mimetype: "video/mp4",
+            caption: `🎬 ${result.title}`,
+        }, { quoted: mek });
+
+        // 📁 Send as downloadable MP4 document
+        await conn.sendMessage(from, {
+            document: { url: result.download },
+            mimetype: "video/mp4",
+            fileName: `${result.title}.mp4`
+        }, { quoted: mek });
+
+    } catch (error) {
+        console.error(error);
+        reply(`❌ An error occurred: ${error.message}`);
+    }
+});
