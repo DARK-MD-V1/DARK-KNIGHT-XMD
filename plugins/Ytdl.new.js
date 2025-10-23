@@ -30,41 +30,77 @@ cmd({
         const result = apiRes.data;
 
         // 🎵 Send info message with thumbnail
-        await conn.sendMessage(from, {
-            image: { url: result.thumbnail },
             caption: `
-📑 *Title:* ${result.title}
-⏱️ *Duration:* ${(result.duration / 60).toFixed(2)} minutes
-🎧 *Format:* ${result.format.toUpperCase()}
+📑 *Title:* ${data.title}
+⏱️ *Duration:* ${(data.timestamp}
 📆 *Uploaded:* ${data.ago}
 📊 *Views:* ${data.views}
 🔗 *Link:* ${data.url}
 
-🎵 *Downloading your song...* ⏳
+🔢 *Reply Below Number*
 
-> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
-        }, { quoted: mek });
+1️⃣ *Audio Type*
+2️⃣ *Document Type*
+3️⃣ *Voice Note*
+ 
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
-        // 🎧 Send as audio
-        await conn.sendMessage(from, {
-            audio: { url: result.download_url },
-            mimetype: "audio/mpeg",
-            ptt: false,
-        }, { quoted: mek });
+            const sentMsg = await conn.sendMessage(from, {
+      image: { url: result.thumbnail },
+      caption
+    }, { quoted: m });
 
-        // 📁 Send as downloadable MP3 file
-        await conn.sendMessage(from, {
-            document: { url: result.download_url },
-            mimetype: "audio/mpeg",
-            fileName: `${result.title}.mp3`
-        }, { quoted: mek });
+    const messageID = sentMsg.key.id;
 
-    } catch (error) {
-        console.error(error);
-        reply(`❌ An error occurred: ${error.message}`);
-    }
+    // 🧠 Reply-based selector
+    conn.ev.on("messages.upsert", async (msgData) => {
+      const receivedMsg = msgData.messages[0];
+      if (!receivedMsg?.message) return;
+
+      const receivedText = receivedMsg.message.conversation || receivedMsg.message.extendedTextMessage?.text;
+      const senderID = receivedMsg.key.remoteJid;
+      const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
+
+      if (isReplyToBot) {
+        await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
+
+        switch (receivedText.trim()) {
+          case "1":
+            await conn.sendMessage(senderID, {
+              audio: { url: download_url },
+              caption: "audio/mpeg",
+              ptt:false,
+            }, { quoted: receivedMsg });
+            break;
+
+          case "2":
+            await conn.sendMessage(senderID, {
+              document: { url: result.download_url },
+              mimetype: "audio/mpeg",
+              fileName: `${result.title}.mp3`
+            }, { quoted: receivedMsg });
+            break;
+
+          case "3":
+            await conn.sendMessage(senderID, {
+              audio: { url: result.download_url },
+              mimetype: "audio/mpeg",
+              ptt: true,
+            }, { quoted: receivedMsg });
+            break;
+
+          default:
+            reply("❌ Invalid option! Please reply with 1, 2, or 3.");
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error("Song Plugin Error:", error);
+    reply("❌ An error occurred while processing your request. Please try again later.");
+  }
 });
-
+        
 
 
 cmd({
