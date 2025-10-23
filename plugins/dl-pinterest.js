@@ -71,7 +71,7 @@ cmd({
         reply('❎ An error occurred while processing your request.');
     }
 });
-
+    
 
 cmd({
     pattern: "pindl1",
@@ -85,25 +85,45 @@ cmd({
         // ⏳ React: Processing Start
         await conn.sendMessage(from, { react: { text: "⏳", key: mek.key } });
 
-        // Make sure the user provided the Pinterest URL
+        // Make sure user provided the Pinterest URL
         if (args.length < 1) {
             await conn.sendMessage(from, { react: { text: "⚠️", key: mek.key } });
             return reply('❎ Please provide the Pinterest URL to download from.');
         }
 
         const pinterestUrl = args[0];
-        const response = await axios.get(`https://api.giftedtech.web.id/api/download/pinterestdl?apikey=gifted&url=${encodeURIComponent(pinterestUrl)}`);
+        const encodedUrl = encodeURIComponent(pinterestUrl);
 
-        if (!response.data.success) {
-            await conn.sendMessage(from, { react: { text: "❌", key: mek.key } });
-            return reply('❎ Failed to fetch data from Pinterest.');
+        // 🧠 Try both APIs (auto fallback)
+        const apis = [
+            `https://api.giftedtech.web.id/api/download/pinterestdl?apikey=gifted&url=${encodedUrl}`,
+            `https://api.giftedtech.co.ke/api/download/pinterestdl?apikey=gifted&url=${encodedUrl}`
+        ];
+
+        let response;
+        for (const api of apis) {
+            try {
+                response = await axios.get(api);
+                if (response.data && response.data.success) {
+                    break;
+                }
+            } catch (err) {
+                console.log(`⚠️ API failed: ${api}`);
+            }
         }
 
+        if (!response || !response.data.success) {
+            await conn.sendMessage(from, { react: { text: "❌", key: mek.key } });
+            return reply('❎ Failed to fetch data from both Pinterest APIs.');
+        }
+
+        // 🖼️ Extract data
         const media = response.data.result.media;
         const description = response.data.result.description || 'No description available';
         const title = response.data.result.title || 'No title available';
         const videoUrl = media.find(item => item.type.includes('720p'))?.download_url || media[0].download_url;
 
+        // 🧾 Caption
         const desc = `╭━━━〔 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 〕━━━┈⊷
 ┃▸╭───────────
 ┃▸┃๏ *PINS DOWNLOADER*
@@ -115,7 +135,7 @@ cmd({
 ╰━━❑━⪼
 > *© Pᴏᴡᴇʀᴇᴅ bʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ♡*`;
 
-        // Send video or image
+        // 🎥 Send video or image
         if (videoUrl) {
             await conn.sendMessage(from, { video: { url: videoUrl }, caption: desc }, { quoted: mek });
         } else {
@@ -132,6 +152,7 @@ cmd({
         reply('❎ An error occurred while processing your request.');
     }
 });
+    
 
 cmd({
     pattern: "pindl2",
