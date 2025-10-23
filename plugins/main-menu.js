@@ -201,15 +201,12 @@ cmd({
 ┃★│ • twitt2
 ┃★│ • xnxx
 ┃★│ • xvideo
-┃★│ • ytmp3
 ┃★│ • play
 ┃★│ • song
 ┃★│ • song1
 ┃★│ • song2
 ┃★│ • song3
 ┃★│ • song4
-┃★│ • song5
-┃★│ • song6
 ┃★│ • video
 ┃★│ • video1
 ┃★│ • video2
