@@ -215,3 +215,129 @@ cmd({
         reply("❌ An error occurred while processing your request. Please try again later.");
     }
 });
+
+
+cmd({
+    pattern: "test",
+    react: "🎬",
+    desc: "Download YouTube MP4",
+    category: "download",
+    use: ".video2 <query>",
+    filename: __filename
+}, async (conn, mek, m, { from, reply, q }) => {
+    try {
+        if (!q) return reply("❓ *Please provide a video name or link!*");
+
+        const yts = (await import("yt-search")).default;
+        const axios = (await import("axios")).default;
+
+        const search = await yts(q);
+        if (!search.videos.length) return reply("❌ No results found for your query.");
+
+        const data = search.videos[0];
+        const ytUrl = data.url;
+
+        const formats = {
+            "240p": `https://api.nekolabs.my.id/downloader/youtube/v1?url=${encodeURIComponent(ytUrl)}&format=240`,
+            "360p": `https://api.nekolabs.my.id/downloader/youtube/v1?url=${encodeURIComponent(ytUrl)}&format=360`,
+            "480p": `https://api.nekolabs.my.id/downloader/youtube/v1?url=${encodeURIComponent(ytUrl)}&format=480`,
+            "720p": `https://api.nekolabs.my.id/downloader/youtube/v1?url=${encodeURIComponent(ytUrl)}&format=720`
+        };
+
+        const caption = `
+📑 *Title:* ${data.title}
+⏱️ *Duration:* ${data.timestamp}
+📆 *Uploaded:* ${data.ago}
+📊 *Views:* ${data.views}
+🔗 *Link:* ${data.url}
+
+🎥 *Choose Video Type (reply with number):*
+
+🔹 1.1 240p (Video)
+🔹 1.2 360p (Video)
+🔹 1.3 480p (Video)
+🔹 1.4 720p (Video)
+
+📁 *Document Type (send as file):*
+🔹 2.1 240p
+🔹 2.2 360p
+🔹 2.3 480p
+🔹 2.4 720p
+
+> ⚡ Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+        `;
+
+        const sentMsg = await conn.sendMessage(from, {
+            image: { url: data.thumbnail },
+            caption
+        }, { quoted: m });
+
+        const messageID = sentMsg.key.id;
+
+        const messageListener = async (msgData) => {
+            try {
+                const receivedMsg = msgData.messages[0];
+                if (!receivedMsg?.message) return;
+
+                const receivedText = receivedMsg.message.conversation || receivedMsg.message.extendedTextMessage?.text;
+                const senderID = receivedMsg.key.remoteJid;
+                const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
+
+                if (!isReplyToBot) return;
+
+                await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
+
+                let selectedFormat, isDocument = false;
+                switch (receivedText.trim().toUpperCase()) {
+                    case "1.1": selectedFormat = "240p"; break;
+                    case "1.2": selectedFormat = "360p"; break;
+                    case "1.3": selectedFormat = "480p"; break;
+                    case "1.4": selectedFormat = "720p"; break;
+                    
+                    case "2.1": selectedFormat = "240p"; isDocument = true; break;
+                    case "2.2": selectedFormat = "360p"; isDocument = true; break;
+                    case "2.3": selectedFormat = "480p"; isDocument = true; break;
+                    case "2.4": selectedFormat = "720p"; isDocument = true; break;
+                    default:
+                        return reply("❌ Invalid option! Please reply with 1.1–1.4 or 2.1–2.4.");
+                }
+
+                const apiUrl = formats[selectedFormat];
+                const { data: apiRes } = await axios.get(apiUrl);
+
+                if (!apiRes?.success || !apiRes.result?.downloadUrl)
+                    return reply(`❌ Couldn't fetch ${selectedFormat} video. Try another format.`);
+
+                const result = apiRes.result;
+
+                await conn.sendMessage(senderID, { react: { text: '✅', key: receivedMsg.key } });
+
+                if (isDocument) {
+                    await conn.sendMessage(senderID, {
+                        document: { url: result.downloadUrl },
+                        mimetype: "video/mp4",
+                        fileName: `${result.title || data.title}.mp4`
+                    }, { quoted: receivedMsg });
+                } else {
+                    await conn.sendMessage(senderID, {
+                        video: { url: result.downloadUrl },
+                        mimetype: "video/mp4",
+                        caption: `🎬 *${result.title || data.title}* (${selectedFormat})`
+                    }, { quoted: receivedMsg });
+                }
+
+                conn.ev.off("messages.upsert", messageListener);
+
+            } catch (err) {
+                console.error("Video download reply error:", err);
+                reply("⚠️ Error downloading video. Please try again.");
+            }
+        };
+
+        conn.ev.on("messages.upsert", messageListener);
+
+    } catch (error) {
+        console.error("Video Command Error:", error);
+        reply("❌ An unexpected error occurred. Please try again later.");
+    }
+});
