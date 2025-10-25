@@ -348,6 +348,7 @@ cmd({
   }
 });
 
+
 cmd({
   pattern: "readmore",
   alias: ["rm", "rmore", "readm"],
@@ -358,13 +359,22 @@ cmd({
   filename: __filename
 }, async (conn, m, store, { args, reply }) => {
   try {
-    const inputText = args.join(" ") || "No text provided.";
-    const readMore = String.fromCharCode(8206).repeat(4000); // Creates a large hidden gap
-    const message = `${inputText} ${readMore} Continue Reading...`;
+    // Join all arguments as message text
+    const inputText = args.join(" ");
+    
+    if (!inputText) {
+      return reply("❌ Please provide some text.\nUsage: `.readmore Hello there!`");
+    }
 
+    // Create a large hidden gap (read more effect)
+    const readMore = String.fromCharCode(8206).repeat(4000);
+    const message = `${inputText}\n\n${readMore}\n\nContinue Reading...`;
+
+    // Send message back to chat
     await conn.sendMessage(m.from, { text: message }, { quoted: m });
+
   } catch (error) {
     console.error("❌ Error in readmore command:", error);
-    reply("❌ An error occurred: " + error.message);
+    reply(`❌ An unexpected error occurred.\nDetails: ${error.message}`);
   }
 });
