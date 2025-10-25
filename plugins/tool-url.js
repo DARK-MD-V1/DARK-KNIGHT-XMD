@@ -82,3 +82,73 @@ function formatBytes(bytes) {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
+
+
+
+cmd({
+  pattern: "img2url",
+  alias: ["imgurl2", "url2", "geturl2"],
+  react: "🖇",
+  desc: "Upload images to ImgBB and get direct link",
+  category: "utility",
+  use: ".img2url [reply to image]",
+  filename: __filename,
+}, async (client, message, args, { reply }) => {
+  try {
+    const quotedMsg = message.quoted ? message.quoted : message;
+    const mimeType = (quotedMsg.msg || quotedMsg).mimetype || "";
+
+    if (!mimeType || !mimeType.startsWith("image/")) {
+      throw "⚠️ Please reply to an image (JPG, PNG, or GIF)";
+    }
+
+    // Download image to temp file
+    const mediaBuffer = await quotedMsg.download();
+    const tempFilePath = path.join(os.tmpdir(), `imgbb_${Date.now()}`);
+    fs.writeFileSync(tempFilePath, mediaBuffer);
+
+    // Create form data as multipart/form-data
+    const form = new FormData();
+    form.append("image", fs.createReadStream(tempFilePath));
+    // Optional expiration in seconds (here: 10 minutes)
+    const expiration = 600;
+
+    const imgbbApiKey = "eb6ec8d812ae32e7a1a765740fd1b497";
+
+    // POST to ImgBB API
+    const response = await axios.post(
+      `https://api.imgbb.com/1/upload?expiration=${expiration}&key=${imgbbApiKey}`,
+      form,
+      { headers: form.getHeaders() }
+    );
+
+    fs.unlinkSync(tempFilePath); // delete temp file after upload
+
+    const data = response.data.data;
+    if (!data || !data.url) throw "❌ Upload failed.";
+
+    // Reply with formatted info
+    await reply(
+      `✅ *Image Uploaded Successfully!*\n\n` +
+      `🖼 *Filename:* ${data.image.filename}\n` +
+      `📏 *Size:* ${formatBytes(mediaBuffer.length)}\n` +
+      `🔗 *Direct URL:* ${data.url}\n` +
+      `🌐 *Viewer:* ${data.url_viewer}\n` +
+      `🗑 *Delete URL:* ${data.delete_url}\n\n` +
+      `> © Uploaded by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ☣️`
+    );
+
+  } catch (error) {
+    console.error(error);
+    await reply(`❌ Error: ${error.message || error}`);
+  }
+});
+
+// Helper function
+function formatBytes(bytes) {
+  if (bytes === 0) return "0 Bytes";
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+}
