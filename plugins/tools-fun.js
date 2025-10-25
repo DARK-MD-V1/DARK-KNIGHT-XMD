@@ -361,7 +361,7 @@ cmd({
   try {
     const inputText = args?.length ? args.join(" ") : "No text provided.";
     const readMore = String.fromCharCode(8206).repeat(4000); // Hidden gap
-    const message = `${inputText}${readMore} Continue Reading...`;
+    const message = `${inputText}${readMore}`;
 
     // Safe fallback for chat ID
     const chatId = m?.from || m?.key?.remoteJid;
