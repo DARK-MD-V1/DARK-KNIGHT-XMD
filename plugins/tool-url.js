@@ -133,8 +133,7 @@ cmd({
       `🖼 *Filename:* ${data.image.filename}\n` +
       `📏 *Size:* ${formatBytes(mediaBuffer.length)}\n` +
       `🔗 *Direct URL:* ${data.url}\n` +
-      `🌐 *Viewer:* ${data.url_viewer}\n` +
-      `🗑 *Delete URL:* ${data.delete_url}\n\n` +
+
       `> © Uploaded by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ☣️`
     );
 
