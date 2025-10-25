@@ -357,24 +357,24 @@ cmd({
   use: ".readmore <text>",
   react: "📝",
   filename: __filename
-}, async (conn, m, store, { args, reply }) => {
+}, async (conn, m, store, { args } = {}) => {
   try {
-    // Join all arguments as message text
-    const inputText = args.join(" ");
-    
-    if (!inputText) {
-      return reply("❌ Please provide some text.\nUsage: `.readmore Hello there!`");
-    }
+    const inputText = args?.length ? args.join(" ") : "No text provided.";
+    const readMore = String.fromCharCode(8206).repeat(4000); // Hidden gap
+    const message = `${inputText}${readMore} Continue Reading...`;
 
-    // Create a large hidden gap (read more effect)
-    const readMore = String.fromCharCode(8206).repeat(4000);
-    const message = `${inputText}\n\n${readMore}\n\nContinue Reading...`;
+    // Safe fallback for chat ID
+    const chatId = m?.from || m?.key?.remoteJid;
+    if (!chatId) throw new Error("Chat ID not found in message object.");
 
-    // Send message back to chat
-    await conn.sendMessage(m.from, { text: message }, { quoted: m });
-
+    await conn.sendMessage(chatId, { text: message, quoted: m });
   } catch (error) {
     console.error("❌ Error in readmore command:", error);
-    reply(`❌ An unexpected error occurred.\nDetails: ${error.message}`);
+    // Safe reply fallback
+    if (m?.reply) {
+      m.reply("❌ An error occurred: " + error.message);
+    } else if (m?.from) {
+      await conn.sendMessage(m.from, { text: "❌ An error occurred: " + error.message });
+    }
   }
 });
