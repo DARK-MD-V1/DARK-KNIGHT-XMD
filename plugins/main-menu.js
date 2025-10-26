@@ -119,12 +119,17 @@ cmd({
 ┃★╭──────────────
 ┃★│ • ai
 ┃★│ • gpt
+┃★│ • gpt2
+┃★│ • copilot
+┃★│ • copilot2
 ┃★│ • openai
 ┃★│ • openai2
 ┃★│ • gemini
 ┃★│ • gemini2
 ┃★│ • aiimg
+┃★│ • aiimg1
 ┃★│ • aiimg2
+┃★│ • aiimg3
 ┃★│ • aianime
 ┃★│ • imgedit
 ┃★│ • topromt
@@ -153,6 +158,7 @@ cmd({
 ┃★│ • sticker
 ┃★│ • tiny
 ┃★│ • tourl
+┃★│ • img2url
 ┃★│ • tts
 ┃★│ • tts2
 ┃★│ • tts3
