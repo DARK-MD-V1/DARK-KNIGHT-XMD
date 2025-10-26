@@ -31,12 +31,17 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★╭──────────────
 ┃★│ • ai
 ┃★│ • gpt
+┃★│ • gpt2
+┃★│ • copilot
+┃★│ • copilot2
 ┃★│ • openai
 ┃★│ • openai2
 ┃★│ • gemini
 ┃★│ • gemini2
 ┃★│ • aiimg
+┃★│ • aiimg1
 ┃★│ • aiimg2
+┃★│ • aiimg3
 ┃★│ • aianime
 ┃★│ • imgedit
 ┃★│ • topromt
@@ -61,6 +66,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • sticker
 ┃★│ • tiny
 ┃★│ • tourl
+┃★│ • img2url
 ┃★│ • tts
 ┃★│ • tts2
 ┃★│ • tts3
