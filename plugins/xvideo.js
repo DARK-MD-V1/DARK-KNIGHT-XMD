@@ -38,13 +38,13 @@ cmd(
                 await reply("No result found you enter xnxx video name :(")
             }
             
-            let list = "🔞 DARK-KNIGHT XMD XNXX VIDEO SEARCH RESULT\n\n";
+            let list = "🔍 XVIDEO SEARCH RESULTS.🔞\n\n";
             
             xnxxSearchapi.result.xvideos.forEach((xnxx, i) => {
       list += `*\`${i + 1}\` | | ${xnxx.title || "No title info"}*\n`;
     });
           
-          const listMsg = await conn.sendMessage(from, { text: list + "\n🔢 *ʀᴇᴘʟʏ ʙᴇʟᴏᴡ ᴀ ɴᴜᴍʙᴇʀ ᴄʜᴏᴏꜱᴇ ᴀ ʀᴇᴀᴜʟᴛ.*\n\n" + tharuzz_footer }, { quoted: mek });
+          const listMsg = await conn.sendMessage(from, { text: list + "\n🔢 *Reply Below Number.*\n\n" + tharuzz_footer }, { quoted: mek });
           const listMsgId = listMsg.key.id;
           
           conn.ev.on("messages.upsert", async (update) => {
@@ -74,11 +74,11 @@ cmd(
             from,{
                 image: {url: infoMap.thumbnail },
                 caption: `*🔞 \`XNXX VIDEO INFO\`*\n\n` +
-                `*📌 \`Title:\` ${infoMap.title}*\n` + 
+                `*📑 \`Title:\` ${infoMap.title}*\n` + 
                 `*⏰ \`Duration:\` ${infoMap.duration}*\n\n` +
                 `*🔢 \`Reply below number:\`*\n\n` +
-                `*1 | | Download video high quality*\n` +
-                `*2 | | Download video low quality*\n\n` + tharuzz_footer
+                `*1️⃣ | | Download video high quality*\n` +
+                `*1️⃣ | | Download video low quality*\n\n` + tharuzz_footer
             }, { quoted:msg }
         );
             
