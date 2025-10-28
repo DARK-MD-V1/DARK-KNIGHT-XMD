@@ -1,123 +1,199 @@
 const axios = require("axios");
-const { cmd } = require("../command");
+const { cmd } = require('../command');
 
 cmd({
   pattern: "tiktok",
   alias: ["tt"],
-  react: '📥',
-  desc: "Download TikTok videos.",
+  desc: "Download TikTok videos",
   category: "download",
-  use: ".tiktok <TikTok video URL>",
   filename: __filename
-}, async (conn, mek, m, { from, reply, args }) => {
+}, async (conn, m, store, { from, quoted, q, reply }) => {
   try {
-    // Check if the user provided a TikTok video URL
-    const tiktokUrl = args[0];
-    if (!tiktokUrl || !tiktokUrl.includes("tiktok.com")) {
-      return reply('Please provide a valid TikTok video URL. Example: `.tiktok https://tiktok.com/...`');
+    if (!q || !q.startsWith("https://")) {
+      return conn.sendMessage(from, { text: "❌ Please provide a valid TikTok URL." }, { quoted: m });
     }
 
-    // Add a reaction to indicate processing
     await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
 
-    // Prepare the API URL
-    const apiUrl = `https://api.nexoracle.com/downloader/tiktok-nowm?apikey=free_key@maher_apis&url=${encodeURIComponent(tiktokUrl)}`;
+    // ✅ Using NexOracle TikTok API
+    const response = await axios.get(`https://api.nexoracle.com/downloader/tiktok-nowm?apikey=free_key@maher_apis&url=${q}`);
+    const data = response.data;
 
-    // Call the API using GET
-    const response = await axios.get(apiUrl);
-
-    // Check if the API response is valid
-    if (!response.data || response.data.status !== 200 || !response.data.result) {
-      return reply('❌ Unable to fetch the video. Please check the URL and try again.');
+    if (!data || !data.status || !data.result) {
+      return reply("⚠️ Failed to retrieve TikTok media. Please check the link and try again.");
     }
 
-    // Extract the video details
-    const { title, thumbnail, author, metrics, url } = response.data.result;
+    const result = data.result;
+    const { title, url, thumbnail, duration, metrics } = result;
 
-    // Inform the user that the video is being downloaded
-    await reply(`📥 *Downloading TikTok video by @${author.username}... Please wait.*`);
+    const caption = `
+📺 Tiktok Downloader. 📥
 
-    // Download the video
-    const videoResponse = await axios.get(url, { responseType: 'arraybuffer' });
-    if (!videoResponse.data) {
-      return reply('❌ Failed to download the video. Please try again later.');
-    }
+📑 *Title:* ${title || "No title"}
+⏱️ *Duration:* ${duration || "N/A"}s
+👍 *Likes:* ${metrics?.digg_count?.toLocaleString() || "0"}
+💬 *Comments:* ${metrics?.comment_count?.toLocaleString() || "0"}
+🔁 *Shares:* ${metrics?.share_count?.toLocaleString() || "0"}
+📥 *Downloads:* ${metrics?.download_count?.toLocaleString() || "0"}
 
-    // Prepare the video buffer
-    const videoBuffer = Buffer.from(videoResponse.data, 'binary');
+🔢 *Reply Below Number*
 
-    // Send the video with details
-    await conn.sendMessage(from, {
-      video: videoBuffer,
-      caption: `📥 *ᴛɪᴋᴛᴏᴋ Vɪᴅᴇᴏ ᴅʟ*\n\n` +
-        `🔖 *Tɪᴛʟᴇ*: ${title || "No title"}\n` +
-        `👤 *Aᴜᴛʜᴏʀ*: @${author.username} (${author.nickname})\n` +
-        `❤️ *Lɪᴋᴇs*: ${metrics.digg_count}\n` +
-        `💬 *Cᴏᴍᴍᴇɴᴛs*: ${metrics.comment_count}\n` +
-        `🔁 *Sʜᴀʀᴇs*: ${metrics.share_count}\n` +
-        `📥 *Doᴡɴʟᴏᴀᴅs*: ${metrics.download_count}\n\n` +
-        `> © ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`,
-      contextInfo: {
-        mentionedJid: [m.sender],
-        forwardingScore: 999,
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-          newsletterJid: '120363400240662312@newsletter',
-          newsletterName: '『 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 』',
-          serverMessageId: 143
+1️⃣  *Video Original Quality*
+2️⃣  *Audio (MP3)*
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
+
+    const sentMsg = await conn.sendMessage(from, {
+      image: { url: thumbnail },
+      caption
+    }, { quoted: m });
+
+    const messageID = sentMsg.key.id;
+
+    // 🧠 Handle reply selector
+    conn.ev.on("messages.upsert", async (msgData) => {
+      const receivedMsg = msgData.messages[0];
+      if (!receivedMsg?.message) return;
+
+      const receivedText = receivedMsg.message.conversation || receivedMsg.message.extendedTextMessage?.text;
+      const senderID = receivedMsg.key.remoteJid;
+      const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
+
+      if (isReplyToBot) {
+        await conn.sendMessage(senderID, { react: { text: '⬇️', key: receivedMsg.key } });
+
+        switch (receivedText.trim()) {
+          case "1":
+            await conn.sendMessage(senderID, {
+              video: { url },
+              caption: "📥 *Downloaded Original Quality*"
+            }, { quoted: receivedMsg });
+            break;
+
+          case "2":
+            await conn.sendMessage(senderID, {
+              audio: { url },
+              mimetype: "audio/mp4",
+              ptt: false
+            }, { quoted: receivedMsg });
+            break;
+
+          default:
+            reply("❌ Invalid option! Please reply with 1, 2, or 3.");
         }
       }
-    }, { quoted: mek });
+    });
 
-    // Add a reaction to indicate success
-    await conn.sendMessage(from, { react: { text: '✅', key: m.key } });
   } catch (error) {
-    console.error('Error downloading TikTok video:', error);
-    reply('❌ Unable to download the video. Please try again later.');
-
-    // Add a reaction to indicate failure
-    await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
+    console.error("TikTok Plugin Error:", error);
+    reply("❌ An error occurred while processing your request. Please try again later.");
   }
 });
 
 
 cmd({
-    pattern: "tiktok2",
-    alias: ["tt2"],
-    desc: "Download TikTok video without watermark",
-    category: "downloader",
-    react: "🎵",
-    filename: __filename
-},
-async (conn, mek, m, { from, args, q, reply }) => {
-    try {
-        if (!q) return reply("Please provide a TikTok video link.");
-        if (!q.includes("tiktok.com")) return reply("Invalid TikTok link.");
-        
-        reply("Downloading video, please wait...");
-        
-        const apiUrl = `https://delirius-apiofc.vercel.app/download/tiktok?url=${q}`;
-        const { data } = await axios.get(apiUrl);
-        
-        if (!data.status || !data.data) return reply("Failed to fetch TikTok video.");
-        
-        const { title, like, comment, share, author, meta } = data.data;
-        const videoUrl = meta.media.find(v => v.type === "video").org;
-        
-        const caption = `🎵 *TikTok Video* 🎵\n\n` +
-                        `👤 *User:* ${author.nickname} (@${author.username})\n` +
-                        `📖 *Title:* ${title}\n` +
-                        `👍 *Likes:* ${like}\n💬 *Comments:* ${comment}\n🔁 *Shares:* ${share}`;
-        
-        await conn.sendMessage(from, {
-            video: { url: videoUrl },
-            caption: caption,
-            contextInfo: { mentionedJid: [m.sender] }
-        }, { quoted: mek });
-        
-    } catch (e) {
-        console.error("Error in TikTok downloader command:", e);
-        reply(`An error occurred: ${e.message}`);
+  pattern: "tiktok2",
+  alias: ["tt2"],
+  desc: "Download TikTok videos",
+  category: "download",
+  filename: __filename
+}, async (conn, m, store, { from, quoted, q, reply }) => {
+  try {
+    if (!q || !q.startsWith("https://")) {
+      return conn.sendMessage(from, { text: "❌ Please provide a valid TikTok URL." }, { quoted: m });
     }
-});
+
+    await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
+
+    // ✅ Using Delirius API (new structure)
+    const response = await axios.get(`https://delirius-apiofc.vercel.app/download/tiktok?url=${q}`);
+    const res = response.data;
+
+    if (!res || !res.status || !res.data) {
+      return reply("⚠️ Failed to fetch TikTok media. Please check the link and try again.");
+    }
+
+    const videoData = res.data;
+    const media = videoData.meta.media?.[0] || {};
+
+    const title = videoData.title || "No title";
+    const wm = media.wm;
+    const hd = media.hd;
+    const org = media.org;
+
+    const caption = `
+📺 Tiktok Downloader. 📥
+    
+📑 *Title:* ${title || "No Title"}
+⏱️ *Duration:* ${videoData.duration || "Unknown"}s
+👍 *Likes:* ${videoData.like || "0"}
+💬 *Comments:* ${videoData.comment || "0"}
+🔁 *Shares:* ${videoData.share || "0"}
+📥 *Downloads:* ${videoData.download || "0"}
+
+🔢 *Reply Below Number*
+
+1️⃣  *Video With Watermark*
+2️⃣  *Video No Watermark (HD)*
+3️⃣  *Video Original Quality*
+4️⃣  *Audio (MP3)*
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
+
+    // Send preview (if thumbnail unavailable, fallback to caption only)
+    const sentMsg = await conn.sendMessage(from, { text: caption }, { quoted: m });
+    const messageID = sentMsg.key.id;
+
+    // 🧠 Handle reply selector
+    conn.ev.on("messages.upsert", async (msgData) => {
+      const receivedMsg = msgData.messages[0];
+      if (!receivedMsg?.message) return;
+
+      const receivedText = receivedMsg.message.conversation || receivedMsg.message.extendedTextMessage?.text;
+      const senderID = receivedMsg.key.remoteJid;
+      const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
+
+      if (isReplyToBot) {
+        await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
+
+        switch (receivedText.trim()) {
+          case "1":
+            await conn.sendMessage(senderID, {
+              video: { url: wm },
+              caption: "📥 *Downloaded With Watermark*"
+            }, { quoted: receivedMsg });
+            break;
+
+          case "2":
+            await conn.sendMessage(senderID, {
+              video: { url: hd },
+              caption: "📥 *Downloaded No Watermark (HD)*"
+            }, { quoted: receivedMsg });
+            break;
+
+          case "3":
+            await conn.sendMessage(senderID, {
+              video: { url: org },
+              caption: "📥 *Downloaded Original Quality*"
+            }, { quoted: receivedMsg });
+            break;
+
+          case "4":
+            await conn.sendMessage(senderID, {
+              audio: { url: wm || hd },
+              mimetype: "audio/mp4",
+              ptt: false
+            }, { quoted: receivedMsg });
+            break;      
           
+          default:
+            reply("❌ Invalid option! Please reply with 1, 2, or 3.");
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error("TikTok Plugin Error:", error);
+    reply("❌ An error occurred while processing your request. Please try again later.");
+  }
+});
