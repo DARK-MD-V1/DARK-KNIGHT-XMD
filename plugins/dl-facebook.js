@@ -83,7 +83,7 @@ cmd({
           break;
             
            default:
-            reply("❌ Invalid option! Please reply with 1 or 2.");
+            reply("❌ Invalid option! Please reply with 1, 2, or 3.");
         }
       }
     });
@@ -185,7 +185,7 @@ cmd({
           break;          
           
           default:
-            reply("❌ Invalid option! Please reply with 1 or 2.");
+            reply("❌ Invalid option! Please reply with 1, 2, or 3.");
         }
       }
     });
