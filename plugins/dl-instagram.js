@@ -54,7 +54,7 @@ cmd({
       const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
 
       if (isReplyToBot) {
-        await conn.sendMessage(senderID, { react: { text: '⬇️', key: receivedMsg.key } });
+        await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
 
         switch (receivedText.trim()) {
           case "1":
@@ -107,11 +107,11 @@ cmd({
     const response = await axios.get(`https://sadiya-tech-apis.vercel.app/download/igdl?url=${encodeURIComponent(q)}&apikey=sadiya`);
     const data = response.data;
 
-    if (!data || !data.status || !data.result) {
+    if (!data || !data.status || !data.result || !data.result.dl_link) {
       return reply("⚠️ Failed to retrieve Instagram media. Please check the link and try again.");
     }
 
-    const { video } = data.result;
+    const videoLink = data.result.dl_link;
 
     const caption = `
 📺 Instagram Downloader. 📥
@@ -145,22 +145,18 @@ Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
         switch (receivedText.trim()) {
           case "1":
-            if (video) {
-              await conn.sendMessage(senderID, {
-                video: { url: video },
-                caption: "📥 *Video Downloaded Successfully!*"
-              }, { quoted: receivedMsg });
-            } else {
-              reply("⚠️ No video found for this post.");
-            }
+            await conn.sendMessage(senderID, {
+              video: { url: videoLink },
+              caption: "📥 *Video Downloaded Successfully!*"
+            }, { quoted: receivedMsg });
             break;
 
           case "2":
-              await conn.sendMessage(senderID, {
-                audio: { url: video },
-                mimetype: "audio/mp4",
-                ptt: false
-              }, { quoted: receivedMsg });
+            await conn.sendMessage(senderID, {
+              audio: { url: videoLink },
+              mimetype: "audio/mp4",
+              ptt: false
+            }, { quoted: receivedMsg });
             break;
 
           default:
