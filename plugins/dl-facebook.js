@@ -26,16 +26,19 @@ cmd({
 
     const { title, thumbnail, low, high } = data.data;
 
-    const caption = `╭━━━〔 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 𝙵𝙰𝙲𝙴𝙱𝙾𝙾𝙺 𝙳𝙻* 〕━━━⊷
-┃▸ *Tɪᴛʟᴇ:* ${title || "No title"}
-╰━━━⪼
+    const caption = `
+📺 *Facebook Downloader.* 📥
 
-🌐 *Download Options:*
-1️⃣  *SD Qᴜᴀʟɪᴛʏ*
-2️⃣  *HD Qᴜᴀʟɪᴛʏ*
-3️⃣ *Aᴜᴅɪᴏ (MP3)*
+📑 *Title:* ${title || "No title"}
+🔗 *Link:* ${q}
 
-↪️ *Reply with the number to download your choice.*`;
+🔢 *Reply Below Number*
+
+1️⃣ *SD Qᴜᴀʟɪᴛʏ*🪫
+2️⃣ *HD Qᴜᴀʟɪᴛʏ*🔋
+3️⃣ *Aᴜᴅɪᴏ (MP3)*🎶
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
     const sentMsg = await conn.sendMessage(from, {
       image: { url: thumbnail },
@@ -54,7 +57,7 @@ cmd({
       const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
 
       if (isReplyToBot) {
-        await conn.sendMessage(senderID, { react: { text: '⬇️', key: receivedMsg.key } });
+        await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
 
         switch (receivedText.trim()) {
           case "1":
@@ -125,16 +128,18 @@ cmd({
     const hdVideo = resultArray.find(v => v.quality?.toUpperCase() === "HD")?.url;
     const sdVideo = resultArray.find(v => v.quality?.toUpperCase() === "SD")?.url;
 
-    const caption = `╭━━━〔 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 〕━━━⊷
-┃▸ *Facebook Downloader. 📥*
-╰━━━⪼
+    const caption = `
+📺 *Facebook Downloader.* 📥
 
-🌐 *Download Options:*
-1️⃣  *SD Quality*
-2️⃣  *HD Quality*
-3️⃣ *Aᴜᴅɪᴏ (MP3)*
+🔗 *Link:* ${q}
 
-↪️ *Reply with the number to download your choice.*`;
+🔢 *Reply Below Number*
+
+1️⃣ *SD Quality*🪫
+2️⃣ *HD Quality*🔋
+3️⃣ *Aᴜᴅɪᴏ (MP3)*🎶
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
     const sentMsg = await conn.sendMessage(from, {
       text: caption
@@ -152,7 +157,7 @@ cmd({
       const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
 
       if (isReplyToBot) {
-        await conn.sendMessage(senderID, { react: { text: '⬇️', key: receivedMsg.key } });
+        await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
 
         switch (receivedText.trim()) {
           case "1":
