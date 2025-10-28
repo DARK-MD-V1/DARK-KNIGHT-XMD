@@ -182,7 +182,7 @@ Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
             break;
 
           default:
-            reply("❌ Invalid option! Please reply with 1, 2, or 5.");
+            reply("❌ Invalid option! Please reply with 1, 2, or 3.");
         }
       }
     });
