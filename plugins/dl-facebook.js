@@ -126,7 +126,7 @@ cmd({
     const sdVideo = resultArray.find(v => v.quality?.toUpperCase() === "SD")?.url;
 
     const caption = `╭━━━〔 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 〕━━━⊷
-┃▸ *Facebook Downloader.*
+┃▸ *Facebook Downloader. 📥*
 ╰━━━⪼
 
 🌐 *Download Options:*
