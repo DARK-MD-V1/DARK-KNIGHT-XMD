@@ -93,48 +93,100 @@ cmd({
 
 
 cmd({
-  pattern: "fb2",
-  alias: ["facebook2"],
+  pattern: "facebook2",
+  alias: ["fb2"], 
   desc: "Download Facebook videos",
   category: "download",
   filename: __filename
-}, async (conn, m, store, { from, q, reply }) => {
+}, async (conn, m, store, { from, quoted, q, reply }) => {
   try {
     if (!q || !q.startsWith("https://")) {
-      return reply("*`Need a valid Facebook URL!`*");
+      return conn.sendMessage(from, { text: "❌ Please provide a valid Facebook video Url." }, { quoted: m });
     }
 
     await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
 
-    const apiUrl = `https://lance-frank-asta.onrender.com/api/downloader?url=${encodeURIComponent(q)}`;
-    const { data } = await axios.get(apiUrl);
+    // ✅ Use the new universal downloader API
+    const response = await axios.get(`https://lance-frank-asta.onrender.com/api/downloader?url=${q}`);
+    const res = response.data;
 
-    if (!data?.content?.status || !data?.content?.data?.result?.length) {
-      throw new Error("Invalid API response or no video found.");
+    if (!res || !res.content || !res.content.status) {
+      return reply("⚠️ Failed to retrieve video. Please check the link and try again.");
     }
 
-    let videoData = data.content.data.result.find(v => v.quality === "HD") || 
-                    data.content.data.result.find(v => v.quality === "SD");
+    const content = res.content;
+    const resultArray = content.data?.result || [];
 
-    if (!videoData) {
-      throw new Error("No valid video URL found.");
+    if (!resultArray.length) {
+      return reply("❌ No downloadable media found.");
     }
 
-    await conn.sendMessage(from, {
-      video: { url: videoData.url },
-      caption: `📥 *FB DOWNLOADER..🚀*\n\n*QUAILTY•${videoData.quality}\n\n> ꜰᴏʀᴡᴀʀᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*`
+    // Extract HD and SD URLs
+    const hdVideo = resultArray.find(v => v.quality?.toUpperCase() === "HD")?.url;
+    const sdVideo = resultArray.find(v => v.quality?.toUpperCase() === "SD")?.url;
+
+    const caption = `╭━━━〔 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 〕━━━⊷
+┃▸ *Facebook Downloader.*
+╰━━━⪼
+
+🌐 *Download Options:*
+1️⃣  *SD Quality*
+2️⃣  *HD Quality*
+3️⃣ *Aᴜᴅɪᴏ (MP3)*
+
+↪️ *Reply with the number to download your choice.*`;
+
+    const sentMsg = await conn.sendMessage(from, {
+      text: caption
     }, { quoted: m });
 
-  } catch (error) {
-    console.error("FB Download Error:", error);
+    const messageID = sentMsg.key.id;
 
-    // Send error details to bot owner
-    const ownerNumber = conn.user.id.split(":")[0] + "@s.whatsapp.net";
-    await conn.sendMessage(ownerNumber, {
-      text: `⚠️ *FB Downloader Error!*\n\n📍 *Group/User:* ${from}\n💬 *Query:* ${q}\n❌ *Error:* ${error.message || error}`
+    // 🧠 Handle reply-based selection
+    conn.ev.on("messages.upsert", async (msgData) => {
+      const receivedMsg = msgData.messages[0];
+      if (!receivedMsg?.message) return;
+
+      const receivedText = receivedMsg.message.conversation || receivedMsg.message.extendedTextMessage?.text;
+      const senderID = receivedMsg.key.remoteJid;
+      const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
+
+      if (isReplyToBot) {
+        await conn.sendMessage(senderID, { react: { text: '⬇️', key: receivedMsg.key } });
+
+        switch (receivedText.trim()) {
+          case "1":
+            if (!sdVideo) return reply("❌ SD video not available.");
+            await conn.sendMessage(senderID, {
+              video: { url: sdVideo },
+              caption: "📥 *Downloaded in SD Quality*"
+            }, { quoted: receivedMsg });
+            break;
+
+          case "2":
+            if (!hdVideo) return reply("❌ HD video not available.");
+            await conn.sendMessage(senderID, {
+              video: { url: hdVideo },
+              caption: "📥 *Downloaded in HD Quality*"
+            }, { quoted: receivedMsg });
+            break;
+
+          case "3": 
+            await conn.sendMessage(senderID, { 
+              audio: { url: sdVideo || hdVideo }, 
+              mimetype: "audio/mp4", 
+              ptt: false 
+          }, { quoted: receivedMsg }); 
+          break;          
+          
+          default:
+            reply("❌ Invalid option! Please reply with 1 or 2.");
+        }
+      }
     });
 
-    // Notify the user
-    reply("❌ *Error:* Unable to process the request. Please try again later.");
+  } catch (error) {
+    console.error("Downloader Plugin Error:", error);
+    reply("❌ An error occurred while processing your request. Please try again later.");
   }
 });
