@@ -61,7 +61,7 @@ cmd({
             if (media.type === "video") {
               await conn.sendMessage(senderID, {
                 video: { url: media.url },
-                caption: "📥 *Instagram Video Downloaded Successfully!*"
+                caption: "📥 *Video Downloaded Successfully!*"
               }, { quoted: receivedMsg });
             } else {
               reply("⚠️ No video found for this post.");
@@ -111,7 +111,7 @@ cmd({
       return reply("⚠️ Failed to retrieve Instagram media. Please check the link and try again.");
     }
 
-    const { desc, thumb, video, image } = data.result;
+    const { video } = data.result;
 
     const caption = `
 📺 Instagram Downloader. 📥
