@@ -24,17 +24,20 @@ cmd({
 
     const { desc, thumb, video_sd, video_hd, audio } = data.result;
 
-    const caption = `╭━━━〔 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ᴛᴡɪᴛᴛᴇʀ ᴅʟ* 〕━━━⊷
-┃▸ *Dᴇsᴄʀɪᴘᴛɪᴏɴ:* ${desc || "No description"}
-╰━━━⪼
+    const caption = `
+📺 Twitter Downloader. 📥
 
-🌐 *Download Options:*
-1️⃣  *SD Qᴜᴀʟɪᴛʏ*
-2️⃣  *HD Qᴜᴀʟɪᴛʏ*
-3️⃣  *Aᴜᴅɪᴏ (MP3)*
-4️⃣  *Aᴜᴅɪᴏ*
+📑 *Description:* ${desc || "No description"}
+🔗 *Link:* ${q}
 
-↪️ *Reply with the number to download your choice.*`;
+🔢 *Reply Below Number*
+
+1️⃣ *SD Qᴜᴀʟɪᴛʏ*🪫
+2️⃣ *HD Qᴜᴀʟɪᴛʏ*🔋
+3️⃣ *Aᴜᴅɪᴏ (MP3)*🎶
+4️⃣ *Aᴜᴅɪᴏ*🎶
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
     const sentMsg = await conn.sendMessage(from, {
       image: { url: thumb },
@@ -53,7 +56,7 @@ cmd({
       const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
 
       if (isReplyToBot) {
-        await conn.sendMessage(senderID, { react: { text: '⬇️', key: receivedMsg.key } });
+        await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
 
         switch (receivedText.trim()) {
           case "1":
@@ -123,16 +126,18 @@ cmd({
 
     const { thumbnail, SD, HD } = data.data;
 
-    const caption = `╭━━━〔 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ᴛᴡɪᴛᴛᴇʀ ᴅʟ* 〕━━━⊷
-┃▸ *Tᴡɪᴛᴛᴇʀ ᴠɪᴅᴇᴏ ᴅᴇᴛᴇᴄᴛᴇᴅ!*
-╰━━━⪼
+    const caption = `
+📺 Twitter Downloader. 📥
 
-🌐 *Download Options:*
-1️⃣  *SD Qᴜᴀʟɪᴛʏ*
-2️⃣  *HD Qᴜᴀʟɪᴛʏ*
-3️⃣  *Aᴜᴅɪᴏ (MP3)*
+🔗 *Link:* ${q}
 
-↪️ *Reply with 1, 2 or 3 to choose your format.*`;
+🔢 *Reply Below Number*
+
+1️⃣ *SD Qᴜᴀʟɪᴛʏ*🪫
+2️⃣ *HD Qᴜᴀʟɪᴛʏ*🔋
+3️⃣ *Aᴜᴅɪᴏ (MP3)*🎶
+
+Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
     const sentMsg = await conn.sendMessage(from, {
       image: { url: thumbnail },
@@ -151,7 +156,7 @@ cmd({
       const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
 
       if (isReplyToBot) {
-        await conn.sendMessage(senderID, { react: { text: '⬇️', key: receivedMsg.key } });
+        await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
 
         switch (receivedText.trim()) {
           case "1":
