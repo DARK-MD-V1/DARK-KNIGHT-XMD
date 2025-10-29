@@ -113,7 +113,7 @@ cmd({
     }
 
     const videoLink = data.result.dl_link;
-    const thumbnail = "https://i.ibb.co/DHHqXNPK/imgbb-1761705217881.png || https://files.catbox.moe/36ndl3.jpg";
+    const thumbnail = "https://files.catbox.moe/36ndl3.jpg";
     
     const caption = `
 📺 Instagram Downloader. 📥
