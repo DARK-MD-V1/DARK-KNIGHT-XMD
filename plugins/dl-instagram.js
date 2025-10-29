@@ -33,8 +33,8 @@ cmd({
 
 🔢 *Reply Below Number*
 
-1️⃣  *Video Original Quality*
-2️⃣  *Audio (MP3)*
+1️⃣  *HD quality*🔋
+2️⃣  *Audio (MP3)*🎶
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
@@ -122,8 +122,8 @@ cmd({
 
 🔢 *Reply Below Number*
 
-1️⃣  *Video Original Quality*
-2️⃣  *Audio (MP3)*
+1️⃣  *HD quality*🔋
+2️⃣  *Audio (MP3)*🎶
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
@@ -206,8 +206,8 @@ cmd({
 
 🔢 *Reply Below Number*
 
-1️⃣  *Video Original Quality*
-2️⃣  *Audio (MP3)*
+1️⃣  *HD quality*🔋
+2️⃣  *Audio (MP3)*🎶
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
