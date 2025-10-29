@@ -40,7 +40,7 @@ cmd(
             let list = "🔍 XVIDEO SEARCH RESULTS.🔞\n\n";
             
             xnxxSearchapi.result.xvideos.forEach((xnxx, i) => {
-            list += `*\`${i + 1}\` | | ${xnxx.title || "No title"}*\n${result.info}\n\n`;
+            list += `*\`${i + 1}\` | | ${xnxx.title || "No title"}*\n`;
           });
           
           const listMsg = await conn.sendMessage(from, { text: list + "\n🔢 *Reply Below Number.*\n\n" + tharuzz_footer }, { quoted: mek });
@@ -77,8 +77,8 @@ cmd(
                 `*📝 \`Description:\` ${infoMap.description}*\n` + 
                 `*⏰ \`Duration:\` ${infoMap.duration}*\n\n` +
                 `*🔢 \`Reply Below Number:\`*\n\n` +
-                `*1️⃣ | | Video High Quality*\n` +
-                `*1️⃣ | | Video Low Quality*\n\n` + tharuzz_footer
+                `*1️⃣ Video High Quality*\n` +
+                `*1️⃣ Video Low Quality*\n\n` + tharuzz_footer
             }, { quoted:msg }
         );
             
@@ -156,8 +156,7 @@ cmd(
 
             let list = "🔍 *XNXX SEARCH RESULTS* 🔞\n\n";
             results.forEach((vid, i) => {
-                const info = vid.info ? vid.info.replace(/\n/g, " | ").trim() : "No info";
-                list += `*${i + 1}.* ${vid.title || "No title"}\n${info}\n\n`;
+                list += `*\`${i + 1}\` | | ${vid.title || "No title"}\n`;
             });
 
             const listMsg = await conn.sendMessage(
