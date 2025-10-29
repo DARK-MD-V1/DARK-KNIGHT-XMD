@@ -128,7 +128,8 @@ cmd({
     const hdVideo = resultArray.find(v => v.quality?.toUpperCase() === "HD")?.url;
     const sdVideo = resultArray.find(v => v.quality?.toUpperCase() === "SD")?.url;
 
-    const thumbnail = "https://i.ibb.co/DHHqXNPK/imgbb-1761705217881.png" || "https://files.catbox.moe/36ndl3.jpg";
+    const thumbnail = "https://i.ibb.co/DHHqXNPK/imgbb-1761705217881.png";
+    const thumbnai = "https://files.catbox.moe/36ndl3.jpg";
     
     const caption = `
 📺 *Facebook Downloader.* 📥
@@ -144,7 +145,7 @@ cmd({
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
     const sentMsg = await conn.sendMessage(from, {
-      image: { url: thumbnail },
+      image: { url: thumbnail || thumbnai },
       caption
     }, { quoted: m });
 
