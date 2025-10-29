@@ -2,8 +2,8 @@ const axios = require("axios");
 const { cmd } = require('../command');
 
 cmd({
-  pattern: "tiktok",
-  alias: ["tt"],
+  pattern: "tiktok2",
+  alias: ["tt2"],
   desc: "Download TikTok videos",
   category: "download",
   filename: __filename
@@ -38,8 +38,8 @@ cmd({
 
 🔢 *Reply Below Number*
 
-1️⃣  *Video Original Quality*
-2️⃣  *Audio (MP3)*
+1️⃣  *HD quality*🔋
+2️⃣  *Audio (MP3)*🎶
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
@@ -92,8 +92,8 @@ cmd({
 
 
 cmd({
-  pattern: "tiktok2",
-  alias: ["tt2"],
+  pattern: "tiktok",
+  alias: ["tt"],
   desc: "Download TikTok videos",
   category: "download",
   filename: __filename
@@ -121,6 +121,8 @@ cmd({
     const hd = media.hd;
     const org = media.org;
 
+    const thumbnail = "https://i.ibb.co/DHHqXNPK/imgbb-1761705217881.png || https://files.catbox.moe/36ndl3.jpg";
+    
     const caption = `
 📺 Tiktok Downloader. 📥
     
@@ -133,15 +135,19 @@ cmd({
 
 🔢 *Reply Below Number*
 
-1️⃣  *Video With Watermark*
-2️⃣  *Video No Watermark (HD)*
-3️⃣  *Video Original Quality*
-4️⃣  *Audio (MP3)*
+1️⃣  *With Watermark*🎫
+2️⃣  *No Watermark (HD)*🎟️
+3️⃣  *Original Quality*📼
+4️⃣  *Audio (MP3)*🎶
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
     // Send preview (if thumbnail unavailable, fallback to caption only)
-    const sentMsg = await conn.sendMessage(from, { text: caption }, { quoted: m });
+    const sentMsg = await conn.sendMessage(from, {
+      image: { url: thumbnail },
+      caption
+    }, { quoted: m });
+    
     const messageID = sentMsg.key.id;
 
     // 🧠 Handle reply selector
