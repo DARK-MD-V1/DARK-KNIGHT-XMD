@@ -113,7 +113,6 @@ cmd({
     }
 
     const videoLink = data.result.dl_link;
-
     const thumbnail = "https://i.ibb.co/dst132tZ/imgbb-1761702740674.png";
     
     const caption = `
