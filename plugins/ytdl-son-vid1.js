@@ -30,6 +30,8 @@ cmd({
         const result = apiRes.data;
 
         const caption = `
+🎵 *Song Downloader.* 📥
+
 📑 *Title:* ${data.title}
 ⏱️ *Duration:* ${data.timestamp}
 📆 *Uploaded:* ${data.ago}
@@ -127,6 +129,8 @@ cmd({
 
         // Prepare caption
         const caption = `
+🎥 *Video Downloader.* 📥
+
 📑 *Title:* ${data.title}
 ⏱️ *Duration:* ${data.timestamp}
 📆 *Uploaded:* ${data.ago}
