@@ -1,7 +1,7 @@
 const { cmd, commands } = require('../command');
 const { fetchJson } = require('../lib/functions');
 
-const tharuzz_footer = "© Powerd by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳";
+const tharuzz_footer = "> Powerd by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳";
 
 cmd(
     {
@@ -37,7 +37,7 @@ cmd(
                 await reply("No result found you enter xnxx video name.")
             }
             
-            let list = "🔍 XVIDEO SEARCH RESULTS.🔞\n\n🔢 *Reply Below Number.*\n\n";
+            let list = "🔍 Xnxx Search Results.🔞\n\n🔢 *Reply Below Number.*\n\n";
             
             xnxxSearchapi.result.xvideos.forEach((xnxx, i) => {
             list += `*\`${i + 1}\` | | ${xnxx.title || "No title"}*\n`;
@@ -72,7 +72,7 @@ cmd(
               const askType = await conn.sendMessage(
             from,{
                 image: {url: infoMap.thumbnail },
-                caption: `*🔞 XNXX VIDEO INFO*\n\n` +
+                caption: `🔍 *Xnxx Video Info.* 🔞\n\n` +
                 `📑 *Title:* ${infoMap.title}\n` + 
                 `📝 *Description:* ${infoMap.description}\n` + 
                 `⏰ *Duration:* ${infoMap.duration}\n\n` +
@@ -112,7 +112,7 @@ cmd(
                     }, {quoted: tMsg}
                 )
             } else {
-                await conn.sendMessage(from, { text: "❌ *`ɪɴᴠᴀʟɪᴅᴇ ɪɴᴘᴜᴛ. 1ꜰᴏʀ ᴠɪᴅᴇᴏ high quality ᴛʏᴘᴇ / 2 ꜰᴏʀ video low quality ᴛʏᴘᴇ`*" }, { quoted: tMsg });
+                await conn.sendMessage(from, { text: "❌ *`ɪɴᴠᴀʟɪᴅᴇ ɪɴᴘᴜᴛ. 1 ꜰᴏʀ ᴠɪᴅᴇᴏ high quality ᴛʏᴘᴇ / 2 ꜰᴏʀ video low quality ᴛʏᴘᴇ`*" }, { quoted: tMsg });
             }
             });
           });
@@ -153,7 +153,7 @@ cmd(
             const results = searchRes?.result?.result;
             if (!results || results.length === 0) return await reply("😔 No results found.");
 
-            let list = "🔍 *XNXX SEARCH RESULTS* 🔞\n\n🔢 *Reply Below Number.*\n\n";
+            let list = "🔍 *Xvideo Search Results* 🔞\n\n🔢 *Reply Below Number.*\n\n";
             results.forEach((vid, i) => {
                 list += `*\`${i + 1}\` | | ${vid.title || "No title"}*\n`;
             });
@@ -200,11 +200,11 @@ cmd(
                     {
                         image: { url: info.image },
                         caption:
-                            `*🔞 XNXX VIDEO INFO*\n\n` +
+                            `🔍 *Xnxx Video Info.* 🔞\n\n` +
                             `📑 *Title:* ${info.title}\n` +
                             `📝 *Info:* ${info.info}\n` +
                             `⏰ *Duration:* ${info.duration || "Unknown"}\n\n` +
-                            `🔢 *Reply Below Number.*\n1️⃣ *Video High Quality*\n2️⃣ *Video Low Quality*\n\n` +
+                            `🔢 *Reply Below Number.*\n\n1️⃣ *Video High Quality*\n2️⃣ *Video Low Quality*\n\n` +
                             tharuzz_footer
                     },
                     { quoted: msg }
