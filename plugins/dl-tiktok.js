@@ -121,7 +121,7 @@ cmd({
     const hd = media.hd;
     const org = media.org;
 
-    const thumbnail = "https://i.ibb.co/DHHqXNPK/imgbb-1761705217881.png";
+    const thumbnail = "https://files.catbox.moe/36ndl3.jpg";
     
     const caption = `
 📺 Tiktok Downloader. 📥
