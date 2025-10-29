@@ -38,7 +38,7 @@ cmd({
 
 🔢 *Reply Below Number*
 
-1️⃣  *HD quality*🔋
+1️⃣  *HD Quality*🔋
 2️⃣  *Audio (MP3)*🎶
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
