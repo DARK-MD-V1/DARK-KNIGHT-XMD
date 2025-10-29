@@ -31,6 +31,8 @@ cmd({
         const result = apiRes.data;
 
         const caption = `
+🎵 ```Song Downloader.``` 📥
+
 📑 *Title:* ${data.title}
 ⏱️ *Duration:* ${data.timestamp}
 📆 *Uploaded:* ${data.ago}
