@@ -135,9 +135,9 @@ cmd({
 
 🔢 *Reply Below Number*
 
-1️⃣  *With Watermark*🎫
-2️⃣  *No Watermark (HD)*🎟️
-3️⃣  *Original Quality*📼
+1️⃣  *With Watermark* 🎫
+2️⃣  *No Watermark (HD)* 🎟️
+3️⃣  *Original Quality* 📼
 4️⃣  *Audio (MP3)*🎶
 
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
