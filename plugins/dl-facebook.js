@@ -128,6 +128,8 @@ cmd({
     const hdVideo = resultArray.find(v => v.quality?.toUpperCase() === "HD")?.url;
     const sdVideo = resultArray.find(v => v.quality?.toUpperCase() === "SD")?.url;
 
+    const thumbnail = "https://i.ibb.co/dst132tZ/imgbb-1761702740674.png";
+    
     const caption = `
 📺 *Facebook Downloader.* 📥
 
@@ -142,7 +144,8 @@ cmd({
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
     const sentMsg = await conn.sendMessage(from, {
-      text: caption
+      image: { url: thumbnail },
+      caption
     }, { quoted: m });
 
     const messageID = sentMsg.key.id;
