@@ -31,7 +31,7 @@ cmd({
         const result = apiRes.data;
 
         const caption = `
-🎵 ```Song Downloader.``` 📥
+🎵 *Song Downloader.* 📥
 
 📑 *Title:* ${data.title}
 ⏱️ *Duration:* ${data.timestamp}
@@ -136,6 +136,8 @@ cmd({
 
     // 🔹 Caption design
     const caption = `
+🎵 *Song Downloader.* 📥
+
 📑 *Title :* ${meta.title}
 ⏱ *Duration :* ${meta.duration}
 ⏰ *ResponseTime :* ${data.responseTime}
