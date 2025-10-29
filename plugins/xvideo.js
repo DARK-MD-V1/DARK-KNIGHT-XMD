@@ -5,8 +5,8 @@ const tharuzz_footer = "© Powerd by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-�
 
 cmd(
     {
-        pattern: "xvideo",
-        use: ".xvideo <xnxx video name>",
+        pattern: "xnxx",
+        use: ".xnxx <xnxx video name>",
         react: "🔞",
         desc: "Search and download xnxx.com 18+ videos.",
         category: "download",
@@ -37,13 +37,13 @@ cmd(
                 await reply("No result found you enter xnxx video name.")
             }
             
-            let list = "🔍 XVIDEO SEARCH RESULTS.🔞\n\n";
+            let list = "🔍 XVIDEO SEARCH RESULTS.🔞\n\n🔢 *Reply Below Number.*\n\n";
             
             xnxxSearchapi.result.xvideos.forEach((xnxx, i) => {
             list += `*\`${i + 1}\` | | ${xnxx.title || "No title"}*\n`;
           });
           
-          const listMsg = await conn.sendMessage(from, { text: list + "\n🔢 *Reply Below Number.*\n\n" + tharuzz_footer }, { quoted: mek });
+          const listMsg = await conn.sendMessage(from, { text: list + "\n🔢 *reply with the number to Choose a video*\n\n" + tharuzz_footer }, { quoted: mek });
           const listMsgId = listMsg.key.id;
           
           conn.ev.on("messages.upsert", async (update) => {
@@ -124,11 +124,10 @@ cmd(
 );
 
 
-
 cmd(
     {
-        pattern: "xnxx",
-        use: ".xnxx <video name>",
+        pattern: "xvideo",
+        use: ".xvideo <video name>",
         react: "🔞",
         desc: "Search and download xnxx.com 18+ videos.",
         category: "download",
@@ -154,14 +153,14 @@ cmd(
             const results = searchRes?.result?.result;
             if (!results || results.length === 0) return await reply("😔 No results found.");
 
-            let list = "🔍 *XNXX SEARCH RESULTS* 🔞\n\n";
+            let list = "🔍 *XNXX SEARCH RESULTS* 🔞\n\n🔢 *Reply Below Number.*\n\n";
             results.forEach((vid, i) => {
-                list += `*\`${i + 1}\` | | ${vid.title || "No title"}\n`;
+                list += `*\`${i + 1}\` | | ${vid.title || "No title"}*\n`;
             });
 
             const listMsg = await conn.sendMessage(
                 from,
-                { text: list + "\n🔢 *Reply Below Number.*\n\n" + tharuzz_footer },
+                { text: list + "\n🔢 *reply with the number to Choose a video*\n\n" + tharuzz_footer },
                 { quoted: mek }
             );
 
