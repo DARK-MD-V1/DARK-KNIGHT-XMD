@@ -30,6 +30,8 @@ cmd({
         const result = apiRes.result;
 
         const caption = `
+🎵 *Song Downloader.* 📥
+
 📑 *Title:* ${data.title}
 ⏱️ *Duration:* ${data.timestamp}
 📆 *Uploaded:* ${data.ago}
@@ -128,6 +130,8 @@ cmd({
         };
 
         const caption = `
+🎥 *Video Downloader.* 📥
+
 📑 *Title:* ${data.title}
 ⏱️ *Duration:* ${data.timestamp}
 📆 *Uploaded:* ${data.ago}
