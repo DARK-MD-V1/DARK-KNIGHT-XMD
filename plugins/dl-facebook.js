@@ -128,7 +128,7 @@ cmd({
     const hdVideo = resultArray.find(v => v.quality?.toUpperCase() === "HD")?.url;
     const sdVideo = resultArray.find(v => v.quality?.toUpperCase() === "SD")?.url;
 
-    const thumbnail = "https://i.ibb.co/dst132tZ/imgbb-1761702740674.png";
+    const thumbnail = "https://i.ibb.co/DHHqXNPK/imgbb-1761705217881.png || https://files.catbox.moe/36ndl3.jpg";
     
     const caption = `
 📺 *Facebook Downloader.* 📥
