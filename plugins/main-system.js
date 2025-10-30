@@ -13,7 +13,7 @@ cmd({
 async (conn, mek, m, { from, sender, reply }) => {
     try {
         const status = `
-╭──〔 🧬 *System Info* 🧬 〕─◉
+╭──〔 🧬 *SYSTEM INFO* 🧬 〕──◉
 │
 │ 🤖 *Owner:* ${config.OWNER_NAME}
 │ ⚡ *Version:* 2.0.0
