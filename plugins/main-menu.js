@@ -28,7 +28,7 @@ cmd({
 ┃★│ 📚 Commands : *${totalCommands}*
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
-╭━━━〔 *MENU LIST* 〕━━━┈⊷
+╭━━━〔 *📃 MENU LIST* 〕━━┈⊷
 ┃◈╭─────────────·๏
 ┃◈│ ➊ 🤖 *Ai Menu*
 ┃◈│ ➋ 🔄 *Convert Menu*
