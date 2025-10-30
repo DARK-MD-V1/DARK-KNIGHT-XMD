@@ -2,23 +2,22 @@ const { cmd } = require("../command");
 
 cmd({
   pattern: "getdp",
-  desc: "Get profile picture of a user (replied, mentioned, or group)",
+  desc: "Get profile picture of user, group, or number (supports mention, reply, or number input).",
   category: "tools",
   react: "🖼️",
   filename: __filename
 },
-async (conn, mek, m, { from, sender, reply, isGroup, participants }) => {
+async (conn, mek, m, { from, sender, reply, isGroup, args }) => {
   try {
-    const quoted = mek.message?.extendedTextMessage?.contextInfo?.quotedMessage;
     const mentioned = mek.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-    const groupMetadata = isGroup ? await conn.groupMetadata(from) : null;
+    const quoted = mek.message?.extendedTextMessage?.contextInfo?.participant;
     let targetJid;
 
     // 🧍 If replied user
     if (quoted) {
-      targetJid = mek.message.extendedTextMessage.contextInfo.participant;
+      targetJid = quoted;
     } 
-    // 🧑‍🤝‍🧑 If mentioned user(s)
+    // 🧑‍🤝‍🧑 If mentioned
     else if (mentioned && mentioned.length > 0) {
       targetJid = mentioned[0];
     } 
@@ -27,60 +26,40 @@ async (conn, mek, m, { from, sender, reply, isGroup, participants }) => {
       const num = args[0].replace(/[^0-9]/g, "");
       if (!num) return reply("⚠️ Invalid number format.\nExample: .getpp 94771234567");
       targetJid = `${num}@s.whatsapp.net`;
-    // 👥 If group and no mention/reply, fetch group DP
+    } 
+    // 👥 If group
     else if (isGroup) {
-      targetJid = from; // Group JID
+      targetJid = from;
+    } 
+    // 💬 DM fallback
+    else {
+      targetJid = sender;
     }
 
     let imageUrl;
     try {
       imageUrl = await conn.profilePictureUrl(targetJid, "image");
     } catch {
-      imageUrl = "https://files.catbox.moe/brlkte.jpg"; // default image
+      imageUrl = "https://files.catbox.moe/brlkte.jpg"; // default fallback
     }
 
-    // Caption based on type
+    // 🖋️ Caption
     let caption;
-    if (isGroup && targetJid === from) {
-      caption = `🖼️ Group Profile Picture: *${groupMetadata.subject}*`;
-    } else {
-      caption = `🖼️ Profile Picture of @${targetJid.split('@')[0]}`;
-    }
-
-    const fakeVCard = {
-      key: {
-        fromMe: false,
-        participant: '0@s.whatsapp.net',
-        remoteJid: "status@broadcast"
-      },
-      message: {
-        contactMessage: {
-          displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
-          vcard: "BEGIN:VCARD\nVERSION:3.0\nFN:𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃\nORG:dark;\nTEL;type=CELL;type=VOICE;waid=254700000000:+254 700 000000\nEND:VCARD",
-          jpegThumbnail: Buffer.from([])
-        }
-      }
-    };
+    if (isGroup && targetJid === from) caption = "🖼️ Group Profile Picture";
+    else caption = `🖼️ Profile Picture of ${targetJid.split('@')[0].startsWith('1') ? '@' + targetJid.split('@')[0] : targetJid.split('@')[0]}`;
 
     await conn.sendMessage(from, {
       image: { url: imageUrl },
       caption,
-      contextInfo: {
-        mentionedJid: isGroup && targetJid !== from ? [targetJid] : [],
-        forwardingScore: 5,
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-          newsletterName: "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳",
-          newsletterJid: "120363400240662312@newsletter"
-        }
-      }
-    }, { quoted: fakeVCard });
+      contextInfo: { mentionedJid: [targetJid] }
+    });
 
   } catch (err) {
     console.error("Error in getpp:", err);
-    reply("❌ Failed to fetch profile picture. Please try again.");
+    reply("❌ Failed to fetch profile picture.");
   }
 });
+
 
 
 
