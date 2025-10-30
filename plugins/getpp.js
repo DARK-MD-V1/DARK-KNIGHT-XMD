@@ -32,8 +32,8 @@ async (conn, mek, m, { from, sender, reply, isGroup, args }) => {
       targetJid = from;
     } 
     // 💬 DM fallback
-    else {
-      targetJid = sender;
+    } else {
+      targetJid = from.endsWith("@s.whatsapp.net") ? from : sender;
     }
 
     let imageUrl;
