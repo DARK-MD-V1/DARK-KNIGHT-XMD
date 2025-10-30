@@ -326,28 +326,43 @@ async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, 
 
 cmd({
     pattern: "getpp",
-    desc: "Fetch the profile picture of a tagged or replied user.",
+    desc: "Fetch the profile picture of a tagged, replied, or mentioned user.",
     category: "owner",
     filename: __filename
 }, async (conn, mek, m, { quoted, isGroup, sender, participants, reply }) => {
     try {
-        // Determine the target user
-        const targetJid = quoted ? quoted.sender : sender;
+        let targetJid;
 
-        if (!targetJid) return reply("⚠️ Please reply to a message to fetch the profile picture.");
+        // 🧩 Determine the target user
+        if (quoted) {
+            targetJid = quoted.sender;
+        } else if (m.mentionedJid && m.mentionedJid.length > 0) {
+            targetJid = m.mentionedJid[0];
+        } else if (isGroup && participants) {
+            targetJid = sender;
+        }
 
-        // Fetch the user's profile picture URL
+        // ⚠️ Validate target
+        if (!targetJid) {
+            return reply("⚠️ Please tag or reply to a user to fetch their profile picture.");
+        }
+
+        // 🔍 Try to fetch the user's profile picture
         const userPicUrl = await conn.profilePictureUrl(targetJid, "image").catch(() => null);
 
-        if (!userPicUrl) return reply("⚠️ No profile picture found for the specified user.");
+        if (!userPicUrl) {
+            return reply("😔 Couldn't find a profile picture for that user.");
+        }
 
-        // Send the user's profile picture
+        // 🖼️ Send the picture back
         await conn.sendMessage(m.chat, {
             image: { url: userPicUrl },
-            caption: "🖼️ Here is the profile picture of the specified user."
+            caption: `🖼️ Profile picture of @${targetJid.split("@")[0]}`,
+            mentions: [targetJid]
         });
-    } catch (e) {
-        console.error("Error fetching user profile picture:", e);
-        reply("❌ An error occurred while fetching the profile picture. Please try again later.");
+
+    } catch (err) {
+        console.error("❌ Error in getpp command:", err);
+        reply("🚨 Oops! Something went wrong while fetching the profile picture.\nPlease try again later.");
     }
 });
