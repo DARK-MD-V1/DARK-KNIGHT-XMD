@@ -327,38 +327,34 @@ async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, 
 cmd({
   pattern: "getdp",
   alias: ["dp"],
-  use: "getdp [@user/reply/number]",
-  desc: "Fetch profile picture of a user, group, or any WhatsApp number.",
+  use: "getpp [@user/reply]",
+  desc: "Fetch the profile picture of a user (replied, tagged or self).",
   category: "tools",
   react: "🖼️",
   filename: __filename
 }, 
-async (conn, mek, m, { from, sender, reply, quoted, isGroup, mentions, text }) => {
+async (conn, mek, m, { from, sender, reply, quoted, isGroup, mentions }) => {
   try {
     let targetJid;
 
-    // 🧩 1. If replied to someone
+    // 🔹 1. Priority: replied message
     if (quoted) {
       targetJid = quoted.sender;
 
-    // 🧩 2. If someone tagged
+    // 🔹 2. If tagged user in message
     } else if (mentions && mentions.length > 0) {
       targetJid = mentions[0];
 
-    // 🧩 3. If text includes a number (e.g., 94763934850)
-    } else if (text && text.match(/^\d{7,15}$/)) {
-      targetJid = `${text}@s.whatsapp.net`;
-
-    // 🧩 4. If in group (and not replied/tagged) → get group DP
+    // 🔹 3. If group but not replied — ask to reply
     } else if (isGroup) {
-      targetJid = from;
+      return reply("❌ Please reply to or tag a user to get their profile picture.");
 
-    // 🧩 5. If DM → sender’s own DP
+    // 🔹 4. If DM, use sender’s own profile
     } else {
-      targetJid = sender;
+      targetJid = from.endsWith("@s.whatsapp.net") ? from : sender;
     }
 
-    // 🖼️ Try fetching the DP
+    // 🔹 Try to get user’s profile picture
     let imageUrl;
     try {
       imageUrl = await conn.profilePictureUrl(targetJid, "image");
@@ -366,7 +362,7 @@ async (conn, mek, m, { from, sender, reply, quoted, isGroup, mentions, text }) =
       imageUrl = "https://files.catbox.moe/brlkte.jpg"; // fallback
     }
 
-    // 🧾 Fake VCard for clean UI
+    // 🔹 Fake vCard for better UI
     const fakeVCard = {
       key: {
         fromMe: false,
@@ -382,17 +378,12 @@ async (conn, mek, m, { from, sender, reply, quoted, isGroup, mentions, text }) =
       }
     };
 
-    // 📝 Caption logic
-    const captionText = targetJid.endsWith("@g.us")
-      ? `👥 Group Display Picture`
-      : `🖼️ Profile Picture of @${targetJid.split("@")[0]}`;
-
-    // 📤 Send result
+    // 🔹 Send the profile picture
     await conn.sendMessage(from, {
       image: { url: imageUrl },
-      caption: captionText,
+      caption: `🖼️ Profile Picture of @${targetJid.split("@")[0]}`,
       contextInfo: {
-        mentionedJid: targetJid.endsWith("@g.us") ? [] : [targetJid],
+        mentionedJid: [targetJid],
         forwardingScore: 5,
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
@@ -407,3 +398,4 @@ async (conn, mek, m, { from, sender, reply, quoted, isGroup, mentions, text }) =
     reply("❌ Failed to fetch profile picture.");
   }
 });
+
