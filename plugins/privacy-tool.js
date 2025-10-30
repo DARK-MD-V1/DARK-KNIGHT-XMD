@@ -325,44 +325,85 @@ async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, 
 
 
 cmd({
-    pattern: "getdp",
-    desc: "Fetch the profile picture of a tagged, replied, or mentioned user.",
-    category: "owner",
-    filename: __filename
-}, async (conn, mek, m, { quoted, isGroup, sender, participants, reply }) => {
-    try {
-        let targetJid;
+  pattern: "getdp",
+  alias: ["dp"],
+  use: "getdp [@user/reply/number]",
+  desc: "Fetch profile picture of a user, group, or any WhatsApp number.",
+  category: "tools",
+  react: "🖼️",
+  filename: __filename
+}, 
+async (conn, mek, m, { from, sender, reply, quoted, isGroup, mentions, text }) => {
+  try {
+    let targetJid;
 
-        // 🧭 Determine target user
-        if (quoted) {
-            targetJid = quoted.sender;
-        } else if (m.mentionedJid && m.mentionedJid.length > 0) {
-            targetJid = m.mentionedJid[0];
-        } else {
-            targetJid = sender;
-        }
+    // 🧩 1. If replied to someone
+    if (quoted) {
+      targetJid = quoted.sender;
 
-        if (!targetJid) {
-            return reply("⚠️ Please tag or reply to a user to fetch their profile picture.");
-        }
+    // 🧩 2. If someone tagged
+    } else if (mentions && mentions.length > 0) {
+      targetJid = mentions[0];
 
-        // 🖼️ Try to fetch user profile picture
-        let userPicUrl;
-        try {
-            userPicUrl = await conn.profilePictureUrl(targetJid, "image");
-        } catch {
-            userPicUrl = "https://files.catbox.moe/brlkte.jpg"; // 🔄 fallback image
-        }
+    // 🧩 3. If text includes a number (e.g., 94763934850)
+    } else if (text && text.match(/^\d{7,15}$/)) {
+      targetJid = `${text}@s.whatsapp.net`;
 
-        // ✅ Send the profile picture (or fallback)
-        await conn.sendMessage(m.chat, {
-            image: { url: userPicUrl },
-            caption: `🖼️ Profile picture of @${targetJid.split("@")[0]}`,
-            mentions: [targetJid]
-        });
+    // 🧩 4. If in group (and not replied/tagged) → get group DP
+    } else if (isGroup) {
+      targetJid = from;
 
-    } catch (e) {
-        console.error("❌ Error fetching user profile picture:", e);
-        reply("🚨 An unexpected error occurred while fetching the profile picture.\nTry again later.");
+    // 🧩 5. If DM → sender’s own DP
+    } else {
+      targetJid = sender;
     }
+
+    // 🖼️ Try fetching the DP
+    let imageUrl;
+    try {
+      imageUrl = await conn.profilePictureUrl(targetJid, "image");
+    } catch {
+      imageUrl = "https://files.catbox.moe/brlkte.jpg"; // fallback
+    }
+
+    // 🧾 Fake VCard for clean UI
+    const fakeVCard = {
+      key: {
+        fromMe: false,
+        participant: "0@s.whatsapp.net",
+        remoteJid: "status@broadcast"
+      },
+      message: {
+        contactMessage: {
+          displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
+          vcard: "BEGIN:VCARD\nVERSION:3.0\nFN:𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃\nORG:dark;\nTEL;type=CELL;type=VOICE;waid=254700000000:+254 700 000000\nEND:VCARD",
+          jpegThumbnail: Buffer.from([])
+        }
+      }
+    };
+
+    // 📝 Caption logic
+    const captionText = targetJid.endsWith("@g.us")
+      ? `👥 Group Display Picture`
+      : `🖼️ Profile Picture of @${targetJid.split("@")[0]}`;
+
+    // 📤 Send result
+    await conn.sendMessage(from, {
+      image: { url: imageUrl },
+      caption: captionText,
+      contextInfo: {
+        mentionedJid: targetJid.endsWith("@g.us") ? [] : [targetJid],
+        forwardingScore: 5,
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+          newsletterName: "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳",
+          newsletterJid: "120363400240662312@newsletter"
+        }
+      }
+    }, { quoted: fakeVCard });
+
+  } catch (err) {
+    console.error("Error in getpp:", err);
+    reply("❌ Failed to fetch profile picture.");
+  }
 });
