@@ -13,17 +13,18 @@ cmd({
 async (conn, mek, m, { from, sender, reply }) => {
     try {
         const status = `
-╭───〔 *🤖 ${config.BOT_NAME} STATUS* 〕───◉
-│✨ *Bot is Active & Online!*
+╭──〔 🤖 *ALIVE STATUS* 〕──◉
 │
-│🧠 *Owner:* ${config.OWNER_NAME}
-│⚡ *Version:* 2.0.0
-│📝 *Prefix:* [${config.PREFIX}]
-│📳 *Mode:* [${config.MODE}]
-│💾 *RAM:* ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}MB / ${(os.totalmem() / 1024 / 1024).toFixed(2)}MB
-│🖥️ *Host:* ${os.hostname()}
-│⌛ *Uptime:* ${runtime(process.uptime())}
-╰────────────────────◉
+│ ✨ _Bot is Active & Online!_
+│
+│ 🧠 *Owner:* ${config.OWNER_NAME}
+│ ⚡ *Version:* 2.0.0
+│ 📝 *Prefix:* [${config.PREFIX}]
+│ 📳 *Mode:* [${config.MODE}]
+│ 💾 *RAM:* ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}MB / ${(os.totalmem() / 1024 / 1024).toFixed(2)}MB
+│ 🖥️ *Host:* ${os.hostname()}
+│ ⌛ *Uptime:* ${runtime(process.uptime())}
+╰────────────────◉
 > ${config.DESCRIPTION}`;
 
        // Fake VCard
