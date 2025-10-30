@@ -17,8 +17,9 @@ cmd({
 }, 
 async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
     try {
-        let dec = `╭━〔 🚀 *${config.BOT_NAME}* 〕━┈⊷
-┃★╭─────────────·๏
+        let dec = `
+╭━〔 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳* 〕━··๏
+┃★╭──────────────
 ┃★│ • 👑 Owner : *${config.OWNER_NAME}*
 ┃★│ • ⚙️ Prefix : *[${config.PREFIX}]*
 ┃★│ • 🌐 Platform : *Heroku*
@@ -276,7 +277,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━┈⊷
 
-╭━━━〔 🎨 *Logo Menu* 〕━━━┈⊷
+╭━━〔 🎨 *Logo Menu* 〕━━┈⊷
 ┃★╭──────────────
 ┃★│ • 3dcomic
 ┃★│ • 3dpaper
