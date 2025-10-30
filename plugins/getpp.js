@@ -2,51 +2,54 @@ const { cmd } = require("../command");
 
 cmd({
   pattern: "getdp",
-  alias: ["dp"],
-  use: "getpp [@user/reply/number]",
-  desc: "Get profile picture of a user, mentioned user, or group.",
+  desc: "Get profile picture of a user (replied, mentioned, or group)",
   category: "tools",
   react: "🖼️",
   filename: __filename
 },
-async (conn, mek, m, { from, sender, reply, isGroup, quoted, text, mentions }) => {
+async (conn, mek, m, { from, sender, reply, isGroup, participants }) => {
   try {
+    const quoted = mek.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+    const mentioned = mek.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+    const groupMetadata = isGroup ? await conn.groupMetadata(from) : null;
     let targetJid;
 
-    // 🧩 1. If reply — get replied user's JID
+    // 🧍 If replied user
     if (quoted) {
-      targetJid = quoted.sender;
-
-    // 🧩 2. If @mention used — get first mentioned JID
-    } else if (mentions && mentions.length > 0) {
-      targetJid = mentions[0];
-
-    // 🧩 3. If user types a number (e.g., .getpp 94761234567)
-    } else if (text && /^\d{7,15}$/.test(text)) {
-      targetJid = `${text}@s.whatsapp.net`;
-
-    // 🧩 4. If in group but no reply/tag/number → group DP
-    } else if (isGroup) {
-      targetJid = from;
-
-    // 🧩 5. If in DM → own DP
-    } else {
+      targetJid = mek.message.extendedTextMessage.contextInfo.participant;
+    } 
+    // 🧑‍🤝‍🧑 If mentioned user(s)
+    else if (mentioned && mentioned.length > 0) {
+      targetJid = mentioned[0];
+    } 
+    // 👥 If group and no mention/reply, fetch group DP
+    else if (isGroup) {
+      targetJid = from; // Group JID
+    } 
+    // 💬 If in DM
+    else {
       targetJid = sender;
     }
 
-    // 🖼️ Try fetching profile picture
     let imageUrl;
     try {
       imageUrl = await conn.profilePictureUrl(targetJid, "image");
     } catch {
-      imageUrl = "https://files.catbox.moe/brlkte.jpg"; // fallback
+      imageUrl = "https://files.catbox.moe/brlkte.jpg"; // default image
     }
 
-    // 🧾 Fake vCard (for clean look)
+    // Caption based on type
+    let caption;
+    if (isGroup && targetJid === from) {
+      caption = `🖼️ Group Profile Picture: *${groupMetadata.subject}*`;
+    } else {
+      caption = `🖼️ Profile Picture of @${targetJid.split('@')[0]}`;
+    }
+
     const fakeVCard = {
       key: {
         fromMe: false,
-        participant: "0@s.whatsapp.net",
+        participant: '0@s.whatsapp.net',
         remoteJid: "status@broadcast"
       },
       message: {
@@ -58,20 +61,11 @@ async (conn, mek, m, { from, sender, reply, isGroup, quoted, text, mentions }) =
       }
     };
 
-    // 📝 Caption logic
-    let captionText;
-    if (targetJid.endsWith("@g.us")) {
-      captionText = "👥 Group Display Picture";
-    } else {
-      captionText = `🖼️ Profile Picture of @${targetJid.split("@")[0]}`;
-    }
-
-    // 📤 Send the image
     await conn.sendMessage(from, {
       image: { url: imageUrl },
-      caption: captionText,
+      caption,
       contextInfo: {
-        mentionedJid: targetJid.endsWith("@g.us") ? [] : [targetJid],
+        mentionedJid: isGroup && targetJid !== from ? [targetJid] : [],
         forwardingScore: 5,
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
@@ -83,9 +77,10 @@ async (conn, mek, m, { from, sender, reply, isGroup, quoted, text, mentions }) =
 
   } catch (err) {
     console.error("Error in getpp:", err);
-    reply("❌ Failed to fetch profile picture.");
+    reply("❌ Failed to fetch profile picture. Please try again.");
   }
 });
+
 
 
 cmd({
