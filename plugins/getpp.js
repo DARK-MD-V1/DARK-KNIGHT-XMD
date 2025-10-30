@@ -1,7 +1,7 @@
 const { cmd } = require("../command");
 
 cmd({
-  pattern: "getpp2",
+  pattern: "getpp",
   alias: [],
   use: "pp",
   desc: "Get profile picture of a user (replied user in group, or DM user)",
