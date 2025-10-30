@@ -22,13 +22,14 @@ async (conn, mek, m, { from, sender, reply, isGroup, participants }) => {
     else if (mentioned && mentioned.length > 0) {
       targetJid = mentioned[0];
     } 
+    // ☎️ If user entered a number manually (e.g. .getpp 94771234567)
+    else if (args[0]) {
+      const num = args[0].replace(/[^0-9]/g, "");
+      if (!num) return reply("⚠️ Invalid number format.\nExample: .getpp 94771234567");
+      targetJid = `${num}@s.whatsapp.net`;
     // 👥 If group and no mention/reply, fetch group DP
     else if (isGroup) {
       targetJid = from; // Group JID
-    } 
-    // 💬 If in DM
-    else {
-      targetJid = sender;
     }
 
     let imageUrl;
