@@ -381,10 +381,10 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • vv1
 ┃★│ • vv3
 ┃★│ • fullpp
-┃★│ • fullpp2
+┃★│ • setdp
 ┃★│ • setpp
+┃★│ • getdp
 ┃★│ • getpp
-┃★│ • getpp2
 ┃★│ • update 
 ┃★│ • shutdown
 ┃★│ • clearchats
