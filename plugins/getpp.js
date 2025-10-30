@@ -1,5 +1,6 @@
 const { cmd } = require("../command");
 
+
 cmd({
   pattern: "getdp",
   desc: "Get profile picture of user, group, or number (supports mention, reply, or number input).",
@@ -13,53 +14,78 @@ async (conn, mek, m, { from, sender, reply, isGroup, args }) => {
     const quoted = mek.message?.extendedTextMessage?.contextInfo?.participant;
     let targetJid;
 
-    // 🧍 If replied user
+    // 🧍 Reply user
     if (quoted) {
       targetJid = quoted;
     } 
-    // 🧑‍🤝‍🧑 If mentioned
+    // 🧑‍🤝‍🧑 Mentioned user
     else if (mentioned && mentioned.length > 0) {
       targetJid = mentioned[0];
     } 
-    // ☎️ If user entered a number manually (e.g. .getpp 94771234567)
+    // ☎️ Number input
     else if (args[0]) {
       const num = args[0].replace(/[^0-9]/g, "");
       if (!num) return reply("⚠️ Invalid number format.\nExample: .getpp 94771234567");
       targetJid = `${num}@s.whatsapp.net`;
     } 
-    // 👥 If group
+    // 👥 Group fallback
     else if (isGroup) {
       targetJid = from;
     } 
     // 💬 DM fallback
-    } else {
+    else {
       targetJid = from.endsWith("@s.whatsapp.net") ? from : sender;
     }
 
+    // Fetch profile picture
     let imageUrl;
     try {
       imageUrl = await conn.profilePictureUrl(targetJid, "image");
     } catch {
-      imageUrl = "https://files.catbox.moe/brlkte.jpg"; // default fallback
+      imageUrl = "https://files.catbox.moe/brlkte.jpg"; // fallback
     }
 
-    // 🖋️ Caption
+    // Fake vCard for quoting
+    const fakeVCard = {
+      key: {
+        fromMe: false,
+        participant: '0@s.whatsapp.net',
+        remoteJid: "status@broadcast"
+      },
+      message: {
+        contactMessage: {
+          displayName: "© 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃",
+          vcard: "BEGIN:VCARD\nVERSION:3.0\nFN:𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃\nORG:dark;\nTEL;type=CELL;type=VOICE;waid=254700000000:+254 700 000000\nEND:VCARD",
+          jpegThumbnail: Buffer.from([])
+        }
+      }
+    };
+
+    // Caption
     let caption;
     if (isGroup && targetJid === from) caption = "🖼️ Group Profile Picture";
-    else caption = `🖼️ Profile Picture of ${targetJid.split('@')[0].startsWith('1') ? '@' + targetJid.split('@')[0] : targetJid.split('@')[0]}`;
+    else caption = `🖼️ Profile Picture of @${targetJid.split('@')[0]}`;
 
+    // Send message with image + fake vCard
     await conn.sendMessage(from, {
       image: { url: imageUrl },
       caption,
-      contextInfo: { mentionedJid: [targetJid] }
-    });
+      contextInfo: {
+        mentionedJid: [targetJid],
+        forwardingScore: 5,
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+          newsletterName: "𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳",
+          newsletterJid: "120363400240662312@newsletter"
+        }
+      }
+    }, { quoted: fakeVCard });
 
   } catch (err) {
     console.error("Error in getpp:", err);
     reply("❌ Failed to fetch profile picture.");
   }
 });
-
 
 
 
