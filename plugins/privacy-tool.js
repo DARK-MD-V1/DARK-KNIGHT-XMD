@@ -325,7 +325,7 @@ async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, 
 
 
 cmd({
-    pattern: "getpp",
+    pattern: "getdp",
     desc: "Fetch the profile picture of a tagged, replied, or mentioned user.",
     category: "owner",
     filename: __filename
@@ -333,36 +333,36 @@ cmd({
     try {
         let targetJid;
 
-        // 🧩 Determine the target user
+        // 🧭 Determine target user
         if (quoted) {
             targetJid = quoted.sender;
         } else if (m.mentionedJid && m.mentionedJid.length > 0) {
             targetJid = m.mentionedJid[0];
-        } else if (isGroup && participants) {
+        } else {
             targetJid = sender;
         }
 
-        // ⚠️ Validate target
         if (!targetJid) {
             return reply("⚠️ Please tag or reply to a user to fetch their profile picture.");
         }
 
-        // 🔍 Try to fetch the user's profile picture
-        const userPicUrl = await conn.profilePictureUrl(targetJid, "image").catch(() => null);
-
-        if (!userPicUrl) {
-            return reply("😔 Couldn't find a profile picture for that user.");
+        // 🖼️ Try to fetch user profile picture
+        let userPicUrl;
+        try {
+            userPicUrl = await conn.profilePictureUrl(targetJid, "image");
+        } catch {
+            userPicUrl = "https://files.catbox.moe/brlkte.jpg"; // 🔄 fallback image
         }
 
-        // 🖼️ Send the picture back
+        // ✅ Send the profile picture (or fallback)
         await conn.sendMessage(m.chat, {
             image: { url: userPicUrl },
             caption: `🖼️ Profile picture of @${targetJid.split("@")[0]}`,
             mentions: [targetJid]
         });
 
-    } catch (err) {
-        console.error("❌ Error in getpp command:", err);
-        reply("🚨 Oops! Something went wrong while fetching the profile picture.\nPlease try again later.");
+    } catch (e) {
+        console.error("❌ Error fetching user profile picture:", e);
+        reply("🚨 An unexpected error occurred while fetching the profile picture.\nTry again later.");
     }
 });
