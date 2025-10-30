@@ -16,19 +16,19 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
     try {
 
 let dec = `    
-⟣──────────────────⟢
-▧ *ᴄʀᴇᴀᴛᴏʀ* : *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳  (🪀)*
+⟣────────────────⟢
+▧ *ᴄʀᴇᴀᴛᴏʀ* : *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*
 ▧ *ᴍᴏᴅᴇ* : *${config.MODE}*
 ▧ *ᴘʀᴇғɪx* : *${config.PREFIX}*
 ▧ *ʀᴀᴍ* : ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}MB / ${Math.round(require('os').totalmem / 1024 / 1024)}MB
 ▧ *ᴠᴇʀsɪᴏɴ* : *V.2* ⚡
 ▧ *ᴜᴘᴛɪᴍᴇ* : ${runtime(process.uptime())}
 
-⟣──────────────────⟢
+⟣────────────────⟢
 
 > ☣️ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳 ☣️ 
 
-⟣──────────────────⟢
+⟣────────────────⟢
 
 *CHANNEL 🛠️*
 https://whatsapp.com/channel/0029VbAM4eo3AzNQZ1WleW3e
@@ -39,7 +39,7 @@ https://chat.whatsapp.com/IGgPW6pTrH14oAWCJALYR5
 *𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-owner🧑‍💻*
 https://wa.me/+94771825192?text=Support!
 
-⟣──────────────────⟢
+⟣────────────────⟢
 
 `;
 
