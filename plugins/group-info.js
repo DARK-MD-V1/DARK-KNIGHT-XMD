@@ -36,7 +36,7 @@ cmd({
         const listAdmin = adminList.map((v, i) => `${i + 1}. @${v.id.split('@')[0]}`).join('\n');
         const owner = metadata.owner ? metadata.owner.split('@')[0] : 'Unknown';
 
-        const gdata = `*「 Group Information 」*\n
+        const gdata = `*「 GROUP INFORMATION 」*
 
 📝 *Group Name:* ${metadata.subject}
 
