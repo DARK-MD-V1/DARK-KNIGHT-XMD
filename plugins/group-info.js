@@ -34,12 +34,13 @@ async (conn, mek, m, { from, participants, isGroup, isAdmins, isBotAdmins, isDev
     const desc = metadata.desc || 'No description';
 
     const gdata = `*「 Group Information 」*\n\n
-*Group Name:* ${metadata.subject}\n
-*Group JID:* ${metadata.id}\n
-*Participants:* ${metadata.size}\n
-*Creator:* @${owner.split('@')[0]}\n
-*Description:* ${desc}\n
-*Admins:*\n${listAdmin}`;
+📝 *Group Name:* ${metadata.subject}\n
+🆔 *Group Jid:* ${metadata.id}\n
+👥 *Participants:* ${metadata.size}\n
+👤 *Creator:* @${owner.split('@')[0]}\n
+📃 *Description:* ${desc}\n
+🫂 *Admins:*\n${listAdmin}\n
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
     await conn.sendMessage(from, {
       image: { url: ppUrl },
