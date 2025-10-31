@@ -13,7 +13,7 @@ cmd({
 },
 async(conn, mek, m,{from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isCreator ,isDev, isAdmins, reply}) => {
 try{
-const msr = (await fetchJson('https://raw.githubusercontent.com/KNIGHT-MD-V1/DARK-KNIGHT-XMD/refs/heads/main/MSG/mreply.json')).replyMsg
+const msr = (await fetchJson('https://raw.githubusercontent.com/bot-deploy-main/DARK-KNIGHT-XMD/refs/heads/main/MSG/mreply.json')).replyMsg
 
 if (!isGroup) return reply(msr.only_gp)
 if (!isAdmins) { if (!isDev) return reply(msr.you_adm),{quoted:mek }} 
