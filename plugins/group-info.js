@@ -31,13 +31,13 @@ async (conn, mek, m, { from, participants, isGroup, isAdmins, isBotAdmins, isDev
     const groupAdmins = participants.filter(p => p.admin);
     const listAdmin = groupAdmins.map((v, i) => `${i + 1}. @${v.id.split('@')[0]}`).join('\n');
     const owner = metadata.owner || (groupAdmins.length ? groupAdmins[0].id : 'Unknown');
-    const desc = metadata.desc ? metadata.desc.slice(0, 400) : 'No description';
+    const desc = metadata.desc || 'No description';
 
     const gdata = `*「 Group Information 」*\n\n
-*Group Name:* ${metadata.subject}
-*Group JID:* ${metadata.id}
-*Participants:* ${metadata.size}
-*Creator:* @${owner.split('@')[0]}
+*Group Name:* ${metadata.subject}\n
+*Group JID:* ${metadata.id}\n
+*Participants:* ${metadata.size}\n
+*Creator:* @${owner.split('@')[0]}\n
 *Description:* ${desc}\n
 *Admins:*\n${listAdmin}`;
 
