@@ -38,7 +38,8 @@ async (conn, mek, m, { from, participants, isGroup, isAdmins, isBotAdmins, isDev
 🆔 *Group Jid:* ${metadata.id}\n
 👥 *Participants:* ${metadata.size}\n
 👤 *Creator:* @${owner.split('@')[0]}\n
-📃 *Description:* ${desc}\n
+📃 *Description:* 
+${desc}\n
 🫂 *Admins:*\n${listAdmin}\n
 > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
