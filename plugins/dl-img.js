@@ -72,7 +72,7 @@ cmd({
 
         await reply(`🔍 Searching Images for *"${query}"*...`);
 
-        const apiUrl = `https://sadiya-tech-apis.vercel.app/search/wallpaperscraft?q=${encodeURIComponent(query)}&apikey=sadiya`;
+        const apiUrl = `https://sadiya-tech-apis.vercel.app/search/wallpaperscraft?q=${encodeURIComponent(query)}&apikey=YOU_API_KEY`;
         const response = await axios.get(apiUrl);
 
         if (!response.data?.status || !response.data?.result?.images?.length) {
