@@ -143,7 +143,7 @@ cmd({
     await conn.sendMessage(from, { react: { text: "⬇️", key: m.key } });
 
     // New Sadiya Tech API
-    const apiUrl = `https://sadiya-tech-apis.vercel.app/download/gdrivedl?url=${encodeURIComponent(q)}&apikey=sadiya`;
+    const apiUrl = `https://sadiya-tech-apis.vercel.app/download/gdrivedl?url=${encodeURIComponent(q)}&apikey=YOU_API_KEY`;
     const response = await axios.get(apiUrl);
 
     if (response.data.status && response.data.result) {
