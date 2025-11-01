@@ -5,49 +5,45 @@ cmd({
   pattern: "mediafire",
   alias: ["mfire"],
   react: '📂',
-  desc: "Download files from MediaFire using Keith's API.",
+  desc: "Download files from MediaFire using Sadiya-Tech API.",
   category: "download",
-  use: ".mediafire1 <MediaFire URL>",
+  use: ".mediafire <MediaFire URL>",
   filename: __filename
 }, async (conn, mek, m, { from, reply, args, q }) => {
   try {
-    // Check if the user provided a URL
     if (!q) {
-      return reply('Please provide a MediaFire URL. Example: `.mediafire2 https://www.mediafire.com/...`');
+      return reply('⚠️ Please provide a MediaFire URL.\n\nExample:\n`.mediafire https://www.mediafire.com/file/...`');
     }
 
-    // Add a reaction to indicate processing
+    // Add a reaction while processing
     await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
 
-    // Prepare the API URL
-    const apiUrl = `https://apis-keith.vercel.app/download/mfire?url=${encodeURIComponent(q)}`;
+    // Build the API URL
+    const apiUrl = `https://sadiya-tech-apis.vercel.app/download/mfiredl?url=${encodeURIComponent(q)}&apikey=YOU_API_KEY`;
 
-    // Call the API using GET
-    const response = await axios.get(apiUrl);
+    // Fetch from API
+    const { data } = await axios.get(apiUrl);
 
-    // Check if the API response is valid
-    if (!response.data || !response.data.status || !response.data.result || !response.data.result.dl_link) {
-      return reply('❌ Unable to fetch the file. Please try again later.');
+    // Validate response
+    if (!data.status || !data.result || !data.result.dl_link) {
+      return reply('❌ Unable to fetch the file. Please try again later or check the URL.');
     }
 
-    // Extract file details
-    const { fileName, fileType, size, date, dl_link } = response.data.result;
+    // Extract details
+    const { fileName, date, fileType, size, dl_link } = data.result;
 
-    // Inform the user that the file is being downloaded
-    await reply(`📂 *Downloading ${fileName}...*`);
+    // Inform user
+    await reply(`📂 *Downloading:* ${fileName}\n📦 *Size:* ${size}\n\nPlease wait...`);
 
-    // Download the file
+    // Download file
     const fileResponse = await axios.get(dl_link, { responseType: 'arraybuffer' });
-    if (!fileResponse.data) {
-      return reply('❌ Failed to download the file. Please try again later.');
-    }
 
-    // Send the file with emojis in the message content
+    // Send file
     await conn.sendMessage(from, {
       document: fileResponse.data,
-      mimetype: fileType,
+      mimetype: fileType || 'application/octet-stream',
       fileName: fileName,
-      caption: `📂 *File Name:* ${fileName}\n📦 *File Size:* ${size}\n📅 *Upload Date:* ${date}\n `,
+      caption: `📂 *File Name:* ${fileName}\n📦 *Size:* ${size}\n📅 *Uploaded:* ${date}\n`,
       contextInfo: {
         mentionedJid: [m.sender],
         forwardingScore: 999,
@@ -60,23 +56,23 @@ cmd({
       }
     }, { quoted: mek });
 
-    // Add a reaction to indicate success
+    // Success reaction
     await conn.sendMessage(from, { react: { text: '✅', key: m.key } });
+
   } catch (error) {
     console.error('Error downloading file:', error);
-    reply('❌ Unable to download the file. Please try again later.');
-
-    // Add a reaction to indicate failure
+    reply('❌ Error downloading the file. Please check the link or try again later.');
     await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
   }
 });
+
 
 
 cmd({
   pattern: "mediafire2",
   alias: ["mfire2"],
   desc: "To download MediaFire files.",
-  react: "🎥",
+  react: "📂",
   category: "download",
   filename: __filename
 }, async (conn, m, store, {
