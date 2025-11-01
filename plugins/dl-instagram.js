@@ -105,7 +105,7 @@ cmd({
     await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
 
     // ✅ Using Sadiya API
-    const response = await axios.get(`https://sadiya-tech-apis.vercel.app/download/igdl?url=${encodeURIComponent(q)}&apikey=sadiya`);
+    const response = await axios.get(`https://sadiya-tech-apis.vercel.app/download/igdl?url=${encodeURIComponent(q)}&apikey=YOU_API_KEY`);
     const data = response.data;
 
     if (!data || !data.status || !data.result || !data.result.dl_link) {
