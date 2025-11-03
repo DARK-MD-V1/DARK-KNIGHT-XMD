@@ -33,7 +33,7 @@ cmd({
     const { fileName, date, fileType, size, dl_link } = data.result;
 
     // Inform user
-    await reply(`*Downloading:* ${fileName}\n*Size:* ${size}\nPlease wait...`);
+    await reply(`📥 *Downloading:* ${fileName}\n*Size:* ${size}\nPlease wait...`);
 
     // Download file
     const fileResponse = await axios.get(dl_link, { responseType: 'arraybuffer' });
