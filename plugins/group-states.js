@@ -10,27 +10,25 @@ cmd({
 }, async (conn, mek, m, { groupMetadata, reply }) => {
     try {
         if (!m.isGroup) return reply("❌ Group only command");
+        if (!groupMetadata || !groupMetadata.participants)
+            return reply("⚠️ Could not fetch group metadata. Try again later.");
 
-        // 1. Basic member count (no message scanning)
         const members = groupMetadata.participants;
         const stats = {
             total: members.length,
-            admins: members.filter(p => p.isAdmin).length,
-            users: members.filter(p => !p.isAdmin).length
+            admins: members.filter(p => p.admin === 'admin' || p.admin === 'superadmin').length,
         };
+        stats.users = stats.total - stats.admins;
 
-        // 2. Safe last seen approximation
-        const activeMembers = members
-            .filter(p => p.lastSeen && p.lastSeen > Date.now() - 7 * 86400 * 1000)
-            .length;
+        const activeMembers = members.filter(
+            p => p.lastSeen && (Date.now() - p.lastSeen) < 7 * 86400 * 1000
+        ).length || 0;
 
-        // 3. Generate report
         const analysis = [
             `👥 *Total Members:* ${stats.total}`,
             `👑 *Admins:* ${stats.admins}`,
             `👤 *Regular Users:* ${stats.users}`,
-            `💬 *Recently Active:* ${activeMembers}`,
-            `ℹ️ *Note:* For detailed stats, use .activemembers`
+            `💬 *Recently Active:* ${activeMembers}`
         ];
 
         await reply(`📊 *Group Stats*\n\n${analysis.join('\n')}`);
