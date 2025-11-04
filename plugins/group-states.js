@@ -31,7 +31,7 @@ cmd({
             `💬 *Recently Active:* ${activeMembers}`
         ];
 
-        await reply(`📊 *Group Stats*\n\n${analysis.join('\n')}`);
+        await reply(`📊 *Group States*\n\n${analysis.join('\n')}`);
 
     } catch (error) {
         console.error('GroupStats Error:', error);
