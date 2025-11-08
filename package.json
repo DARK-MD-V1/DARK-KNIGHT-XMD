@@ -9,7 +9,7 @@
     "restart": "pm2 restart DARK-KNIGHT-XMD"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "github:XdKing2/Malvin-Baileys",
+    "@whiskeysockets/baileys": "^6.7.21",
     "@adiwajshing/keyed-db": "latest",
     "@dark-yasiya/yt-dl.js": "1.0.5",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
@@ -33,6 +33,7 @@
     "google-tts-api": "^2.0.2",
     "path": "^0.12.7",
     "node-fetch": "^2.6.1",
+    "node-cache": "^5.1.1",
     "btch-downloader": "^2.2.9",
     "megajs": "^1.3.7",
     "pdfkit": "^0.17.1",
