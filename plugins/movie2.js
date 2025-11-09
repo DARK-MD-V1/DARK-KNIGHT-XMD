@@ -47,7 +47,7 @@ cmd({
     }));
 
     // Build movie list message
-    let textList = "*🔍 Baiscope Cinema Search 🎥*\n*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
+    let textList = "*🔍 Baiscope Cinema Search 🎥*\n\n*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
     movieList.forEach(m => {
       textList += `🔹 *${m.number}. ${m.title}*\n`;
     });
@@ -206,7 +206,7 @@ cmd({
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `*🔍 CineSubz Cinema Search 🎥*\n${textList}\n\n> > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+      text: `*🔍 CineSubz Cinema Search 🎥*\n\n${textList}\n\n> > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -222,9 +222,7 @@ cmd({
       // ❌ Cancel
       if (replyText.toLowerCase() === "done") {
         conn.ev.off("messages.upsert", listener);
-        return conn.sendMessage(from, {
-          text: "📑 *Cancelled*\n\nSearch cancelled.\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
-        }, { quoted: msg });
+        return conn.sendMessage(from, { text: "✅ *Cancelled*"}, { quoted: msg });
       }
 
       // 🎥 Movie selected
@@ -373,7 +371,7 @@ cmd({
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `*🔍 SubLk Cinema Search 🎥*\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+      text: `*🔍 SubLk Cinema Search 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -389,7 +387,7 @@ cmd({
       // Cancel Search
       if (replyText.toLowerCase() === "done") {
         conn.ev.off("messages.upsert", listener);
-        return conn.sendMessage(from, { text: "*Search cancelled.*" }, { quoted: msg });
+        return conn.sendMessage(from, { text: "✅ *Cancelled.*" }, { quoted: msg });
       }
 
       // Movie Selected
@@ -537,7 +535,7 @@ cmd({
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `*🔍 SubLk Cinema Search 🎥*\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+      text: `*🔍 SubLk Cinema Search 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -553,7 +551,7 @@ cmd({
       // ❌ Cancel search
       if (replyText.toLowerCase() === "done") {
         conn.ev.off("messages.upsert", listener);
-        return conn.sendMessage(from, { text: "*Search cancelled.*" }, { quoted: msg });
+        return conn.sendMessage(from, { text: "✅ *Cancelled.*" }, { quoted: msg });
       }
 
       // 🎥 Movie selected
