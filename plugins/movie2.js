@@ -8,7 +8,7 @@ const movieCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 cmd({
   pattern: "cinesubz",
   alias: ["cine"],
-  desc: "🎥 Search Sinhala subbed movies from CineSubz",
+  desc: "🎥 Search Sinhala SubTitle movies from CineSubz",
   category: "media",
   react: "🎬",
   filename: __filename
@@ -17,10 +17,7 @@ cmd({
   if (!q) {
     return await conn.sendMessage(from, {
       text:
-        "📑 *Usage*\n\n" +
-        "Use: `.cinesubz <movie name>`\n" +
-        "Eg: `.cinesubz black phone`" +
-        "\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
+        "📌 Use: `.cinesubz <movie name>`"
     }, { quoted: mek });
   }
 
@@ -53,14 +50,13 @@ cmd({
       description: m.description
     }));
 
-    let textList = "🎞️ *CineSubz Sinhala Movies*\n━━━━━━━━━━━━━━━━━━\n\n";
+    let textList = "🔍 *CineSubz Cinema Search* 🎥\n━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
       textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
-    textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `📑 *Search Results*\n\n${textList}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+      text: `🔍 *CineSubz Cinema Search* 🎥\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -153,9 +149,15 @@ cmd({
           }, { quoted: msg });
         }
 
+           try {
+        // 🌀 CineSubz direct link handler (auto download redirect support)
+        const dlUrl = chosen.link.includes("cscloud") || chosen.link.includes("cine")
+          ? chosen.link + (chosen.link.includes("?") ? "&download=true" : "?download=true")
+          : chosen.link;
+        
         // Send file
         await conn.sendMessage(from, {
-          document: { url: chosen.link },
+          document: { url: dlUrl },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
           caption:
@@ -457,7 +459,7 @@ cmd({
         movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
       }
 
-      // Handle download selection
+      // Handle download selection (🆕 Updated Pixeldrain Direct Download Support)
       else if (movieMap.has(repliedId)) {
         const { selected, downloads } = movieMap.get(repliedId);
         const num = parseInt(replyText);
@@ -470,21 +472,40 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "📦", key: msg.key } });
 
-        // Check file size (simple check)
+        // 🧠 Convert Pixeldrain links to direct download
+        let directLink = chosen.link;
+        if (directLink.includes("pixeldrain.com")) {
+          const match = directLink.match(/\/([A-Za-z0-9]+)$/);
+          if (match) {
+            const fileId = match[1];
+            directLink = `https://pixeldrain.com/api/file/${fileId}`;
+          }
+        }
+
+         // 🧠 Convert Google Drive share links to direct download
+        else if (directLink.includes("drive.google.com/file/d/")) {
+          const match = directLink.match(/\/d\/([A-Za-z0-9_-]+)\//);
+          if (match) {
+            const fileId = match[1];
+            directLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
+          }
+        }      
+       
+        // ✅ Estimate file size
         const size = chosen.size.toLowerCase();
         const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
 
-        // If file is too large, send link instead
+        // ⚠️ Large file -> send link instead
         if (sizeGB > 2) {
           return conn.sendMessage(from, {
             text:
-              `📑 *Large File*\n\nFile too large (${chosen.size}).\n🔗 *Direct Link:*\n${chosen.link}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+              `📑 *Large File*\n\nFile too large (${chosen.size}).\n🔗 *Direct Link:*\n${directLink}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
           }, { quoted: msg });
         }
 
-        // ✅ Send file directly (your requested code)
+        // ✅ Send movie file directly
         await conn.sendMessage(from, {
-          document: { url: chosen.link },
+          document: { url: directLink },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
           caption:
@@ -501,7 +522,6 @@ cmd({
     }, { quoted: mek });
   }
 });
-
 
 cmd({
   pattern: "pirate",
@@ -627,7 +647,7 @@ cmd({
         movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
       }
 
-      // 💾 Download quality selection
+      // 💾 Download quality selection (🆕 with Pixeldrain direct link)
       else if (movieMap.has(repliedId)) {
         const { selected, downloads } = movieMap.get(repliedId);
         const num = parseInt(replyText);
@@ -640,21 +660,40 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "📦", key: msg.key } });
 
-        // Check file size (simple check)
+        // 🧠 Convert Pixeldrain links to direct download
+        let directLink = chosen.link;
+        if (directLink.includes("pixeldrain.com")) {
+          const match = directLink.match(/\/([A-Za-z0-9]+)$/);
+          if (match) {
+            const fileId = match[1];
+            directLink = `https://pixeldrain.com/api/file/${fileId}`;
+          }
+        }
+
+        // 🧠 Convert Google Drive share links to direct download
+        else if (directLink.includes("drive.google.com/file/d/")) {
+          const match = directLink.match(/\/d\/([A-Za-z0-9_-]+)\//);
+          if (match) {
+            const fileId = match[1];
+            directLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
+          }
+        }
+        
+        // ✅ Check file size
         const size = chosen.size.toLowerCase();
         const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
 
-        // If file is too large, send link instead
+        // ⚠️ Large file -> send link instead
         if (sizeGB > 2) {
           return conn.sendMessage(from, {
             text:
-              `📑 *Large File*\n\nFile too large (${chosen.size}).\n🔗 *Direct Link:*\n${chosen.link}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+              `📑 *Large File*\n\nFile too large (${chosen.size}).\n🔗 *Direct Link:*\n${directLink}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
           }, { quoted: msg });
         }
 
-        // ✅ Direct file send (MP4)
+        // ✅ Send movie file directly (if small)
         await conn.sendMessage(from, {
-          document: { url: chosen.link },
+          document: { url: directLink },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
           caption:
@@ -671,3 +710,4 @@ cmd({
     }, { quoted: mek });
   }
 });
+
