@@ -2,8 +2,158 @@ const { cmd } = require("../command");
 const axios = require("axios");
 const NodeCache = require("node-cache");
 
-// Cache setup
+// Cache setup (TTL: 100 seconds)
 const movieCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
+
+cmd({
+  pattern: "baiscope",
+  alias: ["bais"],
+  desc: "🎬 Search Sinhala subbed movies from Baiscope",
+  category: "media",
+  react: "🎞️",
+  filename: __filename
+}, async (conn, mek, m, { from, q }) => {
+
+  if (!q) {
+    return await conn.sendMessage(from, {
+      text: "Use: .baiscope <movie name>"
+    }, { quoted: mek });
+  }
+
+  try {
+    const cacheKey = `baiscope_${q.toLowerCase()}`;
+    let data = movieCache.get(cacheKey);
+
+    // Fetch from API if not cached
+    if (!data) {
+      const url = `https://darkyasiya-new-movie-api.vercel.app/api/movie/baiscope/search?q=${encodeURIComponent(q)}`;
+      const res = await axios.get(url);
+      data = res.data;
+
+      if (!data.success || !data.data?.length) {
+        throw new Error("No results found for your query.");
+      }
+
+      movieCache.set(cacheKey, data);
+    }
+
+    const movieList = data.data.map((m, i) => ({
+      number: i + 1,
+      title: m.maintitle || m.title,
+      year: m.year || "N/A",
+      imdb: m.imdb?.replace("IMDb", "").trim() || "N/A",
+      image: m.image,
+      link: m.link
+    }));
+
+    // Build movie list message
+    let textList = "🎞️ *Baiscope Sinhala Movies*\n━━━━━━━━━━━━━\n\n";
+    movieList.forEach(m => {
+      textList += `🔹 *${m.number}. ${m.title}*\n`;
+    });
+    textList += "\n💬 *Reply with movie number to view details.*";
+
+    const sentMsg = await conn.sendMessage(from, { text: textList }, { quoted: mek });
+
+    const movieMap = new Map();
+
+    // Listener for replies
+    const listener = async (update) => {
+      const msg = update.messages?.[0];
+      if (!msg?.message?.extendedTextMessage) return;
+
+      const replyText = msg.message.extendedTextMessage.text.trim();
+      const repliedId = msg.message.extendedTextMessage.contextInfo?.stanzaId;
+
+      if (replyText.toLowerCase() === "done") {
+        conn.ev.off("messages.upsert", listener);
+        return conn.sendMessage(from, { text: "✅ *Cancelled.*" }, { quoted: msg });
+      }
+
+      // Replying to search list
+      if (repliedId === sentMsg.key.id) {
+        const num = parseInt(replyText);
+        const selected = movieList.find(m => m.number === num);
+        if (!selected) {
+          return conn.sendMessage(from, { text: "*Invalid movie number.*" }, { quoted: msg });
+        }
+
+        await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
+
+        // Fetch movie details
+        const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/baiscope/movie?url=${encodeURIComponent(selected.link)}`;
+        const movieRes = await axios.get(movieUrl);
+        const movie = movieRes.data.data;
+
+        if (!movie.downloadUrl?.length) {
+          return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
+        }
+
+        const castList = movie.cast?.map(c => c.actor.name).slice(0, 6).join(", ") || "N/A";
+        const catList = movie.category?.join(", ") || "N/A";
+
+        let info =
+          `🎬 *${movie.maintitle}*\n\n` +
+          `⭐ *IMDb:* ${movie.imdb?.value || "N/A"}\n` +
+          `🎭 *Category:* ${catList}\n` +
+          `🕐 *Duration:* ${movie.duration}\n` +
+          `🌍 *Country:* ${movie.country}\n` +
+          `📅 *Release:* ${movie.releaseDate}\n` +
+          `🎬 *Director:* ${movie.director?.name || "N/A"}\n` +
+          `🎭 *Cast:* ${castList}\n\n` +
+          `📥 *Download Links:*\n`;
+
+        movie.downloadUrl.forEach((d, i) => {
+          info += `   ${i + 1}. *${d.quality}* — ${d.size}\n`;
+        });
+
+        info += "\n💬 *Reply with number to download.*";
+
+        const downloadMsg = await conn.sendMessage(from, {
+          image: { url: movie.mainImage || selected.image },
+          caption: info
+        }, { quoted: msg });
+
+        movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
+      }
+
+      // Replying to download list
+      else if (movieMap.has(repliedId)) {
+        const { selected, downloads } = movieMap.get(repliedId);
+        const num = parseInt(replyText);
+        const chosen = downloads[num - 1];
+        if (!chosen) {
+          return conn.sendMessage(from, { text: "*Invalid download number.*" }, { quoted: msg });
+        }
+
+        await conn.sendMessage(from, { react: { text: "📦", key: msg.key } });
+
+        const size = chosen.size.toLowerCase();
+        const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
+
+        if (sizeGB > 2) {
+          return conn.sendMessage(from, {
+            text: `⚠️ *Large File (${chosen.size})*`
+          }, { quoted: msg });
+        }
+
+        await conn.sendMessage(from, {
+          document: { url: chosen.link },
+          mimetype: "video/mp4",
+          fileName: `${selected.title} - ${chosen.quality}.mp4`,
+          caption:
+            `🎬 *Your Movie is Ready!*\n\n🎥 ${selected.title}\n📺 ${chosen.quality}\n💾 ${chosen.size}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+        }, { quoted: msg });
+      }
+    };
+
+    conn.ev.on("messages.upsert", listener);
+
+  } catch (err) {
+    await conn.sendMessage(from, { text: `*Error:* ${err.message}` }, { quoted: mek });
+  }
+});
+
 
 cmd({
   pattern: "sublk",
