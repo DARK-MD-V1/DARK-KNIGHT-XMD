@@ -222,7 +222,7 @@ cmd({
       // ❌ Cancel
       if (replyText.toLowerCase() === "done") {
         conn.ev.off("messages.upsert", listener);
-        return conn.sendMessage(from, { text: "✅ *Cancelled*"}, { quoted: msg });
+        return conn.sendMessage(from, { text: "✅ *Cancelled*" }, { quoted: msg });
       }
 
       // 🎥 Movie selected
@@ -230,9 +230,7 @@ cmd({
         const num = parseInt(replyText);
         const selected = movieList.find(m => m.number === num);
         if (!selected) {
-          return conn.sendMessage(from, {
-            text: "📑 *Invalid*\n\nInvalid movie number.\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
-          }, { quoted: msg });
+          return conn.sendMessage(from, { text: "*Invalid movie number.*" }, { quoted: msg });
         }
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
@@ -243,9 +241,7 @@ cmd({
         const movie = movieRes.data.data;
 
         if (!movie.downloadUrl?.length) {
-          return conn.sendMessage(from, {
-            text: "📑 *Unavailable*\n\nNo download links available.\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
-          }, { quoted: msg });
+          return conn.sendMessage(from, { text: "*No download links available.*"}, { quoted: msg });
         }
 
         // 📝 Build detailed info
