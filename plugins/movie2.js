@@ -47,11 +47,11 @@ cmd({
     }));
 
     // Build movie list message
-    let textList = "🎞️ *Baiscope Sinhala Movies*\n━━━━━━━━━━━━━\n\n";
+    let textList = "*🔍 Baiscope Cinema Search 🎥*\n*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
     movieList.forEach(m => {
       textList += `🔹 *${m.number}. ${m.title}*\n`;
     });
-    textList += "\n💬 *Reply with movie number to view details.*";
+    textList += "\n💬 *Reply with movie number to view details.*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳";
 
     const sentMsg = await conn.sendMessage(from, { text: textList }, { quoted: mek });
 
@@ -199,14 +199,14 @@ cmd({
       description: m.description
     }));
 
-    let textList = "🔍 *CineSubz Cinema Search* 🎥\n━━━━━━━━━━━━━\n\n";
+    let textList = "*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
       textList += `🔹 *${m.number}. ${m.title}*\n`;
     });
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `🔍 *CineSubz Cinema Search* 🎥\n\n${textList}\n\n> Powered by Dark-Knight-XMD`
+      text: `*🔍 CineSubz Cinema Search 🎥*\n${textList}\n\n> > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -366,14 +366,14 @@ cmd({
       description: m.description
     }));
 
-    let textList = "🎞️ *Sub.lk Sinhala Movies*\n━━━━━━━━━━━━━\n\n";
+    let textList = "*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
       textList += `🔹 *${m.number}. ${m.title}*\n`;
     });
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `📑 *Search Results*\n\n${textList}\n━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+      text: `*🔍 SubLk Cinema Search 🎥*\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -530,14 +530,14 @@ cmd({
       description: m.description
     }));
 
-    let textList = "🏴‍☠️ *Pirate.lk Sinhala Movies*\n━━━━━━━━━━━━━\n\n";
+    let textList = "*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
       textList += `🔹 *${m.number}. ${m.title}*\n`;
     });
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `📑 *Search Results*\n\n${textList}\n━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+      text: `*🔍 SubLk Cinema Search 🎥*\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
 
     const movieMap = new Map();
