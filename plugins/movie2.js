@@ -55,6 +55,7 @@ cmd({
       textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
 
+   textList += "\n💬 *Reply with movie number to view details.*";
     const sentMsg = await conn.sendMessage(from, {
       text: `🔍 *CineSubz Cinema Search* 🎥\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
