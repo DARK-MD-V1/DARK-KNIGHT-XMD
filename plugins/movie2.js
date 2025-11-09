@@ -39,9 +39,9 @@ cmd({
 
     const movieList = data.data.map((m, i) => ({
       number: i + 1,
-      title: m.maintitle || m.title,
-      year: m.year || "N/A",
-      imdb: m.imdb?.replace("IMDb", "").trim() || "N/A",
+      title: m.title,
+      year: m.year,
+      imdb: m.imdb,
       image: m.image,
       link: m.link
     }));
@@ -93,24 +93,24 @@ cmd({
         const catList = movie.category?.join(", ") || "N/A";
 
         let info =
-          `🎬 *${movie.maintitle}*\n\n` +
-          `⭐ *IMDb:* ${movie.imdb?.value || "N/A"}\n` +
-          `🎭 *Category:* ${catList}\n` +
+          `🎬 *${movie.title}*\n\n` +
+          `⭐ ${m.imdb}\n` +
           `🕐 *Duration:* ${movie.duration}\n` +
           `🌍 *Country:* ${movie.country}\n` +
           `📅 *Release:* ${movie.releaseDate}\n` +
-          `🎬 *Director:* ${movie.director?.name || "N/A"}\n` +
-          `🎭 *Cast:* ${castList}\n\n` +
-          `📥 *Download Links:*\n`;
+          `🎭 *Category:* ${catList}\n` +
+          `🕵️ *Director:* ${movie.director?.name || "N/A"}\n` +
+          `👷‍♂️ *Cast:* ${castList}\n\n` +
+          `📥 *Download Links:*\n\n`;
 
         movie.downloadUrl.forEach((d, i) => {
           info += `   ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
 
-        info += "\n💬 *Reply with number to download.*";
+        info += "\n🔢 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
-          image: { url: movie.mainImage || selected.image },
+          image: { url: movie.mainImage },
           caption: info
         }, { quoted: msg });
 
@@ -126,7 +126,7 @@ cmd({
           return conn.sendMessage(from, { text: "*Invalid download number.*" }, { quoted: msg });
         }
 
-        await conn.sendMessage(from, { react: { text: "📦", key: msg.key } });
+        await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
 
         const size = chosen.size.toLowerCase();
         const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
@@ -142,7 +142,7 @@ cmd({
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
           caption:
-            `🎬 *Your Movie is Ready!*\n\n🎥 ${selected.title}\n📺 ${chosen.quality}\n💾 ${chosen.size}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+            `🎬 ${selected.title}\n📺 ${chosen.quality}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
