@@ -94,7 +94,7 @@ cmd({
 
         let info =
           `🎬 *${movie.title}*\n\n` +
-          `⭐ ${m.imdb}\n` +
+          `⭐ *Imdb:* ${movie.imdb?.value || "N/A"}\n` +
           `🕐 *Duration:* ${movie.duration}\n` +
           `🌍 *Country:* ${movie.country}\n` +
           `📅 *Release:* ${movie.releaseDate}\n` +
@@ -104,7 +104,7 @@ cmd({
           `📥 *Download Links:*\n\n`;
 
         movie.downloadUrl.forEach((d, i) => {
-          info += `   ${i + 1}. *${d.quality}* — ${d.size}\n`;
+          info += `📥 ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
 
         info += "\n🔢 *Reply with number to download.*";
