@@ -17,10 +17,7 @@ cmd({
   if (!q) {
     return await conn.sendMessage(from, {
       text:
-        "📑 *Usage*\n\n" +
-        "Use: `.baiscope <movie name>`\n" +
-        "Eg: `.baiscope barbarik`" +
-        "\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
+        "Use: .baiscope <movie name>"
     }, { quoted: mek });
   }
 
@@ -50,7 +47,7 @@ cmd({
       link: m.link
     }));
 
-    let textList = "🎞️ *Baiscope Sinhala Movies*\n━━━━━━━━━━━━━━━━━━\n\n";
+    let textList = "🎞️ *Baiscope Sinhala Movies*\n━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
       textList += `🔹 *${m.number}. ${m.title}*\n`;
     });
@@ -80,7 +77,7 @@ cmd({
         const num = parseInt(replyText);
         const selected = movieList.find(m => m.number === num);
         if (!selected) {
-          return conn.sendMessage(from, { text: "📑 *Invalid movie number.*" }, { quoted: msg });
+          return conn.sendMessage(from, { text: " *Invalid movie number.*" }, { quoted: msg });
         }
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
@@ -91,7 +88,7 @@ cmd({
         const movie = movieRes.data.data;
 
         if (!movie.downloadUrl?.length) {
-          return conn.sendMessage(from, { text: "📑 *No download links available.*" }, { quoted: msg });
+          return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
         }
 
         // Cast & Category
@@ -130,7 +127,7 @@ cmd({
         const num = parseInt(replyText);
         const chosen = downloads[num - 1];
         if (!chosen) {
-          return conn.sendMessage(from, { text: "📑 *Invalid download number.*" }, { quoted: msg });
+          return conn.sendMessage(from, { text: "*Invalid download number.*" }, { quoted: msg });
         }
 
         await conn.sendMessage(from, { react: { text: "📦", key: msg.key } });
@@ -140,7 +137,7 @@ cmd({
 
         if (sizeGB > 2) {
           return conn.sendMessage(from, {
-            text: `⚠️ *Large File (${chosen.size})*\n🔗 *Direct Link:*\n${chosen.link}`
+            text: `⚠️ *Large File (${chosen.size})*`
           }, { quoted: msg });
         }
 
@@ -158,7 +155,7 @@ cmd({
 
   } catch (err) {
     await conn.sendMessage(from, {
-      text: `❌ *Error:* ${err.message}`
+      text: `*Error:* ${err.message}`
     }, { quoted: mek });
   }
 });
@@ -176,10 +173,7 @@ cmd({
   if (!q) {
     return await conn.sendMessage(from, {
       text:
-        "📑 *Usage*\n\n" +
-        "Use: `.sublk <movie name>`\n" +
-        "Eg: `.sublk black phone 2`" +
-        "\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
+        "Use: .sublk <movie name>"
     }, { quoted: mek });
   }
 
@@ -212,14 +206,14 @@ cmd({
       description: m.description
     }));
 
-    let textList = "🎞️ *Sub.lk Sinhala Movies*\n━━━━━━━━━━━━━━━━━━\n\n";
+    let textList = "🎞️ *Sub.lk Sinhala Movies*\n━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
       textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `📑 *Search Results*\n\n${textList}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+      text: `📑 *Search Results*\n\n${textList}\n━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -236,7 +230,7 @@ cmd({
       if (replyText.toLowerCase() === "done") {
         conn.ev.off("messages.upsert", listener);
         return conn.sendMessage(from, {
-          text: "📑 *Cancelled*\n\nSearch cancelled.\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
+          text: "*Search cancelled.*"
         }, { quoted: msg });
       }
 
@@ -246,7 +240,7 @@ cmd({
         const selected = movieList.find(m => m.number === num);
         if (!selected) {
           return conn.sendMessage(from, {
-            text: "📑 *Invalid*\n\nInvalid movie number.\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
+            text: "*Invalid Movie Number.*"
           }, { quoted: msg });
         }
 
@@ -260,7 +254,7 @@ cmd({
         if (!movie.downloadUrl?.length) {
           return conn.sendMessage(from, {
             text:
-              "📑 *Unavailable*\n\nNo download links available.\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
+              "*No download links available.*"
           }, { quoted: msg });
         }
 
@@ -295,7 +289,7 @@ cmd({
         const chosen = downloads[num - 1];
         if (!chosen) {
           return conn.sendMessage(from, {
-            text: "📑 *Invalid*\n\nInvalid number.\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
+            text: "*Invalid number.*"
           }, { quoted: msg });
         }
 
@@ -347,7 +341,7 @@ cmd({
 
   } catch (err) {
     await conn.sendMessage(from, {
-      text: `📑 *Error*\n\n${err.message}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+      text: `*Error:* ${err.message}`
     }, { quoted: mek });
   }
 });
@@ -364,10 +358,7 @@ cmd({
   if (!q) {
     return await conn.sendMessage(from, {
       text:
-        "📑 *Usage*\n\n" +
-        "Use: `.pirate <movie name>`\n" +
-        "Eg: `.pirate black phone 2`\n" +
-        "━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
+        "Use: .pirate <movie name>"
     }, { quoted: mek });
   }
 
@@ -400,14 +391,14 @@ cmd({
       description: m.description
     }));
 
-    let textList = "🏴‍☠️ *Pirate.lk Sinhala Movies*\n━━━━━━━━━━━━━━━━━━\n\n";
+    let textList = "🏴‍☠️ *Pirate.lk Sinhala Movies*\n━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
       textList += `🔹 *${m.number}. ${m.title}*\n`;
     });
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `📑 *Search Results*\n\n${textList}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+      text: `📑 *Search Results*\n\n${textList}\n━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -424,7 +415,7 @@ cmd({
       if (replyText.toLowerCase() === "done") {
         conn.ev.off("messages.upsert", listener);
         return conn.sendMessage(from, {
-          text: "📑 *Cancelled*\n\nSearch cancelled.\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
+          text: "*Search cancelled.*"
         }, { quoted: msg });
       }
 
@@ -434,7 +425,7 @@ cmd({
         const selected = movieList.find(m => m.number === num);
         if (!selected) {
           return conn.sendMessage(from, {
-            text: "📑 *Invalid*\n\nInvalid movie number.\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
+            text: "*Invalid movie number."
           }, { quoted: msg });
         }
 
@@ -448,7 +439,7 @@ cmd({
         if (!movie.downloadUrl?.length) {
           return conn.sendMessage(from, {
             text:
-              "📑 *Unavailable*\n\nNo download links available.\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
+              "*No download links available.*"
           }, { quoted: msg });
         }
 
@@ -483,7 +474,7 @@ cmd({
         const chosen = downloads[num - 1];
         if (!chosen) {
           return conn.sendMessage(from, {
-            text: "📑 *Invalid*\n\nInvalid link number.\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD"
+            text: "*Invalid link number.*"
           }, { quoted: msg });
         }
 
@@ -516,7 +507,7 @@ cmd({
         if (sizeGB > 2) {
           return conn.sendMessage(from, {
             text:
-              `📑 *Large File*\n\nFile too large (${chosen.size}).\n🔗 *Direct Link:*\n${directLink}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+              `*Large File (${chosen.size})*`
           }, { quoted: msg });
         }
 
@@ -535,7 +526,7 @@ cmd({
 
   } catch (err) {
     await conn.sendMessage(from, {
-      text: `📑 *Error*\n\n${err.message}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+      text: `*Error;* ${err.message}\`
     }, { quoted: mek });
   }
 });
