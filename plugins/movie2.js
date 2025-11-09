@@ -86,7 +86,7 @@ cmd({
           return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
         }
 
-        const castList = movie.cast?.map(c => c.actor.name).slice(0, 6).join(", ") || "N/A";
+        const castList = movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ") || "N/A";
         const catList = movie.category?.join(", ") || "N/A";
 
         let info =
@@ -238,12 +238,12 @@ cmd({
         let info =
           `🎬 *${movie.title}*\n\n` +
           `⭐ *IMDb:* ${movie.imdb.value}\n` +
-          `📅 *Released:* ${movie.dateCreate}\n\n` +
+          `📅 *Released:* ${movie.dateCreate}\n` +
           `🌍 *Country:* ${movie.country}\n` +
           `🕐 *Runtime:* ${movie.runtime}\n` +
           `🎭 *Category:* ${movie.category.join(", ")}\n` +
           `🕵️ *Director:* ${movie.director?.name || "N/A"}\n` +
-          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 6).join(", ") || "N/A"}\n\n` +
+          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ") || "N/A"}\n\n` +
           `📥 *Download Links:*\n\n`;
 
         // 📥 Download list
