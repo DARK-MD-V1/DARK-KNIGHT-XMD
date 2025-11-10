@@ -5,44 +5,63 @@ const NodeCache = require("node-cache");
 // Cache setup (TTL: 100 seconds)
 const movieCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
+
 cmd({
   pattern: "mv",
   react: "🔎",
   alias: ["movie", "film", "cinema"],
-  desc: "Search movies from Sinhala movie sites",
+  desc: "Search for movies",
   category: "movie",
-  use: ".mv <movie name>",
+  use: ".movie",
   filename: __filename
-}, async (client, message, args, { from, q, prefix, reply }) => {
+}, async (client, message, args, { from, prefix, q, reply, quoted }) => {
   try {
-    // If no movie name given
-    if (!q) {
-      return await reply("*Please enter a movie name to search 🎬*\n\n_Example:_ `.mv Inception`");
+    // Require a query
+    if (!q) return await reply("*🎬 Please enter a movie name to search!*");
+
+    // Map numbers to commands
+    const movieSites = {
+      1: "baiscope",
+      2: "cinesubz",
+      3: "sublk",
+      4: "pirate"
+    };
+
+    // Check if user replied with a number
+    const isNumberReply = quoted?.text?.trim();
+    if (isNumberReply && movieSites[parseInt(isNumberReply)]) {
+      const cmdName = movieSites[parseInt(isNumberReply)];
+      return client.sendMessage(from, {
+        text: `Running command: ${prefix}${cmdName} ${q}`
+      }, { quoted: message });
     }
 
-    // Caption text (no image)
+    // Plain text movie search menu
     const caption = `
-_🎬 VISPER MOVIE SEARCH SYSTEM_
+_*VISPER SEARCH SYSTEM 🎬*_
 
 *Input:* ${q}
 
-🌟 *Select your preferred movie site:*
+_*🌟 Select your preferred movie download site*_:
 
-1️⃣ Baiscope   → ${prefix}baiscope ${q}
-2️⃣ Cinesubz   → ${prefix}cine ${q}
-3️⃣ SubLK      → ${prefix}sublk ${q}
-4️⃣ Pirate     → ${prefix}pirate ${q}
+1) Baiscope Results   — command: ${prefix}baiscope ${q}
+2) Cinesubz Results — command: ${prefix}cinesubz ${q}
+3) SuLk Results      — command: ${prefix}sublk ${q}
+4) Pirate Results  — command: ${prefix}pirate ${q}
 
-_Reply with the number (1-4) or use the command shown above._`;
+_Reply with the number (1–10) to automatically run the corresponding command._
+`;
 
-    // Send plain text message
-    await client.sendMessage(from, { text: caption.trim() }, { quoted: message });
+    await client.sendMessage(from, {
+      text: caption
+    }, { quoted: message });
 
-  } catch (err) {
-    console.error(err);
-    await reply("*❌ An error occurred while processing your request.*");
+  } catch (error) {
+    console.error("❌ Movie command error:", error);
+    await reply("*❌ An error occurred while searching for movies.*");
   }
 });
+
 
 cmd({
   pattern: "baiscope",
