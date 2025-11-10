@@ -26,7 +26,7 @@ cmd({
 
     // Define all movie sources + corresponding commands
     const sources = [
-      { name: "CINESUBZ Results 🍿", cmd: "cine" },
+      { name: "CINESUBZ Results 🍿", cmd: "cinesubz" },
       { name: "SINHALASUB Results 🍿", cmd: "sinhalasub" },
       { name: "YTSMX Results 🍿", cmd: "ytsmx" },
       { name: "BAISCOPES Results 🍿", cmd: "baiscopes" },
