@@ -1,9 +1,79 @@
 const { cmd } = require("../command");
 const axios = require("axios");
+const config = require('../config');
 const NodeCache = require("node-cache");
 
-// Cache setup (TTL: 100 seconds)
 const movieCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
+
+cmd({
+  pattern: 'mv',
+  react: '🔎',
+  alias: ["movie", "film", "cinema"],
+  desc: "All movie search with number reply",
+  category: 'movie',
+  use: ".mv <movie name>",
+  filename: __filename
+}, async (client, message, _unused, {
+  from,
+  prefix,
+  q,
+  reply
+}) => {
+  try {
+    const userInput = q?.trim();
+    if (!userInput) return await reply("*Enter movie name..🎬*");
+
+    const sources = [
+      { name: "Baiscope Results 🍿", cmd: "baiscope" },
+      { name: "Cinesubz Results 🍿", cmd: "cinesubz" },
+      { name: "SubLk Results 🍿", cmd: "sublk" },
+      { name: "Pirate Results 🍿", cmd: "pirate" }
+    ];
+
+    let listText = `_*VISPER SEARCH SYSTEM 🎬*_\n\n*\`Input :\`* ${userInput}\n\n`;
+    sources.forEach((source, index) => {
+      listText += `${index + 1}. ${source.name}\n`;
+    });
+    listText += `\n*Reply with the number of your preferred source.*`;
+
+    message.mvSources = sources;
+    await reply(listText);
+
+    const numberReplyListener = async replyMsg => {
+      try {
+        if (!replyMsg.quoted || replyMsg.quoted.key.id !== message.key.id) return;
+
+        const choice = parseInt(replyMsg.text);
+        if (!choice) {
+          await reply("*❌ Invalid input! Please reply with a number.*");
+          return;
+        }
+        if (choice < 1 || choice > sources.length) {
+          await reply(`*❌ Invalid number! Please select a number between 1 and ${sources.length}.*`);
+          return;
+        }
+
+        const selected = sources[choice - 1];
+        await client.sendMessage(from, { text: `Fetching ${selected.name} for: ${userInput}` });
+
+        const cmdToRun = `${prefix}${selected.cmd} ${userInput}`;
+        client.emit('callCommand', cmdToRun, replyMsg);
+
+        client.off('message', numberReplyListener);
+      } catch (err) {
+        await reply("*❌ Error occurred while processing your selection.*");
+        console.error(err); // Replaced logger with console.error
+      }
+    };
+
+    client.on('message', numberReplyListener);
+
+  } catch (err) {
+    await reply("*❌ Error occurred*");
+    console.error(err); // Replaced logger with console.error
+  }
+});
+
 
 cmd({
   pattern: "baiscope",
