@@ -5,11 +5,12 @@ const NodeCache = require("node-cache");
 
 const movieCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
+
 cmd({
   pattern: 'mv',
   react: '🔎',
   alias: ["movie", "film", "cinema"],
-  desc: "All movie search with number reply",
+  desc: "All movie search with number reply and cmd support",
   category: 'movie',
   use: ".mv <movie name>",
   filename: __filename
@@ -23,13 +24,22 @@ cmd({
     const userInput = q?.trim();
     if (!userInput) return await reply("*Enter movie name..🎬*");
 
+    // Define all movie sources + corresponding commands
     const sources = [
-      { name: "Baiscope Results 🍿", cmd: "baiscope" },
-      { name: "Cinesubz Results 🍿", cmd: "cinesubz" },
-      { name: "SubLk Results 🍿", cmd: "sublk" },
-      { name: "Pirate Results 🍿", cmd: "pirate" }
+      { name: "CINESUBZ Results 🍿", cmd: "cine" },
+      { name: "SINHALASUB Results 🍿", cmd: "sinhalasub" },
+      { name: "YTSMX Results 🍿", cmd: "ytsmx" },
+      { name: "BAISCOPES Results 🍿", cmd: "baiscopes" },
+      { name: "PUPILVIDEO Results 🍿", cmd: "pupilvideo" },
+      { name: "ANIMEHEAVEN Results 🍿", cmd: "animeheaven" },
+      { name: "1377 Results 🍿", cmd: "1377" },
+      { name: "18 PLUS Results 🍿", cmd: "sexfull" },
+      { name: "PIRATE Results 🍿", cmd: "pirate" },
+      { name: "SLANIME Results 🍿", cmd: "slanime" },
+      { name: "NARUTO Sinhala Sub 🍿", cmd: "naru" }
     ];
 
+    // Build numbered list for user
     let listText = `_*VISPER SEARCH SYSTEM 🎬*_\n\n*\`Input :\`* ${userInput}\n\n`;
     sources.forEach((source, index) => {
       listText += `${index + 1}. ${source.name}\n`;
@@ -39,6 +49,7 @@ cmd({
     message.mvSources = sources;
     await reply(listText);
 
+    // Listener for user reply
     const numberReplyListener = async replyMsg => {
       try {
         if (!replyMsg.quoted || replyMsg.quoted.key.id !== message.key.id) return;
@@ -56,13 +67,16 @@ cmd({
         const selected = sources[choice - 1];
         await client.sendMessage(from, { text: `Fetching ${selected.name} for: ${userInput}` });
 
+        // Execute the corresponding cmd-type command
         const cmdToRun = `${prefix}${selected.cmd} ${userInput}`;
         client.emit('callCommand', cmdToRun, replyMsg);
 
+        // Remove listener after successful selection
         client.off('message', numberReplyListener);
+
       } catch (err) {
         await reply("*❌ Error occurred while processing your selection.*");
-        console.error(err); // Replaced logger with console.error
+        console.error(err);
       }
     };
 
@@ -70,9 +84,10 @@ cmd({
 
   } catch (err) {
     await reply("*❌ Error occurred*");
-    console.error(err); // Replaced logger with console.error
+    console.error(err);
   }
 });
+
 
 
 cmd({
