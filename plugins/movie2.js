@@ -42,9 +42,9 @@ cmd({
       link: m.link
     }));
 
-    let textList = "*🔍 Baiscope Cinema Search 🎥*\n\n*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
+    let textList = "*🔍 𝐁𝐀𝐈𝐒𝐂𝐎𝐏𝐄 𝑪𝑰𝑵𝑬𝑴𝑨 𝑺𝑬𝑨𝑹𝑪𝑯 🎥*\n\n*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
     movieList.forEach(m => {
-      textList += `🔹 *${m.number}. ${m.title}*\n`;
+      textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
     textList += "\n💬 *Reply with movie number to view details.*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳";
 
@@ -90,10 +90,10 @@ cmd({
           `🎭 *Category:* ${movie.category.join(", ")}\n` +
           `🕵️ *Director:* ${movie.director?.name}\n` +
           `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
-          `📥 *Download Links:*\n\n`;
+          `🎥 *Download Links:* 📥\n\n`;
 
         movie.downloadUrl.forEach((d, i) => {
-          info += `📥 ${i + 1}. *${d.quality}* — ${d.size}\n`;
+          info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
 
         info += "\n🔢 *Reply with number to download.*";
@@ -180,12 +180,12 @@ cmd({
 
     let textList = "*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
-      textList += `🔹 *${m.number}. ${m.title}*\n`;
+      textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `*🔍 CineSubz Cinema Search 🎥*\n\n${textList}\n\n> > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+      text: `*🔍 𝐂𝐈𝐍𝐄𝐒𝐔𝐁𝐙 𝑪𝑰𝑵𝑬𝑴𝑨 𝑺𝑬𝑨𝑹𝑪𝑯 🎥*\n\n${textList}\n\n> > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -228,10 +228,10 @@ cmd({
           `🎭 *Category:* ${movie.category.join(", ")}\n` +
           `🕵️ *Director:* ${movie.director?.name}\n` +
           `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
-          `📥 *Download Links:*\n\n`;
+          `🎥 *Download Links:* 📥\n\n`;
 
         movie.downloadUrl.forEach((d, i) => {
-          info += `📥 ${i + 1}. *${d.quality}* — ${d.size}\n`;
+          info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
         info += "\n🔢 *Reply with number to download.*";
 
@@ -320,12 +320,12 @@ cmd({
 
     let textList = "*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
-      textList += `🔹 *${m.number}. ${m.title}*\n`;
+      textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `*🔍 SubLk Cinema Search 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+      text: `*🔍 𝐒𝐔𝐁𝐋𝐊 𝑪𝑰𝑵𝑬𝑴𝑨 𝑺𝑬𝑨𝑹𝑪𝑯 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -368,10 +368,10 @@ cmd({
           `🎭 *Category:* ${movie.category?.join(", ")}\n` +
           `🕵️ *Director:* ${movie.director?.name}\n` +
           `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
-          `📥 *Download Links:*\n\n`;
+          `🎥 *Download Links:* 📥\n\n`;
 
         movie.downloadUrl.forEach((d, i) => {
-          info += `📥 ${i + 1}. *${d.quality}* — ${d.size}\n`;
+          info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
         info += "\n🔢 *Reply with number to download.*";
 
@@ -466,12 +466,12 @@ cmd({
 
     let textList = "*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
-      textList += `🔹 *${m.number}. ${m.title}*\n`;
+      textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `*🔍 Pirate Cinema Search 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+      text: `*🔍 𝐏𝐈𝐑𝐀𝐓𝐄 𝑪𝑰𝑵𝑬𝑴𝑨 𝑺𝑬𝑨𝑹𝑪𝑯 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -514,10 +514,10 @@ cmd({
           `🎭 *Category:* ${movie.category?.join(", ")}\n` +
           `🕵️ *Director:* ${movie.director?.name}\n` +
           `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
-          `📥 *Download Links:*\n\n`;
+          `🎥 *Download Links:* 📥\n\n`;
 
         movie.downloadUrl.forEach((d, i) => {
-          info += `📥 ${i + 1}. *${d.quality}* — ${d.size}\n`;
+          info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
         info += "\n🔢 *Reply with number to download.*";
 
