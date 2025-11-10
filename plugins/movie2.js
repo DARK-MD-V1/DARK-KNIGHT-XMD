@@ -6,6 +6,45 @@ const NodeCache = require("node-cache");
 const movieCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
 cmd({
+  pattern: "mv",
+  react: "🔎",
+  alias: ["movie", "film", "cinema"],
+  desc: "Search movies from Sinhala movie sites",
+  category: "movie",
+  use: ".mv <movie name>",
+  filename: __filename
+}, async (client, message, args, { from, q, prefix, reply }) => {
+  try {
+    // If no movie name given
+    if (!q) {
+      return await reply("*Please enter a movie name to search 🎬*\n\n_Example:_ `.mv Inception`");
+    }
+
+    // Caption text (no image)
+    const caption = `
+_🎬 VISPER MOVIE SEARCH SYSTEM_
+
+*Input:* ${q}
+
+🌟 *Select your preferred movie site:*
+
+1️⃣ Baiscope   → ${prefix}baiscope ${q}
+2️⃣ Cinesubz   → ${prefix}cine ${q}
+3️⃣ SubLK      → ${prefix}sublk ${q}
+4️⃣ Pirate     → ${prefix}pirate ${q}
+
+_Reply with the number (1-4) or use the command shown above._`;
+
+    // Send plain text message
+    await client.sendMessage(from, { text: caption.trim() }, { quoted: message });
+
+  } catch (err) {
+    console.error(err);
+    await reply("*❌ An error occurred while processing your request.*");
+  }
+});
+
+cmd({
   pattern: "baiscope",
   alias: ["bais"],
   desc: "🎥 Search Sinhala subbed movies from Baiscope",
