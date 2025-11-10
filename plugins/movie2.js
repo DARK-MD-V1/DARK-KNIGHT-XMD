@@ -5,64 +5,6 @@ const NodeCache = require("node-cache");
 // Cache setup (TTL: 100 seconds)
 const movieCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
-
-cmd({
-  pattern: "mv",
-  react: "🔎",
-  alias: ["movie", "film", "cinema"],
-  desc: "Search for movies",
-  category: "movie",
-  use: ".movie",
-  filename: __filename
-}, async (client, message, args, { from, prefix, q, reply, quoted }) => {
-  try {
-    // Require a query
-    if (!q) return await reply("*🎬 Please enter a movie name to search!*");
-
-    // Map numbers to commands
-    const movieSites = {
-      1: "baiscope",
-      2: "cinesubz",
-      3: "sublk",
-      4: "pirate"
-    };
-
-    // Check if user replied with a number
-    const isNumberReply = quoted?.text?.trim();
-    if (isNumberReply && movieSites[parseInt(isNumberReply)]) {
-      const cmdName = movieSites[parseInt(isNumberReply)];
-      return client.sendMessage(from, {
-        text: `Running command: ${prefix}${cmdName} ${q}`
-      }, { quoted: message });
-    }
-
-    // Plain text movie search menu
-    const caption = `
-_*VISPER SEARCH SYSTEM 🎬*_
-
-*Input:* ${q}
-
-_*🌟 Select your preferred movie download site*_:
-
-1) Baiscope Results   — command: ${prefix}baiscope ${q}
-2) Cinesubz Results — command: ${prefix}cinesubz ${q}
-3) SuLk Results      — command: ${prefix}sublk ${q}
-4) Pirate Results  — command: ${prefix}pirate ${q}
-
-_Reply with the number (1–10) to automatically run the corresponding command._
-`;
-
-    await client.sendMessage(from, {
-      text: caption
-    }, { quoted: message });
-
-  } catch (error) {
-    console.error("❌ Movie command error:", error);
-    await reply("*❌ An error occurred while searching for movies.*");
-  }
-});
-
-
 cmd({
   pattern: "baiscope",
   alias: ["bais"],
@@ -144,18 +86,15 @@ cmd({
           return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
         }
 
-        const castList = movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ") || "N/A";
-        const catList = movie.category?.join(", ") || "N/A";
-
         let info =
           `🎬 *${movie.title}*\n\n` +
-          `⭐ *Imdb:* ${movie.imdb?.value || "N/A"}\n` +
+          `⭐ *IMDB:* ${movie.imdb?.value}\n` +
           `🕐 *Duration:* ${movie.duration}\n` +
           `🌍 *Country:* ${movie.country}\n` +
           `📅 *Release:* ${movie.releaseDate}\n` +
-          `🎭 *Category:* ${catList}\n` +
-          `🕵️ *Director:* ${movie.director?.name || "N/A"}\n` +
-          `👷‍♂️ *Cast:* ${castList}\n\n` +
+          `🎭 *Category:* ${movie.category.join(", ")}\n` +
+          `🕵️ *Director:* ${movie.director?.name}\n` +
+          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
           `📥 *Download Links:*\n\n`;
 
         movie.downloadUrl.forEach((d, i) => {
@@ -300,8 +239,8 @@ cmd({
           `🌍 *Country:* ${movie.country}\n` +
           `🕐 *Runtime:* ${movie.runtime}\n` +
           `🎭 *Category:* ${movie.category.join(", ")}\n` +
-          `🕵️ *Director:* ${movie.director?.name || "N/A"}\n` +
-          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ") || "N/A"}\n\n` +
+          `🕵️ *Director:* ${movie.director?.name}\n` +
+          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
           `📥 *Download Links:*\n\n`;
 
         // 📥 Download list
@@ -396,12 +335,7 @@ cmd({
     const movieList = data.data.all.map((m, i) => ({
       number: i + 1,
       title: m.title,
-      year: m.year,
-      imdb: m.imdb || "N/A",
-      type: m.type,
-      image: m.image,
-      link: m.link,
-      description: m.description
+      link: m.link
     }));
 
     let textList = "*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━━━\n\n";
@@ -451,23 +385,25 @@ cmd({
 
         // Build Info
         let info =
-          `🎬 *${movie.maintitle || movie.title}*\n\n` +
-          `⭐ *IMDb:* ${movie.imdb?.value || "N/A"}\n` +
-          `🎭 *Category:* ${movie.category?.join(", ") || "N/A"}\n` +
-          `🕐 *Runtime:* ${movie.runtime || "N/A"}\n` +
-          `🌍 *Country:* ${movie.country || "N/A"}\n` +
-          `📅 *Released:* ${movie.dateCreate || "N/A"}\n\n` +
-          `📖 *Description:*\n${movie.description?.slice(0, 500) || "No description."}...\n\n`;
+          `🎬 *${movie.title}*\n\n` +
+          `⭐ *IMDb:* ${movie.imdb?.value}\n` +
+          `📅 *Released:* ${movie.dateCreate}\n` +
+          `🌍 *Country:* ${movie.country}\n` +
+          `🕐 *Runtime:* ${movie.runtime}\n` +
+          `🎭 *Category:* ${movie.category?.join(", ")}\n` +
+          `🕵️ *Director:* ${movie.director?.name}\n` +
+          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
+          `📥 *Download Links:*\n\n`;
 
         // Add download options
         movie.downloadUrl.forEach((d, i) => {
           info += `📥 ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
-        info += "\n💬 *Reply with number to download.*";
+        info += "\n🔢 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
-          image: { url: movie.mainImage || selected.image },
-          caption: `📑 *Movie Info*\n\n${info}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+          image: { url: movie.mainImage },
+          caption: info
         }, { quoted: msg });
 
         movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
@@ -482,7 +418,7 @@ cmd({
           return conn.sendMessage(from, { text: "*Invalid number.*" }, { quoted: msg });
         }
 
-        await conn.sendMessage(from, { react: { text: "📦", key: msg.key } });
+        await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
 
         // Convert Pixeldrain / Google Drive links to direct download
         let directLink = chosen.link;
@@ -502,7 +438,7 @@ cmd({
         // Large file -> send link
         if (sizeGB > 2) {
           return conn.sendMessage(from, {
-            text: `📑 *Large File*\n\nFile too large (${chosen.size}).\n🔗 *Direct Link:*\n${directLink}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+            text: `⚠️ *Large File (${chosen.size})*`
           }, { quoted: msg });
         }
 
@@ -511,7 +447,7 @@ cmd({
           document: { url: directLink },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *Your Movie is Ready!*\n\n🎥 ${selected.title}\n📺 ${chosen.quality}\n💾 ${chosen.size}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+          caption: `🎬 ${selected.title}\n📺 ${chosen.quality}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -560,12 +496,7 @@ cmd({
     const movieList = data.data.all.map((m, i) => ({
       number: i + 1,
       title: m.title,
-      year: m.year,
-      imdb: m.imdb || "N/A",
-      type: m.type,
-      image: m.image,
-      link: m.link,
-      description: m.description
+      link: m.link
     }));
 
     let textList = "*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
@@ -615,13 +546,15 @@ cmd({
 
         // 📝 Build movie info
         let info =
-          `🎬 *${movie.maintitle || movie.title}*\n\n` +
-          `⭐ *IMDb:* ${movie.imdb?.value || "N/A"}\n` +
-          `🎭 *Category:* ${movie.category?.join(", ") || "Unknown"}\n` +
-          `🕐 *Runtime:* ${movie.runtime}\n` +
+          `🎬 *${movie.title}*\n\n` +
+          `⭐ *IMDb:* ${movie.imdb?.value}\n` +
+          `📅 *Released:* ${movie.dateCreate}\n` +
           `🌍 *Country:* ${movie.country}\n` +
-          `📅 *Released:* ${movie.dateCreate}\n\n` +
-          `📖 *Description:*\n${movie.description?.slice(0, 400) || "No description"}...\n\n`;
+          `🕐 *Runtime:* ${movie.runtime}\n` +
+          `🎭 *Category:* ${movie.category?.join(", ")}\n` +
+          `🕵️ *Director:* ${movie.director?.name}\n` +
+          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
+          `📥 *Download Links:*\n\n`;
 
         movie.downloadUrl.forEach((d, i) => {
           info += `📥 ${i + 1}. *${d.quality}* — ${d.size}\n`;
@@ -629,8 +562,8 @@ cmd({
         info += "\n💬 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
-          image: { url: movie.mainImage || selected.image },
-          caption: `📑 *Movie Info*\n\n${info}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+          image: { url: movie.mainImage },
+          caption: info
         }, { quoted: msg });
 
         movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
@@ -645,10 +578,10 @@ cmd({
           return conn.sendMessage(from, { text: "*Invalid link number.*" }, { quoted: msg });
         }
 
-        await conn.sendMessage(from, { react: { text: "📦", key: msg.key } });
-
-        // 🧠 Convert Pixeldrain / Google Drive to direct links
+        await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
+        // 🧠 Convert Pixeldrain / Google Drive to direct link
         let directLink = chosen.link;
+        
         if (directLink.includes("pixeldrain.com")) {
           const match = directLink.match(/\/([A-Za-z0-9]+)$/);
           if (match) directLink = `https://pixeldrain.com/api/file/${match[1]}`;
@@ -664,7 +597,7 @@ cmd({
         // ⚠️ Large file -> send link instead
         if (sizeGB > 2) {
           return conn.sendMessage(from, {
-            text: `*Large File (${chosen.size})*\n🔗 Direct Link:\n${directLink}`
+            text: `⚠️ *Large File (${chosen.size})*`
           }, { quoted: msg });
         }
 
@@ -673,7 +606,7 @@ cmd({
           document: { url: directLink },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *Your Movie is Ready!*\n\n🎥 ${selected.title}\n📺 ${chosen.quality}\n💾 ${chosen.size}\n━━━━━━━━━━━━━━━━━━\n⚡ Powered by Dark-Knight-XMD`
+          caption: `🎬 ${selected.title}\n📺 ${chosen.quality}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
