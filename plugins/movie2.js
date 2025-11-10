@@ -24,7 +24,6 @@ cmd({
     const cacheKey = `baiscope_${q.toLowerCase()}`;
     let data = movieCache.get(cacheKey);
 
-    // Fetch from API if not cached
     if (!data) {
       const url = `https://darkyasiya-new-movie-api.vercel.app/api/movie/baiscope/search?q=${encodeURIComponent(q)}`;
       const res = await axios.get(url);
@@ -43,7 +42,6 @@ cmd({
       link: m.link
     }));
 
-    // Build movie list message
     let textList = "*🔍 Baiscope Cinema Search 🎥*\n\n*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
     movieList.forEach(m => {
       textList += `🔹 *${m.number}. ${m.title}*\n`;
@@ -54,7 +52,6 @@ cmd({
 
     const movieMap = new Map();
 
-    // Listener for replies
     const listener = async (update) => {
       const msg = update.messages?.[0];
       if (!msg?.message?.extendedTextMessage) return;
@@ -67,7 +64,6 @@ cmd({
         return conn.sendMessage(from, { text: "✅ *Cancelled.*" }, { quoted: msg });
       }
 
-      // Replying to search list
       if (repliedId === sentMsg.key.id) {
         const num = parseInt(replyText);
         const selected = movieList.find(m => m.number === num);
@@ -77,7 +73,6 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
-        // Fetch movie details
         const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/baiscope/movie?url=${encodeURIComponent(selected.link)}`;
         const movieRes = await axios.get(movieUrl);
         const movie = movieRes.data.data;
@@ -111,7 +106,6 @@ cmd({
         movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
       }
 
-      // Replying to download list
       else if (movieMap.has(repliedId)) {
         const { selected, downloads } = movieMap.get(repliedId);
         const num = parseInt(replyText);
@@ -166,7 +160,6 @@ cmd({
     const cacheKey = `cinesubz_${q.toLowerCase()}`;
     let data = movieCache.get(cacheKey);
 
-    // 🔍 Fetch Search Results if not cached
     if (!data) {
       const url = `https://darkyasiya-new-movie-api.vercel.app/api/movie/cinesubz/search?q=${encodeURIComponent(q)}`;
       const res = await axios.get(url);
@@ -179,7 +172,6 @@ cmd({
       movieCache.set(cacheKey, data);
     }
 
-    // 🎬 Build Movie List
     const movieList = data.data.all.map((m, i) => ({
       number: i + 1,
       title: m.title,
@@ -198,7 +190,6 @@ cmd({
 
     const movieMap = new Map();
 
-    // 👂 Listener for replies
     const listener = async (update) => {
       const msg = update.messages?.[0];
       if (!msg?.message?.extendedTextMessage) return;
@@ -206,13 +197,11 @@ cmd({
       const replyText = msg.message.extendedTextMessage.text.trim();
       const repliedId = msg.message.extendedTextMessage.contextInfo?.stanzaId;
 
-      // ❌ Cancel
       if (replyText.toLowerCase() === "done") {
         conn.ev.off("messages.upsert", listener);
         return conn.sendMessage(from, { text: "✅ *Cancelled*" }, { quoted: msg });
       }
 
-      // 🎥 Movie selected
       if (repliedId === sentMsg.key.id) {
         const num = parseInt(replyText);
         const selected = movieList.find(m => m.number === num);
@@ -222,7 +211,6 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
-        // 🛰 Fetch Movie Details
         const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/cinesubz/movie?url=${encodeURIComponent(selected.link)}`;
         const movieRes = await axios.get(movieUrl);
         const movie = movieRes.data.data;
@@ -231,7 +219,6 @@ cmd({
           return conn.sendMessage(from, { text: "*No download links available.*"}, { quoted: msg });
         }
 
-        // 📝 Build detailed info
         let info =
           `🎬 *${movie.title}*\n\n` +
           `⭐ *IMDb:* ${movie.imdb.value}\n` +
@@ -243,7 +230,6 @@ cmd({
           `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
           `📥 *Download Links:*\n\n`;
 
-        // 📥 Download list
         movie.downloadUrl.forEach((d, i) => {
           info += `📥 ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
@@ -257,7 +243,6 @@ cmd({
         movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
       }
 
-      // 💾 Handle download selection
       else if (movieMap.has(repliedId)) {
         const { selected, downloads } = movieMap.get(repliedId);
         const num = parseInt(replyText);
@@ -271,17 +256,14 @@ cmd({
         const size = chosen.size.toLowerCase();
         const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
 
-        // ⚠️ Large file -> send link
         if (sizeGB > 2) {
           return conn.sendMessage(from, { text: `⚠️ *Large File (${chosen.size})*` }, { quoted: msg });
         }
 
-        // 🌀 CineSubz direct link handler
         const dlUrl = chosen.link.includes("cscloud") || chosen.link.includes("cine")
           ? chosen.link + (chosen.link.includes("?") ? "&download=true" : "?download=true")
           : chosen.link;
 
-        // ✅ Send file
         await conn.sendMessage(from, {
           document: { url: dlUrl },
           mimetype: "video/mp4",
@@ -318,7 +300,6 @@ cmd({
     const cacheKey = `sublk_${q.toLowerCase()}`;
     let data = movieCache.get(cacheKey);
 
-    // Fetch Search Results
     if (!data) {
       const url = `https://darkyasiya-new-movie-api.vercel.app/api/movie/sublk/search?q=${encodeURIComponent(q)}`;
       const res = await axios.get(url);
@@ -330,8 +311,7 @@ cmd({
 
       movieCache.set(cacheKey, data);
     }
-
-    // Build Movie List
+    
     const movieList = data.data.all.map((m, i) => ({
       number: i + 1,
       title: m.title,
@@ -350,7 +330,6 @@ cmd({
 
     const movieMap = new Map();
 
-    // Listen for replies
     const listener = async (update) => {
       const msg = update.messages?.[0];
       if (!msg?.message?.extendedTextMessage) return;
@@ -358,13 +337,11 @@ cmd({
       const replyText = msg.message.extendedTextMessage.text.trim();
       const repliedId = msg.message.extendedTextMessage.contextInfo?.stanzaId;
 
-      // Cancel Search
       if (replyText.toLowerCase() === "done") {
         conn.ev.off("messages.upsert", listener);
         return conn.sendMessage(from, { text: "✅ *Cancelled.*" }, { quoted: msg });
       }
 
-      // Movie Selected
       if (repliedId === sentMsg.key.id) {
         const num = parseInt(replyText);
         const selected = movieList.find(m => m.number === num);
@@ -374,7 +351,6 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
-        // Fetch Movie Details
         const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/sublk/movie?url=${encodeURIComponent(selected.link)}`;
         const movieRes = await axios.get(movieUrl);
         const movie = movieRes.data.data;
@@ -383,7 +359,6 @@ cmd({
           return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
         }
 
-        // Build Info
         let info =
           `🎬 *${movie.title}*\n\n` +
           `⭐ *IMDb:* ${movie.imdb?.value}\n` +
@@ -395,7 +370,6 @@ cmd({
           `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
           `📥 *Download Links:*\n\n`;
 
-        // Add download options
         movie.downloadUrl.forEach((d, i) => {
           info += `📥 ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
@@ -409,7 +383,6 @@ cmd({
         movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
       }
 
-      // Handle download selection
       else if (movieMap.has(repliedId)) {
         const { selected, downloads } = movieMap.get(repliedId);
         const num = parseInt(replyText);
@@ -420,7 +393,6 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
 
-        // Convert Pixeldrain / Google Drive links to direct download
         let directLink = chosen.link;
 
         if (directLink.includes("pixeldrain.com")) {
@@ -431,18 +403,13 @@ cmd({
           if (match) directLink = `https://drive.google.com/uc?export=download&id=${match[1]}`;
         }
 
-        // Estimate file size
         const size = chosen.size.toLowerCase();
         const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
 
-        // Large file -> send link
         if (sizeGB > 2) {
-          return conn.sendMessage(from, {
-            text: `⚠️ *Large File (${chosen.size})*`
-          }, { quoted: msg });
+          return conn.sendMessage(from, { text: `⚠️ *Large File (${chosen.size})*` }, { quoted: msg });
         }
 
-        // Send movie directly
         await conn.sendMessage(from, {
           document: { url: directLink },
           mimetype: "video/mp4",
@@ -479,7 +446,6 @@ cmd({
     const cacheKey = `pirate_${q.toLowerCase()}`;
     let data = movieCache.get(cacheKey);
 
-    // 🔍 Fetch Search Results if not cached
     if (!data) {
       const url = `https://darkyasiya-new-movie-api.vercel.app/api/movie/pirate/search?q=${encodeURIComponent(q)}`;
       const res = await axios.get(url);
@@ -492,7 +458,6 @@ cmd({
       movieCache.set(cacheKey, data);
     }
 
-    // 🎬 Build Movie List
     const movieList = data.data.all.map((m, i) => ({
       number: i + 1,
       title: m.title,
@@ -506,12 +471,11 @@ cmd({
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `*🔍 SubLk Cinema Search 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+      text: `*🔍 Pirate Cinema Search 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
 
     const movieMap = new Map();
 
-    // 👂 Listener for replies
     const listener = async (update) => {
       const msg = update.messages?.[0];
       if (!msg?.message?.extendedTextMessage) return;
@@ -519,13 +483,11 @@ cmd({
       const replyText = msg.message.extendedTextMessage.text.trim();
       const repliedId = msg.message.extendedTextMessage.contextInfo?.stanzaId;
 
-      // ❌ Cancel search
       if (replyText.toLowerCase() === "done") {
         conn.ev.off("messages.upsert", listener);
         return conn.sendMessage(from, { text: "✅ *Cancelled.*" }, { quoted: msg });
       }
 
-      // 🎥 Movie selected
       if (repliedId === sentMsg.key.id) {
         const num = parseInt(replyText);
         const selected = movieList.find(m => m.number === num);
@@ -535,7 +497,6 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
-        // 🛰 Fetch movie details
         const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/pirate/movie?url=${encodeURIComponent(selected.link)}`;
         const movieRes = await axios.get(movieUrl);
         const movie = movieRes.data.data;
@@ -544,7 +505,6 @@ cmd({
           return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
         }
 
-        // 📝 Build movie info
         let info =
           `🎬 *${movie.title}*\n\n` +
           `⭐ *IMDb:* ${movie.imdb?.value}\n` +
@@ -559,7 +519,7 @@ cmd({
         movie.downloadUrl.forEach((d, i) => {
           info += `📥 ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
-        info += "\n💬 *Reply with number to download.*";
+        info += "\n🔢 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
           image: { url: movie.mainImage },
@@ -569,7 +529,6 @@ cmd({
         movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
       }
 
-      // 💾 Handle download selection
       else if (movieMap.has(repliedId)) {
         const { selected, downloads } = movieMap.get(repliedId);
         const num = parseInt(replyText);
@@ -579,7 +538,7 @@ cmd({
         }
 
         await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
-        // 🧠 Convert Pixeldrain / Google Drive to direct link
+        
         let directLink = chosen.link;
         
         if (directLink.includes("pixeldrain.com")) {
@@ -590,18 +549,13 @@ cmd({
           if (match) directLink = `https://drive.google.com/uc?export=download&id=${match[1]}`;
         }
 
-        // ✅ Check file size
         const size = chosen.size.toLowerCase();
         const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
 
-        // ⚠️ Large file -> send link instead
         if (sizeGB > 2) {
-          return conn.sendMessage(from, {
-            text: `⚠️ *Large File (${chosen.size})*`
-          }, { quoted: msg });
+          return conn.sendMessage(from, { text: `⚠️ *Large File (${chosen.size})*` }, { quoted: msg });
         }
 
-        // ✅ Send movie file directly
         await conn.sendMessage(from, {
           document: { url: directLink },
           mimetype: "video/mp4",
