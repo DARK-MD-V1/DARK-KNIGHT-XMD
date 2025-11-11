@@ -398,7 +398,7 @@ cmd({
 
         const dlUrl = `https://foreign-marna-sithaunarathnapromax-9a005c2e.koyeb.app/api/cinesubz/downloadurl?url=${encodeURIComponent(selected.link)}&apiKey=35f70afaa18af9b20b76e3a38bdd18b33aff49244f9968e489123ae5834f950e`;
         const dlRes = await axios.get(dlUrl);
-        const download = dlRes.data;
+        const download = dlRes.data.data;
         
         if (!download.url?.length) {
           return conn.sendMessage(from, { text: "*No download links available.*"}, { quoted: msg });
