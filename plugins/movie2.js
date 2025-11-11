@@ -5,112 +5,42 @@ const NodeCache = require("node-cache");
 
 const movieCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
-
-
 cmd({
   pattern: 'mv',
   react: '🔎',
   alias: ['movie', 'film', 'cinema'],
-  desc: 'Search and choose movie sources by replying with a number',
+  desc: 'Send movie sources as caption message',
   category: 'movie',
   use: '.movie <movie name>',
   filename: __filename
-}, async (client, message, conn, {
-  from,
-  prefix,
-  quoted,
-  q, // movie name
-  reply,
-  l: logger
-}) => {
+}, async (client, message, conn, { from, prefix, q, reply }) => {
   try {
-    if (!q) return await reply('*Please enter a movie name.. 🎬*');
+    if (!q) return await reply('🎬 *Please enter a movie name..*');
 
-    // Movie sources
-    const sources = [
-      { num: '1', name: 'CINESUBZ', cmd: 'cine' },
-      { num: '2', name: 'SINHALASUB', cmd: 'sinhalasub' },
-      { num: '3', name: 'YTSMX', cmd: 'ytsmx' },
-      { num: '4', name: 'BAISCOPES', cmd: 'baiscopes' },
-      { num: '5', name: 'PUPILVIDEO', cmd: 'pupilvideo' },
-      { num: '6', name: 'ANIMEHEAVEN', cmd: 'animeheaven' },
-      { num: '7', name: '1377', cmd: '1377' },
-      { num: '8', name: '18 PLUS', cmd: 'sexfull' },
-      { num: '9', name: 'PIRATE', cmd: 'pirate' },
-      { num: '10', name: 'SLANIME', cmd: 'slanime' },
-    ];
+    const caption = `
+🔍 𝐀𝐋𝐋 𝐂𝐈𝐍𝐄𝐌𝐀 𝐒𝐄𝐀𝐑𝐂𝐇 🎬
 
-    // Build menu text
-    const menuText = [
-      '_*🎬 VISPER MOVIE SEARCH SYSTEM*_',
-      '',
-      `*Search Term:* ${q}`,
-      '',
-      '_Reply with a number to choose your source:_',
-      '',
-      ...sources.map(s => `${s.num}. ${s.name}`),
-      '',
-      '_Example: reply with 1 to search from CINESUBZ._',
-      '',
-      config.FOOTER ? `_${config.FOOTER}_` : ''
-    ].join('\n');
+✏️ 𝐘𝐎𝐔𝐑 𝐒𝐄𝐀𝐑𝐂𝐇 𝐓𝐄𝐗𝐓: ${q}  
+    
+📝 𝐔𝐒𝐄 𝑼𝑺𝑬 𝑪𝑶𝑴𝑴𝑨𝑵𝑫 & <𝑀𝑂𝑉𝐼𝐸 𝑁𝐴𝑀𝐸>
 
-    // Send menu message
-    const sentMsg = await client.sendMessage(from, { text: menuText }, { quoted: message });
+✏️ . 𝑩𝑰𝑺𝑬𝑪𝑶𝑷𝑬  𝑆𝐸𝐴𝑅𝐶𝐻
+✏️ . 𝑪𝑰𝑵𝑬𝑺𝑼𝑩𝒁  𝑆𝐸𝐴𝑅𝐶𝐻
+✏️ . 𝑺𝑰𝑵𝑯𝑨𝑳𝑨𝑺𝑼𝑩 𝑆𝐸𝐴𝑅𝐶𝐻
+✏️ . 𝑺𝑼𝑩𝑳𝑲 𝑆𝐸𝐴𝑅𝐶𝐻
+✏️ . 𝑷𝑰𝑹𝑨𝑻𝑬 𝑆𝐸𝐴𝑅𝐶𝐻
 
-    // Setup number-reply listener
-    const handler = async (m) => {
-      try {
-        const msg = m.messages?.[0];
-        if (!msg || !msg.message) return;
+📌 EX: .cmd & <query>
 
-        const text =
-          msg.message.conversation ||
-          msg.message.extendedTextMessage?.text ||
-          '';
-        if (!text) return;
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
 
-        // Check if reply is to our menu message
-        const replyTo = msg.message.extendedTextMessage?.contextInfo?.stanzaId || msg.key.id;
-        if (replyTo !== sentMsg.key.id) return;
-
-        const choice = sources.find(s => s.num === text.trim());
-        if (!choice) {
-          return await client.sendMessage(from, { text: '❌ Invalid number. Reply 1–10.' }, { quoted: msg });
-        }
-
-        // Send "Searching..." message
-        await client.sendMessage(from, { text: `🔎 Searching *${q}* on *${choice.name}*...` }, { quoted: msg });
-
-        // 🔥 Dynamically run the corresponding command
-        // You can simulate a command message so your bot executes the proper handler
-        if (conn && typeof conn.runCommand === 'function') {
-          const fakeMsg = {
-            ...msg,
-            message: {
-              conversation: `${prefix}${choice.cmd} ${q}`
-            }
-          };
-          await conn.runCommand(client, fakeMsg, `${prefix}${choice.cmd} ${q}`);
-        }
-
-      } catch (err) {
-        console.error('❌ Number reply handler error:', err);
-      } finally {
-        // Remove listener after first use
-        client.ev.off('messages.upsert', handler);
-      }
-    };
-
-    client.ev.on('messages.upsert', handler);
+    await client.sendMessage(from, { text: caption }, { quoted: message });
 
   } catch (err) {
-    console.error('❌ MV command error:', err);
-    await reply('*❌ An unexpected error occurred while searching.*');
-    try { logger(err); } catch {}
+    console.error('❌ MV Caption error:', err);
+    await reply('*❌ An error occurred while sending the movie menu.*');
   }
 });
-
 
 
 cmd({
