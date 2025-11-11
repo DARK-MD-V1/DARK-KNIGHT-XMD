@@ -5,6 +5,109 @@ const NodeCache = require("node-cache");
 
 const movieCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
+
+cmd({
+  pattern: 'mv',
+  react: '🔎',
+  alias: ['movie', 'film', 'cinema'],
+  desc: 'Search and choose movie sources by replying with a number',
+  category: 'movie',
+  use: '.movie <movie name>',
+  filename: __filename
+}, async (client, message, conn, {
+  from,
+  prefix,
+  quoted,
+  q,              // Movie name
+  isPre,
+  isSudo,
+  isOwner,
+  isMe,
+  reply,
+  l: logger
+}) => {
+  try {
+    if (!q) return await reply('*Please enter a movie name.. 🎬*');
+
+    // 🎬 Available movie sources
+    const sources = [
+      { num: '1️⃣', name: 'CINESUBZ', cmd: 'cine' },
+      { num: '2️⃣', name: 'SINHALASUB', cmd: 'sinhalasub' },
+      { num: '3️⃣', name: 'YTSMX', cmd: 'ytsmx' },
+      { num: '4️⃣', name: 'BAISCOPES', cmd: 'baiscope' },
+      { num: '5️⃣', name: 'PUPILVIDEO', cmd: 'pupilvideo' },
+      { num: '6️⃣', name: 'ANIMEHEAVEN', cmd: 'animeheaven' },
+      { num: '7️⃣', name: '1377', cmd: '1377' },
+      { num: '8️⃣', name: '18 PLUS', cmd: 'sexfull' },
+      { num: '9️⃣', name: 'PIRATE', cmd: 'pirate' },
+      { num: '🔟', name: 'SLANIME', cmd: 'slanime' },
+    ];
+
+    // 🧾 Build text list message
+    const caption = [
+      '_*🎬 VISPER MOVIE SEARCH SYSTEM*_',
+      '',
+      `*Search Term:* ${q}`,
+      '',
+      '_Reply with a number to choose your source:_',
+      '',
+      ...sources.map(s => `${s.num}  ${s.name}`),
+      '',
+      '_Example: reply with 1 to search from CINESUBZ._',
+      '',
+      config.FOOTER ? `_${config.FOOTER}_` : ''
+    ].join('\n');
+
+    // 📤 Send the list
+    const sentMsg = await client.sendMessage(from, { text: caption }, { quoted: message });
+
+    // 🧠 Await user reply
+    const handler = async (m) => {
+      try {
+        const msg = m.messages[0];
+        if (!msg.message?.conversation) return;
+
+        const userReply = msg.message.conversation.trim();
+        const replyTo = msg.message?.extendedTextMessage?.contextInfo?.stanzaId || msg.key.id;
+
+        // Check that user is replying to the correct message
+        if (replyTo !== sentMsg.key.id) return;
+
+        // Find matching source
+        const choice = sources.find((s, i) => userReply === (i + 1).toString());
+        if (!choice) {
+          await client.sendMessage(from, { text: '❌ Invalid number. Please reply with a valid number (1–10).' }, { quoted: msg });
+          return;
+        }
+
+        // 🏃 Run the subcommand
+        const fullCmd = `${prefix}${choice.cmd} ${q}`;
+        await client.sendMessage(from, { text: `🔎 Searching *${q}* on *${choice.name}*...\n\n_Executing:_ ${fullCmd}` }, { quoted: msg });
+
+        // Optionally call the handler dynamically (if your framework supports command rerun)
+        // Example for dynamic execution:
+        if (conn?.runCommand) {
+          await conn.runCommand(client, msg, fullCmd);
+        }
+
+      } catch (err) {
+        console.error('Reply handler error:', err);
+      } finally {
+        // Remove listener after one use to avoid memory leaks
+        client.ev.off('messages.upsert', handler);
+      }
+    };
+
+    // 🪄 Wait for next user message
+    client.ev.on('messages.upsert', handler);
+
+  } catch (err) {
+    await reply('*❌ Error occurred while processing your request.*');
+    try { logger(err); } catch { console.error(err); }
+  }
+});
+
+
 cmd({
   pattern: "sinhalasub",
   alias: ["sub"],
