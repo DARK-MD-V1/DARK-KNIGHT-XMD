@@ -47,7 +47,7 @@ cmd({
     movieList.forEach((m) => {
       textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
-    textList += "💬 *Reply with a number to view movie details.*";
+    textList += "\n💬 *Reply with a number to view movie details.*";
 
     const sentMsg = await conn.sendMessage(from, {
       text: `*🔍 𝐒𝐈𝐍𝐇𝐀𝐋𝐀𝐒𝐔𝐁 𝑪𝑰𝑵𝑬𝑴𝑨 𝑺𝑬𝑨𝑹𝑪𝑯 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
@@ -96,7 +96,7 @@ cmd({
         movie.downloadLinks.forEach((d, i) => {
           info += `♦️ *${i + 1}.* ${d.quality} — ${d.size}\n`;
         });
-        info += "🔢 *Reply with number to download video.*";
+        info += "\n🔢 *Reply with number to download video.*";
 
         const downloadMsg = await conn.sendMessage(from, {
           image: { url: movie.images?.[0] || selected.img },
