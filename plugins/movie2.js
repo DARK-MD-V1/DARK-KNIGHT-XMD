@@ -325,7 +325,7 @@ cmd({
 cmd({
   pattern: "cinesubz",
   alias: ["cine"],
-  desc: "🎥 Search Sinhala subded movies from CineSubz",
+  desc: "🎥 Search Sinhala subbed movies from CineSubz",
   category: "media",
   react: "🎬",
   filename: __filename
@@ -366,7 +366,7 @@ cmd({
     textList += "\n💬 *Reply with movie number to view details.*";
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `*🔍 𝐂𝐈𝐍𝐄𝐒𝐔𝐁𝐙 𝑪𝑰𝑵𝑬𝑴𝑨 𝑺𝑬𝑨𝑹𝑪𝑯 🎥*\n\n${textList}\n\n> > Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+      text: `*🔍 𝐂𝐈𝐍𝐄𝐒𝐔𝐁𝐙 𝑪𝑰𝑵𝑬𝑴𝑨 𝑺𝑬𝑨𝑹𝑪𝑯 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -399,7 +399,7 @@ cmd({
         const dlUrl = `https://foreign-marna-sithaunarathnapromax-9a005c2e.koyeb.app/api/cinesubz/downloadurl?url=${encodeURIComponent(selected.link)}&apiKey=35f70afaa18af9b20b76e3a38bdd18b33aff49244f9968e489123ae5834f950e`;
         const dlRes = await axios.get(dlUrl);
         const download = dlRes.data.data;
-        
+
         if (!download.url?.length) {
           return conn.sendMessage(from, { text: "*No download links available.*"}, { quoted: msg });
         }
@@ -461,7 +461,7 @@ cmd({
   }
 });
 
-
+            
 cmd({
   pattern: "sublk",
   alias: ["sublk"],
