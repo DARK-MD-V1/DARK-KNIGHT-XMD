@@ -6,6 +6,40 @@ const NodeCache = require("node-cache");
 const movieCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
 cmd({
+  pattern: "movie",
+  alias: ["mv", "film"],
+  desc: "Search Sinhala movies",
+  category: "Search",
+  react: "🔍",
+  filename: __filename
+}, async (conn, mek, m, { from, q }) => {
+
+  if (!q) {
+    let caption = `
+🔍 𝐀𝐋𝐋 𝐂𝐈𝐍𝐄𝐌𝐀 𝐒𝐄𝐀𝐑𝐂𝐇 🎬
+
+✏️ 𝐘𝐎𝐔𝐑 𝐒𝐄𝐀𝐑𝐂𝐇: ${q}
+    
+📝 𝐔𝐒𝐄 𝑪𝑴𝑫 & <𝑁𝐴𝑀𝐸>
+
+✏️ .𝑩𝑰𝑺𝑬𝑪𝑶𝑷𝑬  𝑆𝐸𝐴𝐑𝐶𝐻  
+✏️ .𝑪𝑰𝑵𝑬𝑺𝑼𝑩𝒁  𝑆𝐸𝐴𝐑𝐶𝐻  
+✏️ .𝑺𝑰𝑵𝑯𝑨𝑳𝑨𝑺𝑼𝑩 𝑆𝐸𝐴𝐑𝐶𝐻  
+✏️ .𝑺𝑼𝑩𝑳𝑲  𝑆𝐸𝐴𝐑𝐶𝐻  
+✏️ .𝑷𝑰𝑹𝑨𝑻𝑬  𝑆𝐸𝐴𝐑𝐶𝐻
+
+📌 EX: .cmd & <query> 
+
+> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
+
+    await conn.sendMessage(from, { text: caption }, { quoted: mek });
+    return;
+  }
+
+});
+
+
+cmd({
   pattern: "sinhalasub",
   alias: ["ssub"],
   desc: "🎥 Search Sinhala subbed movies from Sub.lk",
