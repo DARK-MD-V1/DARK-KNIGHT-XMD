@@ -5,6 +5,147 @@ const NodeCache = require("node-cache");
 
 const movieCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
+
+cmd({
+  pattern: "cinesubzz",
+  alias: ["cz"],
+  desc: "🎥 Search Sinhala subbed movies from CineSubz",
+  category: "media",
+  react: "🎬",
+  filename: __filename
+}, async (conn, mek, m, { from, q }) => {
+
+  if (!q) {
+    return await conn.sendMessage(from, {
+      text: "Use: .cinesubz <movie name>"
+    }, { quoted: mek });
+  }
+
+  try {
+    const cacheKey = `cinesubz_${q.toLowerCase()}`;
+    let data = movieCache.get(cacheKey);
+
+    if (!data) {
+      const url = `https://darkyasiya-new-movie-api.vercel.app/api/movie/cinesubz/search?q=${encodeURIComponent(q)}`;
+      const res = await axios.get(url);
+      data = res.data;
+
+      if (!data.success || !data.data.all?.length) {
+        throw new Error("No results found for your query.");
+      }
+
+      movieCache.set(cacheKey, data);
+    }
+
+    const movieList = data.data.all.map((m, i) => ({
+      number: i + 1,
+      title: m.title,
+      link: m.link
+    }));
+
+    let textList = "*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
+    movieList.forEach((m) => {
+      textList += `🔸 *${m.number}. ${m.title}*\n`;
+    });
+    textList += "\n💬 *Reply with movie number to view details.*";
+
+    const sentMsg = await conn.sendMessage(from, {
+      text: `*🔍 𝐂𝐈𝐍𝐄𝐒𝐔𝐁𝐙 𝑪𝑰𝑵𝑬𝑴𝑨 𝑺𝑬𝑨𝑹𝑪𝑯 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+    }, { quoted: mek });
+
+    const movieMap = new Map();
+
+    const listener = async (update) => {
+      const msg = update.messages?.[0];
+      if (!msg?.message?.extendedTextMessage) return;
+
+      const replyText = msg.message.extendedTextMessage.text.trim();
+      const repliedId = msg.message.extendedTextMessage.contextInfo?.stanzaId;
+
+      if (replyText.toLowerCase() === "done") {
+        conn.ev.off("messages.upsert", listener);
+        return conn.sendMessage(from, { text: "✅ *Cancelled*" }, { quoted: msg });
+      }
+
+      if (repliedId === sentMsg.key.id) {
+        const num = parseInt(replyText);
+        const selected = movieList.find(m => m.number === num);
+        if (!selected) {
+          return conn.sendMessage(from, { text: "*Invalid movie number.*" }, { quoted: msg });
+        }
+
+        await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
+
+        const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/cinesubz/movie?url=${encodeURIComponent(selected.link)}`;
+        const movieRes = await axios.get(movieUrl);
+        const movie = movieRes.data.data;
+
+        const dlUrl = `https://foreign-marna-sithaunarathnapromax-9a005c2e.koyeb.app/api/cinesubz/downloadurl?url=${encodeURIComponent(selected.link)}&apiKey=35f70afaa18af9b20b76e3a38bdd18b33aff49244f9968e489123ae5834f950e`;
+        const dlRes = await axios.get(dlUrl);
+        const download = dlRes.data;
+        
+        if (!download.url?.length) {
+          return conn.sendMessage(from, { text: "*No download links available.*"}, { quoted: msg });
+        }
+
+        let info =
+          `🎬 *${movie.title}*\n\n` +
+          `⭐ *IMDb:* ${movie.imdb.value}\n` +
+          `📅 *Released:* ${movie.dateCreate}\n` +
+          `🌍 *Country:* ${movie.country}\n` +
+          `🕐 *Runtime:* ${movie.runtime}\n` +
+          `🎭 *Category:* ${movie.category.join(", ")}\n` +
+          `🕵️ *Director:* ${movie.director?.name}\n` +
+          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
+          `🎥 *Download Links:* 📥\n\n`;
+
+        download.url.forEach((d, i) => {
+          info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
+        });
+        info += "\n🔢 *Reply with number to download.*";
+
+        const downloadMsg = await conn.sendMessage(from, {
+          image: { url: movie.mainImage },
+          caption: info
+        }, { quoted: msg });
+
+        movieMap.set(downloadMsg.key.id, { selected, downloads: download.url });
+      }
+
+      else if (movieMap.has(repliedId)) {
+        const { selected, downloads } = movieMap.get(repliedId);
+        const num = parseInt(replyText);
+        const chosen = downloads[num - 1];
+        if (!chosen) {
+          return conn.sendMessage(from, { text: "*Invalid quality number.*" }, { quoted: msg });
+        }
+
+        await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
+
+        const size = chosen.size.toLowerCase();
+        const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
+
+        if (sizeGB > 2) {
+          return conn.sendMessage(from, { text: `⚠️ *Large File (${chosen.size})*` }, { quoted: msg });
+        }
+
+        await conn.sendMessage(from, {
+          document: { url: chosen.url },
+          mimetype: "video/mp4",
+          fileName: `${selected.title} - ${chosen.quality}.mp4`,
+          caption: `🎬 ${selected.title}\n📺 ${chosen.quality}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+        }, { quoted: msg });
+      }
+    };
+
+    conn.ev.on("messages.upsert", listener);
+
+  } catch (err) {
+    await conn.sendMessage(from, { text: `*Error:* ${err.message}` }, { quoted: mek }); 
+  }
+});
+
+
 cmd({
   pattern: "baiscope",
   alias: ["bais"],
