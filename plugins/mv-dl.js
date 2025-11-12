@@ -38,8 +38,8 @@ cmd({
     
     const movieList = data.result.map((m, i) => ({
       number: i + 1,
-      title: m.title,
-      link: m.link
+      title: m.Title,
+      link: m.Link
     }));
 
     let textList = "*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━━━\n\n";
