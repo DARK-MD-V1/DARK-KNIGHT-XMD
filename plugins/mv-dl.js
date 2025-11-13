@@ -421,7 +421,7 @@ cmd({
         info += "\n🔢 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
-          image: { url: movie.mainImage },
+          image: { url: movie.galleryImages?.[0] },
           caption: info
         }, { quoted: msg });
 
