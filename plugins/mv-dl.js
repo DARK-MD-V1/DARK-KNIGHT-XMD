@@ -328,19 +328,22 @@ cmd({
   }
 });
 
-
 cmd({
   pattern: "baiscope",
   alias: ["bais"],
-  desc: "🎥 Search Sinhala subbed movies from Baiscope",
+  desc: "🎥 Search Sinhala subbed movies from Baiscope.lk",
   category: "media",
   react: "🎬",
   filename: __filename
 }, async (conn, mek, m, { from, q }) => {
 
+  const axios = require("axios");
+  const NodeCache = require("node-cache");
+  const movieCache = new NodeCache({ stdTTL: 1800 }); // cache 30 min
+
   if (!q) {
-    return await conn.sendMessage(from, {
-      text: "Use: .baiscope <movie name>"
+    return conn.sendMessage(from, {
+      text: "🎬 *Usage:* `.baiscope <movie name>`\n\nExample:\n`.baiscope 2025`"
     }, { quoted: mek });
   }
 
@@ -349,109 +352,105 @@ cmd({
     let data = movieCache.get(cacheKey);
 
     if (!data) {
-      const url = `https://sadaslk-apis.vercel.app/api/v1/movie/baiscopes/search?q=${encodeURIComponent(q)}&apiKey=vispermdv4`;
-      const res = await axios.get(url);
+      const searchUrl = `https://sadaslk-apis.vercel.app/api/v1/movie/baiscopes/search?q=${encodeURIComponent(q)}&apiKey=vispermdv4`;
+      const res = await axios.get(searchUrl);
       data = res.data;
 
       if (!data.status || !data.data?.length) {
-        throw new Error("No results found for your query.");
+        throw new Error("⚠️ No results found for your query.");
       }
 
       movieCache.set(cacheKey, data);
     }
 
-    const movieList = data.data.map((m, i) => ({
+    const movies = data.data.map((m, i) => ({
       number: i + 1,
       title: m.title,
       link: m.link
     }));
 
-    let textList = "*🔍 𝐁𝐀𝐈𝐒𝐂𝐎𝐏𝐄 𝑪𝑰𝑵𝑬𝑴𝑨 𝑺𝑬𝑨𝑹𝑪𝑯 🎥*\n\n*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n";
-    movieList.forEach(m => {
-      textList += `🔸 *${m.number}. ${m.title}*\n`;
-    });
-    textList += "\n💬 *Reply with movie number to view details.*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳";
+    let text = `*🎬 Baiscope Sinhala Subbed Movie Search*\n\n🔍 Search: *${q}*\n━━━━━━━━━━━━━━━\n`;
+    for (let mv of movies) {
+      text += `\n${mv.number}. *${mv.title}*`;
+    }
+    text += "\n💬 *Reply with number to view movie details.*\nType *done* to cancel.\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳";
 
-    const sentMsg = await conn.sendMessage(from, { text: textList }, { quoted: mek });
-
+    const sentMsg = await conn.sendMessage(from, { text }, { quoted: mek });
     const movieMap = new Map();
 
+    // 🧠 LISTENER
     const listener = async (update) => {
       const msg = update.messages?.[0];
       if (!msg?.message?.extendedTextMessage) return;
-
       const replyText = msg.message.extendedTextMessage.text.trim();
       const repliedId = msg.message.extendedTextMessage.contextInfo?.stanzaId;
 
       if (replyText.toLowerCase() === "done") {
         conn.ev.off("messages.upsert", listener);
-        return conn.sendMessage(from, { text: "✅ *Cancelled.*" }, { quoted: msg });
+        return conn.sendMessage(from, { text: "✅ *Search cancelled.*" }, { quoted: msg });
       }
 
+      // 🎬 When user replies with movie number
       if (repliedId === sentMsg.key.id) {
         const num = parseInt(replyText);
-        const selected = movieList.find(m => m.number === num);
-        if (!selected) {
-          return conn.sendMessage(from, { text: "*Invalid movie number.*" }, { quoted: msg });
-        }
+        const selected = movies.find(x => x.number === num);
+        if (!selected) return conn.sendMessage(from, { text: "❌ Invalid movie number." }, { quoted: msg });
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
-        const movieUrl = `https://sadaslk-apis.vercel.app/api/v1/movie/baiscopes/infodl?q=${encodeURIComponent(selected.link)}&apiKey=vispermdv4`;
-        const movieRes = await axios.get(movieUrl);
-        const movie = movieRes.data.movieInfo;
-        const downloads = movieRes.data.downloadLinks || [];
-        
-        if (!movie.downloads?.length) {
-          return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
+        const infoUrl = `https://sadaslk-apis.vercel.app/api/v1/movie/baiscopes/infodl?q=${encodeURIComponent(selected.link)}&apiKey=vispermdv4`;
+        const infoRes = await axios.get(infoUrl);
+        const movie = infoRes.data.data.movieInfo;
+        const downloads = infoRes.data.data.downloadLinks || [];
+
+        let infoTxt = `🎬 *${movie.title}*\n\n`;
+        infoTxt += `⭐ *IMDB:* ${movie.ratingValue || "N/A"}\n`;
+        infoTxt += `🕐 *Duration:* ${movie.runtime || "-"}\n`;
+        infoTxt += `🌍 *Country:* ${movie.country || "-"}\n`;
+        infoTxt += `📅 *Release:* ${movie.releaseDate || "-"}\n`;
+        infoTxt += `🎭 *Genres:* ${movie.genres?.join(", ") || "-"}\n\n`;
+
+        if (!downloads.length) {
+          infoTxt += "⚠️ *No download links found.*";
+        } else {
+          infoTxt += "📥 *Available Downloads:*\n";
+          downloads.forEach((d, i) => {
+            infoTxt += `\n${i + 1}. *${d.quality}* — ${d.size}\n🔗 ${d.directLinkUrl}`;
+          });
+          infoTxt += `\n\n💬 *Reply with number to download.*`;
         }
 
-        let info =
-          `🎬 *${movie.title}*\n\n` +
-          `⭐ *IMDB:* ${movie.ratingValue}\n` +
-          `🕐 *Duration:* ${movie.runtime}\n` +
-          `🌍 *Country:* ${movie.country}\n` +
-          `📅 *Release:* ${movie.releaseDate}\n` +
-          `🎭 *Category:* ${movie.genres.join(", ")}\n\n` +
-          `🎥 *Download Links:* 📥\n\n`;
-
-        movie.downloads.forEach((d, i) => {
-          info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
-        });
-
-        info += "\n🔢 *Reply with number to download.*";
-
-        const downloadMsg = await conn.sendMessage(from, {
-          image: { url: movie.galleryImages?.[0] },
-          caption: info
+        const infoMsg = await conn.sendMessage(from, {
+          image: { url: movie.posterUrl || movie.galleryImages?.[0] || selected.img },
+          caption: infoTxt
         }, { quoted: msg });
 
-        movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloads });
+        movieMap.set(infoMsg.key.id, { selected, downloads });
       }
 
       else if (movieMap.has(repliedId)) {
         const { selected, downloads } = movieMap.get(repliedId);
         const num = parseInt(replyText);
         const chosen = downloads[num - 1];
-        if (!chosen) {
-          return conn.sendMessage(from, { text: "*Invalid download number.*" }, { quoted: msg });
-        }
 
+        if (!chosen) return conn.sendMessage(from, { text: "❌ Invalid download number." }, { quoted: msg });
         await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
 
         const size = chosen.size.toLowerCase();
         const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
+        const link = chosen.directLinkUrl;
 
         if (sizeGB > 2) {
-          return conn.sendMessage(from, { text: `⚠️ *Large File (${chosen.size})*` }, { quoted: msg });
+          return conn.sendMessage(from, {
+            text: `⚠️ *File too large (${chosen.size})*`
+          }, { quoted: msg });
         }
 
         await conn.sendMessage(from, {
-          document: { url: chosen.link },
+          document: { url: link },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption:
-            `🎬 ${selected.title}\n📺 ${chosen.quality}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 ${selected.title}\n📺 ${chosen.quality}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -459,7 +458,9 @@ cmd({
     conn.ev.on("messages.upsert", listener);
 
   } catch (err) {
-    await conn.sendMessage(from, { text: `*Error:* ${err.message}` }, { quoted: mek });
+    await conn.sendMessage(from, {
+      text: `❌ *Error:* ${err.message}`
+    }, { quoted: mek });
   }
 });
 
