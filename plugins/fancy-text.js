@@ -14,14 +14,14 @@ cmd({
       return reply("❎ Please provide text to convert into fancy fonts.\n\n*Example:* .fancy Hello");
     }
 
-    const apiUrl = `https://www.dark-yasiya-api.site/other/font?text=${encodeURIComponent(q)}`;
+    const apiUrl = `https://api.giftedtech.co.ke/api/tools/fancy?apikey=gifted&text=${encodeURIComponent(q)}`;
     const response = await axios.get(apiUrl);
     
     if (!response.data.status) {
       return reply("❌ Error fetching fonts. Please try again later.");
     }
 
-    const fonts = response.data.result.map(item => `*${item.name}:*\n${item.result}`).join("\n\n");
+    const fonts = response.data.results.map(item => `*${item.name}:*\n${item.result}`).join("\n\n");
     const resultText = `✨ *Fancy Fonts Converter* ✨\n\n${fonts}\n\n> *Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*`;
 
     await conn.sendMessage(from, { text: resultText }, { quoted: m });
