@@ -176,7 +176,7 @@ cmd({
           document: { url: directLink },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n🎥 *`${chosen.quality}`*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -190,17 +190,20 @@ cmd({
 
 
 cmd({
-  pattern: "cinesubzz",
+  pattern: "cinesubz",
   alias: ["cz"],
   desc: "🎥 Search Sinhala subbed movies from CineSubz",
   category: "media",
   react: "🎬",
   filename: __filename
 }, async (conn, mek, m, { from, q }) => {
+  const axios = require("axios");
+  const NodeCache = require("node-cache");
+  const movieCache = new NodeCache({ stdTTL: 600 }); // cache for 10 min
 
   if (!q) {
     return await conn.sendMessage(from, {
-      text: "Use: .cinesubz <movie name>"
+      text: "🎬 Use: *.cinesubz <movie name>*"
     }, { quoted: mek });
   }
 
@@ -209,13 +212,11 @@ cmd({
     let data = movieCache.get(cacheKey);
 
     if (!data) {
-      const url = `https://darkyasiya-new-movie-api.vercel.app/api/movie/cinesubz/search?q=${encodeURIComponent(q)}`;
-      const res = await axios.get(url);
+      const res = await axios.get(`https://darkyasiya-new-movie-api.vercel.app/api/movie/cinesubz/search?q=${encodeURIComponent(q)}`);
       data = res.data;
 
-      if (!data.success || !data.data.all?.length) {
+      if (!data.success || !data.data.all?.length)
         throw new Error("No results found for your query.");
-      }
 
       movieCache.set(cacheKey, data);
     }
@@ -226,16 +227,13 @@ cmd({
       link: m.link
     }));
 
-    let textList = "🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━\n\n";
+    let listText = "🎬 *CineSubz Search Results*\n\n";
     movieList.forEach((m) => {
-      textList += `🔸 *${m.number}. ${m.title}*\n`;
+      listText += `🔹 *${m.number}.* ${m.title}\n`;
     });
-    textList += "\n💬 *Reply with movie number to view details.*";
+    listText += "\n💬 *Reply with number to get movie details.*";
 
-    const sentMsg = await conn.sendMessage(from, {
-      text: `*🔍 𝐂𝐈𝐍𝐄𝐒𝐔𝐁𝐙 𝑪𝑰𝑵𝑬𝑴𝑨 𝑺𝑬𝑨𝑹𝑪𝑯 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
-    }, { quoted: mek });
-
+    const sentMsg = await conn.sendMessage(from, { text: listText }, { quoted: mek });
     const movieMap = new Map();
 
     const listener = async (update) => {
@@ -245,78 +243,82 @@ cmd({
       const replyText = msg.message.extendedTextMessage.text.trim();
       const repliedId = msg.message.extendedTextMessage.contextInfo?.stanzaId;
 
-      if (replyText.toLowerCase() === "done") {
-        conn.ev.off("messages.upsert", listener);
-        return conn.sendMessage(from, { text: "✅ *Cancelled*" }, { quoted: msg });
-      }
-
+      // --- If user replies to movie list ---
       if (repliedId === sentMsg.key.id) {
         const num = parseInt(replyText);
         const selected = movieList.find(m => m.number === num);
-        if (!selected) {
-          return conn.sendMessage(from, { text: "*Invalid movie number.*" }, { quoted: msg });
-        }
+        if (!selected) return conn.sendMessage(from, { text: "*❌ Invalid number.*" }, { quoted: msg });
 
-        await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
+        await conn.sendMessage(from, { react: { text: "🔎", key: msg.key } });
 
-        const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/cinesubz/movie?url=${encodeURIComponent(selected.link)}`;
-        const movieRes = await axios.get(movieUrl);
+        const detailsUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/cinesubz/movie?url=${encodeURIComponent(selected.link)}`;
+        const movieRes = await axios.get(detailsUrl);
         const movie = movieRes.data.data;
 
-        const dlUrl = `https://foreign-marna-sithaunarathnapromax-9a005c2e.koyeb.app/api/cinesubz/downloadurl?url=${encodeURIComponent(selected.link)}&apiKey=35f70afaa18af9b20b76e3a38bdd18b33aff49244f9968e489123ae5834f950e`;
-        const dlRes = await axios.get(dlUrl);
+        // Download API Call
+        const dlApi = `https://foreign-marna-sithaunarathnapromax-9a005c2e.koyeb.app/api/cinesubz/downloadurl?url=${encodeURIComponent(selected.link)}&apiKey=35f70afaa18af9b20b76e3a38bdd18b33aff49244f9968e489123ae5834f950e`;
+        const dlRes = await axios.get(dlApi);
         const download = dlRes.data;
-        
-        if (!download.url?.length) {
-          return conn.sendMessage(from, { text: "*No download links available.*"}, { quoted: msg });
-        }
 
-        let info =
+        if (!download.url?.length)
+          return conn.sendMessage(from, { text: "⚠️ No download links found." }, { quoted: msg });
+
+        let caption =
           `🎬 *${movie.title}*\n\n` +
-          `⭐ *IMDb:* ${movie.imdb.value}\n` +
-          `📅 *Released:* ${movie.dateCreate}\n` +
-          `🌍 *Country:* ${movie.country}\n` +
-          `🕐 *Runtime:* ${movie.runtime}\n` +
-          `🎭 *Category:* ${movie.category.join(", ")}\n` +
-          `🕵️ *Director:* ${movie.director?.name}\n` +
-          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
-          `🎥 *𝑫𝒐𝒘𝒏𝒍𝒐𝒂𝒅 𝑳𝒊𝒏𝒌𝒔:* 📥\n\n`;
+          `⭐ IMDb: ${movie.imdb.value}\n📅 Released: ${movie.dateCreate}\n🌍 Country: ${movie.country}\n🕐 Runtime: ${movie.runtime}\n🎭 Genre: ${movie.category.join(", ")}\n👥 Cast: ${movie.cast?.map(c => c.actor.name).slice(0, 10).join(", ")}\n\n` +
+          `📥 *Available Downloads:*\n`;
 
         download.url.forEach((d, i) => {
-          info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
+          caption += `\n${i + 1}. ${d.quality} — ${d.size}`;
         });
-        info += "\n🔢 *Reply with number to download.*";
+
+        caption += "\n\n💬 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
           image: { url: movie.mainImage },
-          caption: info
+          caption
         }, { quoted: msg });
 
         movieMap.set(downloadMsg.key.id, { selected, downloads: download.url });
       }
 
+      // --- If user replies to download list ---
       else if (movieMap.has(repliedId)) {
         const { selected, downloads } = movieMap.get(repliedId);
         const num = parseInt(replyText);
         const chosen = downloads[num - 1];
-        if (!chosen) {
-          return conn.sendMessage(from, { text: "*Invalid quality number.*" }, { quoted: msg });
-        }
+        if (!chosen) return conn.sendMessage(from, { text: "*❌ Invalid quality number.*" }, { quoted: msg });
 
         await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
 
         const size = chosen.size.toLowerCase();
         const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
 
+        // ⚠️ Skip sending huge files
         if (sizeGB > 2) {
-          return conn.sendMessage(from, { text: `⚠️ *Large File (${chosen.size})*` }, { quoted: msg });
+          return conn.sendMessage(from, {
+            text: `⚠️ *Large file detected (${chosen.size}).*\n📎 Direct link:\n${chosen.url}`
+          }, { quoted: msg });
         }
 
+        // --- JSON download data handler integration ---
+        const data = {
+          author: "asitha.top",
+          url: chosen.url,
+          size: chosen.size,
+          quality: chosen.quality
+        };
+
         await conn.sendMessage(from, {
-          document: { url: chosen.url },
+          video: { url: data.url },
           mimetype: "video/mp4",
-          fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n🎥 *`${chosen.quality}`*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          fileName: `${selected.title} - ${data.quality}.mp4`,
+          caption:
+            `🎬 *${selected.title}*\n` +
+            `📺 *Quality:* ${data.quality}\n` +
+            `📦 *Size:* ${data.size}\n` +
+            `👤 *Uploader:* ${data.author}\n\n` +
+            `> 🔰 Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -324,7 +326,8 @@ cmd({
     conn.ev.on("messages.upsert", listener);
 
   } catch (err) {
-    await conn.sendMessage(from, { text: `*Error:* ${err.message}` }, { quoted: mek }); 
+    console.error(err);
+    await conn.sendMessage(from, { text: `❌ *Error:* ${err.message}` }, { quoted: mek });
   }
 });
 
@@ -445,7 +448,7 @@ cmd({
           document: { url: link },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n🎥 *`${chosen.quality}`*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -587,7 +590,7 @@ cmd({
           document: { url: dlUrl },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n🎥 *`${chosen.quality}`*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -733,7 +736,7 @@ cmd({
           document: { url: directLink },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n🎥 *`${chosen.quality}`*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -879,7 +882,7 @@ cmd({
           document: { url: directLink },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n🎥 *`${chosen.quality}`*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
