@@ -81,7 +81,7 @@ cmd({
       link: m.Link
     }));
 
-    let textList = "🔍 𝒀𝑶𝑼𝑹 𝑺𝑬𝑨𝑹𝑪𝑯: ${q}\n🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━━━\n\n";
+    let textList = "🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
       textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
@@ -176,7 +176,7 @@ cmd({
           document: { url: directLink },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n📺 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 *${selected.title}*\n🎥 *`${chosen.quality}`*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -226,7 +226,7 @@ cmd({
       link: m.link
     }));
 
-    let textList = "🔍 𝒀𝑶𝑼𝑹 𝑺𝑬𝑨𝑹𝑪𝑯: ${q}\n🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━\n\n";
+    let textList = "🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
       textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
@@ -316,7 +316,7 @@ cmd({
           document: { url: chosen.url },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n📺 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 *${selected.title}*\n🎥 *`${chosen.quality}`*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -366,7 +366,7 @@ cmd({
       link: m.link
     }));
 
-    let textList = `*🔍 𝐁𝐀𝐈𝐒𝐂𝐎𝐏𝐄 𝐒𝐄𝐀𝐑𝐂𝐇 𝐑𝐄𝐒𝐔𝐋𝐓𝐒 🎬*\n\n🔍 𝒀𝑶𝑼𝑹 𝑺𝑬𝑨𝑹𝑪𝑯: ${q}\n🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━\n\n`;
+    let textList = `*🔍 𝐁𝐀𝐈𝐒𝐂𝐎𝐏𝐄 𝐒𝐄𝐀𝐑𝐂𝐇 𝐑𝐄𝐒𝐔𝐋𝐓𝐒 🎬*\n\n🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━\n\n`;
     movies.forEach(m => {
       textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
@@ -445,7 +445,7 @@ cmd({
           document: { url: link },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n📺 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 *${selected.title}*\n🎥 *`${chosen.quality}`*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -497,7 +497,7 @@ cmd({
       link: m.link
     }));
 
-    let textList = "🔍 𝒀𝑶𝑼𝑹 𝑺𝑬𝑨𝑹𝑪𝑯: ${q}\n🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━\n\n";
+    let textList = "🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
       textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
@@ -587,7 +587,7 @@ cmd({
           document: { url: dlUrl },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n📺 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 *${selected.title}*\n🎥 *`${chosen.quality}`*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -637,7 +637,7 @@ cmd({
       link: m.link
     }));
 
-    let textList = "🔍 𝒀𝑶𝑼𝑹 𝑺𝑬𝑨𝑹𝑪𝑯: ${q}\n🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━━━\n\n";
+    let textList = "🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
       textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
@@ -733,7 +733,7 @@ cmd({
           document: { url: directLink },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n📺 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 *${selected.title}*\n🎥 *`${chosen.quality}`*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -783,7 +783,7 @@ cmd({
       link: m.link
     }));
 
-    let textList = "🔍 𝒀𝑶𝑼𝑹 𝑺𝑬𝑨𝑹𝑪𝑯: ${q}\n🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━\n\n";
+    let textList = "🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━\n\n";
     movieList.forEach((m) => {
       textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
@@ -879,7 +879,7 @@ cmd({
           document: { url: directLink },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n📺 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 *${selected.title}*\n🎥 *`${chosen.quality}`*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
