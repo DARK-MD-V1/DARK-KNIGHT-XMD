@@ -349,11 +349,11 @@ cmd({
     let data = movieCache.get(cacheKey);
 
     if (!data) {
-      const url = `https://darkyasiya-new-movie-api.vercel.app/api/movie/baiscope/search?q=${encodeURIComponent(q)}`;
+      const url = `https://sadaslk-apis.vercel.app/api/v1/movie/baiscopes/search?q=${encodeURIComponent(q)}&apiKey=vispermdv4`;
       const res = await axios.get(url);
       data = res.data;
 
-      if (!data.success || !data.data?.length) {
+      if (!data.status || !data.data?.length) {
         throw new Error("No results found for your query.");
       }
 
@@ -397,26 +397,24 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
-        const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/baiscope/movie?url=${encodeURIComponent(selected.link)}`;
+        const movieUrl = `https://sadaslk-apis.vercel.app/api/v1/movie/baiscopes/infodl?q=${encodeURIComponent(selected.link)}&apiKey=vispermdv4`;
         const movieRes = await axios.get(movieUrl);
-        const movie = movieRes.data.data;
+        const movie = movieRes.data.movieInfo;
 
-        if (!movie.downloadUrl?.length) {
+        if (!movie.downloadLinks?.length) {
           return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
         }
 
         let info =
           `🎬 *${movie.title}*\n\n` +
-          `⭐ *IMDB:* ${movie.imdb?.value}\n` +
-          `🕐 *Duration:* ${movie.duration}\n` +
+          `⭐ *IMDB:* ${movie.ratingValue?.value}\n` +
+          `🕐 *Duration:* ${movie.runtime}\n` +
           `🌍 *Country:* ${movie.country}\n` +
           `📅 *Release:* ${movie.releaseDate}\n` +
-          `🎭 *Category:* ${movie.category.join(", ")}\n` +
-          `🕵️ *Director:* ${movie.director?.name}\n` +
-          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
+          `🎭 *Category:* ${movie.genres.join(", ")}\n\n` +
           `🎥 *Download Links:* 📥\n\n`;
 
-        movie.downloadUrl.forEach((d, i) => {
+        movie.downloadLinks.directLinkUrl.forEach((d, i) => {
           info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
 
@@ -427,7 +425,7 @@ cmd({
           caption: info
         }, { quoted: msg });
 
-        movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
+        movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadLinks.directLinkUrl });
       }
 
       else if (movieMap.has(repliedId)) {
