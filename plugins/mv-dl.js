@@ -328,6 +328,7 @@ cmd({
   }
 });
 
+
 cmd({
   pattern: "baiscope",
   alias: ["bais"],
@@ -343,7 +344,7 @@ cmd({
 
   if (!q) {
     return conn.sendMessage(from, {
-      text: "*Usage: .baiscope <movie name>*"
+      text: "*Usage:* .baiscope <movie name>"
     }, { quoted: mek });
   }
 
@@ -355,25 +356,21 @@ cmd({
       const searchUrl = `https://sadaslk-apis.vercel.app/api/v1/movie/baiscopes/search?q=${encodeURIComponent(q)}&apiKey=vispermdv4`;
       const res = await axios.get(searchUrl);
       data = res.data;
-
-      if (!data.status || !data.data?.length) {
-        throw new Error("No results found for your query.");
-      }
-
+      if (!data.status || !data.data?.length) throw new Error("No results found.");
       movieCache.set(cacheKey, data);
     }
 
-    const movieList = data.data.map((m, i) => ({
+    const movies = data.data.map((m, i) => ({
       number: i + 1,
       title: m.title,
       link: m.link
     }));
 
-    let textList = `*🔍 𝐁𝐀𝐈𝐒𝐂𝐎𝐏𝐄 𝐌𝐎𝐕𝐈𝐄 𝐒𝐄𝐀𝐑𝐂𝐇 🎥*\n\n*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n`;
-    movieList.forEach(m => {
+    let textList = `*🔍 𝐁𝐀𝐈𝐒𝐂𝐎𝐏𝐄 𝐒𝐄𝐀𝐑𝐂𝐇 𝐑𝐄𝐒𝐔𝐋𝐓𝐒 🎬*\n\n`;
+    movies.forEach(m => {
       textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
-    textList += "\n💬 *Reply with number to view movie details.*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳";
+    textList += "💬 *Reply with a number to get movie details.*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳";
 
     const sentMsg = await conn.sendMessage(from, { text: textList }, { quoted: mek });
     const movieMap = new Map();
@@ -398,31 +395,28 @@ cmd({
 
         const infoUrl = `https://sadaslk-apis.vercel.app/api/v1/movie/baiscopes/infodl?q=${encodeURIComponent(selected.link)}&apiKey=vispermdv4`;
         const infoRes = await axios.get(infoUrl);
-        const movie = infoRes.data.data.movieInfo;
-        const downloads = infoRes.data.data.downloadLinks || [];
+        const movieData = infoRes.data.data;
+        const movie = movieData.movieInfo;
+        const downloads = movieData.downloadLinks || [];
 
-        if (!downloads.length) {
-          return conn.sendMessage(from, { text: "⚠️ No download links available for this movie." }, { quoted: msg });
-        }
-
-        let info = 
+        let caption = 
           `🎬 *${movie.title}*\n\n` +
-          `⭐ *IMDB:* ${movie.ratingValue}\n` +
-          `🕐 *Duration:* ${movie.runtime}\n` +
-          `🌍 *Country:* ${movie.country}\n` +
-          `📅 *Release:* ${movie.releaseDate}\n` +
-          `🎭 *Genres:* ${movie.genres?.join(", ")}\n\n` +;
+          `⭐ *IMDB:* ${movie.ratingValue || "N/A"}\n` +
+          `🕐 *Duration:* ${movie.runtime || "Unknown"}\n` +
+          `🌍 *Country:* ${movie.country || "Unknown"}\n` +
+          `📅 *Release:* ${movie.releaseDate || "N/A"}\n` +
+          `🎭 *Genres:* ${movie.genres?.join(", ") || "N/A"}\n\n` +
           `📥 *Available Downloads:*\n`;
-    
-          downloads.forEach((d, i) => {
-            info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
-          });
-          info += `\n💬 *Reply with number to download.*`;
-        }
+
+        downloads.forEach((d, i) => {
+          caption += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
+        });
+
+        caption += "\n💬 *Reply with number to download.*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳";
 
         const infoMsg = await conn.sendMessage(from, {
           image: { url: movie.galleryImages?.[0] },
-          caption: info
+          caption
         }, { quoted: msg });
 
         movieMap.set(infoMsg.key.id, { selected, downloads });
@@ -434,6 +428,7 @@ cmd({
         const chosen = downloads[num - 1];
 
         if (!chosen) return conn.sendMessage(from, { text: "❌ Invalid download number." }, { quoted: msg });
+
         await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
 
         const size = chosen.size.toLowerCase();
@@ -442,7 +437,7 @@ cmd({
 
         if (sizeGB > 2) {
           return conn.sendMessage(from, {
-            text: `⚠️ *File too large (${chosen.size})*`
+            text: `⚠️ *File too large (${chosen.size})*\n🔗 Use link manually:\n${link}`
           }, { quoted: msg });
         }
 
