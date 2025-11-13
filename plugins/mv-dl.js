@@ -343,7 +343,7 @@ cmd({
 
   if (!q) {
     return conn.sendMessage(from, {
-      text: "🎬 *Usage:* `.baiscope <movie name>`\n\nExample:\n`.baiscope 2025`"
+      text: "*Usage: .baiscope <movie name>*"
     }, { quoted: mek });
   }
 
@@ -357,28 +357,27 @@ cmd({
       data = res.data;
 
       if (!data.status || !data.data?.length) {
-        throw new Error("⚠️ No results found for your query.");
+        throw new Error("No results found for your query.");
       }
 
       movieCache.set(cacheKey, data);
     }
 
-    const movies = data.data.map((m, i) => ({
+    const movieList = data.data.map((m, i) => ({
       number: i + 1,
       title: m.title,
       link: m.link
     }));
 
-    let text = `*🎬 Baiscope Sinhala Subbed Movie Search*\n\n🔍 Search: *${q}*\n━━━━━━━━━━━━━━━\n`;
-    for (let mv of movies) {
-      text += `\n${mv.number}. *${mv.title}*`;
-    }
-    text += "\n💬 *Reply with number to view movie details.*\nType *done* to cancel.\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳";
+    let textList = `*🔍 𝐁𝐀𝐈𝐒𝐂𝐎𝐏𝐄 𝐌𝐎𝐕𝐈𝐄 𝐒𝐄𝐀𝐑𝐂𝐇 🎥*\n\n*🔢 Reply Below Number*\n━━━━━━━━━━━━━━━\n\n`;
+    movieList.forEach(m => {
+      textList += `🔸 *${m.number}. ${m.title}*\n`;
+    });
+    textList += "\n💬 *Reply with number to view movie details.*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳";
 
-    const sentMsg = await conn.sendMessage(from, { text }, { quoted: mek });
+    const sentMsg = await conn.sendMessage(from, { text: textList }, { quoted: mek });
     const movieMap = new Map();
 
-    // 🧠 LISTENER
     const listener = async (update) => {
       const msg = update.messages?.[0];
       if (!msg?.message?.extendedTextMessage) return;
@@ -390,10 +389,9 @@ cmd({
         return conn.sendMessage(from, { text: "✅ *Search cancelled.*" }, { quoted: msg });
       }
 
-      // 🎬 When user replies with movie number
       if (repliedId === sentMsg.key.id) {
         const num = parseInt(replyText);
-        const selected = movies.find(x => x.number === num);
+        const selected = movies.find(m => m.number === num);
         if (!selected) return conn.sendMessage(from, { text: "❌ Invalid movie number." }, { quoted: msg });
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
@@ -403,26 +401,28 @@ cmd({
         const movie = infoRes.data.data.movieInfo;
         const downloads = infoRes.data.data.downloadLinks || [];
 
-        let infoTxt = `🎬 *${movie.title}*\n\n`;
-        infoTxt += `⭐ *IMDB:* ${movie.ratingValue || "N/A"}\n`;
-        infoTxt += `🕐 *Duration:* ${movie.runtime || "-"}\n`;
-        infoTxt += `🌍 *Country:* ${movie.country || "-"}\n`;
-        infoTxt += `📅 *Release:* ${movie.releaseDate || "-"}\n`;
-        infoTxt += `🎭 *Genres:* ${movie.genres?.join(", ") || "-"}\n\n`;
-
         if (!downloads.length) {
-          infoTxt += "⚠️ *No download links found.*";
-        } else {
-          infoTxt += "📥 *Available Downloads:*\n";
+          return conn.sendMessage(from, { text: "⚠️ No download links available for this movie." }, { quoted: msg });
+        }
+
+        let info = 
+          `🎬 *${movie.title}*\n\n` +
+          `⭐ *IMDB:* ${movie.ratingValue}\n` +
+          `🕐 *Duration:* ${movie.runtime}\n` +
+          `🌍 *Country:* ${movie.country}\n` +
+          `📅 *Release:* ${movie.releaseDate}\n` +
+          `🎭 *Genres:* ${movie.genres?.join(", ")}\n\n` +;
+          `📥 *Available Downloads:*\n`;
+    
           downloads.forEach((d, i) => {
-            infoTxt += `\n${i + 1}. *${d.quality}* — ${d.size}\n🔗 ${d.directLinkUrl}`;
+            info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
           });
-          infoTxt += `\n\n💬 *Reply with number to download.*`;
+          info += `\n💬 *Reply with number to download.*`;
         }
 
         const infoMsg = await conn.sendMessage(from, {
-          image: { url: movie.posterUrl || movie.galleryImages?.[0] || selected.img },
-          caption: infoTxt
+          image: { url: movie.galleryImages?.[0] },
+          caption: info
         }, { quoted: msg });
 
         movieMap.set(infoMsg.key.id, { selected, downloads });
