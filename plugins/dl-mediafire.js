@@ -90,7 +90,7 @@ cmd({
       react: { text: "⏳", key: m.key }
     });
 
-    const response = await axios.get(`https://www.dark-yasiya-api.site/download/mfire?url=${q}`);
+    const response = await axios.get(`https://vajira-api.vercel.app/download/mfire?url=${q}`);
     const data = response.data;
 
     if (!data || !data.status || !data.result || !data.result.dl_link) {
