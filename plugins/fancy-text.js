@@ -14,7 +14,7 @@ cmd({
       return reply("❎ Please provide text to convert into fancy fonts.\n\n*Example:* .fancy Hello");
     }
 
-    const apiUrl = `https://api.giftedtech.co.ke/api/tools/fancy?apikey=gifted&text=${encodeURIComponent(q)}`;
+    const apiUrl = `https://api.giftedtech.co.ke/api/tools/fancyv2?apikey=gifted&text=${encodeURIComponent(q)}`;
     const response = await axios.get(apiUrl);
     
     if (!response.data.status) {
