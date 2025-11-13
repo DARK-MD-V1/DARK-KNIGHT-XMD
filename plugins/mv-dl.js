@@ -400,21 +400,22 @@ cmd({
         const movieUrl = `https://sadaslk-apis.vercel.app/api/v1/movie/baiscopes/infodl?q=${encodeURIComponent(selected.link)}&apiKey=vispermdv4`;
         const movieRes = await axios.get(movieUrl);
         const movie = movieRes.data.movieInfo;
-
-        if (!movie.downloadLinks?.length) {
+        const downloads = movieRes.data.downloadLinks || [];
+        
+        if (!movie.downloads?.length) {
           return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
         }
 
         let info =
           `🎬 *${movie.title}*\n\n` +
-          `⭐ *IMDB:* ${movie.ratingValue?.value}\n` +
+          `⭐ *IMDB:* ${movie.ratingValue}\n` +
           `🕐 *Duration:* ${movie.runtime}\n` +
           `🌍 *Country:* ${movie.country}\n` +
           `📅 *Release:* ${movie.releaseDate}\n` +
           `🎭 *Category:* ${movie.genres.join(", ")}\n\n` +
           `🎥 *Download Links:* 📥\n\n`;
 
-        movie.downloadLinks.directLinkUrl.forEach((d, i) => {
+        movie.downloads.forEach((d, i) => {
           info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
 
@@ -425,7 +426,7 @@ cmd({
           caption: info
         }, { quoted: msg });
 
-        movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadLinks.directLinkUrl });
+        movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloads });
       }
 
       else if (movieMap.has(repliedId)) {
