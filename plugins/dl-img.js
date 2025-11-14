@@ -17,18 +17,22 @@ cmd({
 
         await reply(`🔍 Searching images for *"${query}"*...`);
 
-        const url = `https://malvin-api.vercel.app/search/gimage?q=${encodeURIComponent(query)}`;
-        const response = await axios.get(url);
+        const api = `https://malvin-api.vercel.app/search/gimage?q=${encodeURIComponent(query)}`;
+        const { data } = await axios.get(api);
 
-        if (!response.data?.status || !response.data.result?.length) {
+        // Check response validity
+        if (!data?.status || !Array.isArray(data.result) || data.result.length === 0) {
             return reply("❌ No images found. Try different keywords.");
         }
 
-        const result = response.data.result.map(item => item.url);
-        await reply(`✅ Found *${results.length}* results for *"${query}"*. Sending top 5...`);
+        // Extract URLs
+        const images = data.result.map(img => img.url);
 
-        const selectedImages = results
-            .sort(() => 0.5 - Math.random())
+        await reply(`✅ Found *${images.length}* results for *"${query}"*. Sending top 5...`);
+
+        // Shuffle & pick 5
+        const selectedImages = images
+            .sort(() => Math.random() - 0.5)
             .slice(0, 5);
 
         for (const imageUrl of selectedImages) {
@@ -46,11 +50,11 @@ cmd({
                 console.warn(`⚠️ Failed to send image: ${imageUrl}`);
             }
 
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(res => setTimeout(res, 1000)); // small delay
         }
 
     } catch (error) {
-        console.error('Image Search Error:', error);
+        console.error("Image Search Error:", error);
         reply(`❌ Error: ${error.message || "Failed to fetch images"}`);
     }
 });
