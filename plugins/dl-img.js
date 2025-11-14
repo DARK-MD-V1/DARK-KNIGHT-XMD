@@ -24,10 +24,10 @@ cmd({
             return reply("❌ No images found. Try different keywords.");
         }
 
-        const result = response.data.result.url;
+        const result = response.data.result.map(item => item.url);
         await reply(`✅ Found *${results.length}* results for *"${query}"*. Sending top 5...`);
 
-        const selectedImages = result
+        const selectedImages = results
             .sort(() => 0.5 - Math.random())
             .slice(0, 5);
 
