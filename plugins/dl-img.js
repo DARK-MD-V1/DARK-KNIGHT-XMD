@@ -17,17 +17,17 @@ cmd({
 
         await reply(`🔍 Searching images for *"${query}"*...`);
 
-        const url = `https://supun-md-api-rho.vercel.app/api/search/googleImage?q=${encodeURIComponent(query)}`;
+        const url = `https://malvin-api.vercel.app/search/gimage?q=${encodeURIComponent(query)}`;
         const response = await axios.get(url);
 
-        if (!response.data?.success || !response.data.results?.length) {
+        if (!response.data?.status || !response.data.result?.length) {
             return reply("❌ No images found. Try different keywords.");
         }
 
-        const results = response.data.results;
+        const result = response.data.result.url;
         await reply(`✅ Found *${results.length}* results for *"${query}"*. Sending top 5...`);
 
-        const selectedImages = results
+        const selectedImages = result
             .sort(() => 0.5 - Math.random())
             .slice(0, 5);
 
