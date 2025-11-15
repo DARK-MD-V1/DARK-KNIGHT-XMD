@@ -16,15 +16,15 @@ async (conn, mek, m, { from, q, reply }) => {
         await conn.sendMessage(from, { react: { text: '⏳', key: m.key } });
 
         // New API endpoint
-        const apiUrl = `https://supun-md-api-xmjh.vercel.app/api/search/PlayStore?q=${encodeURIComponent(q)}`;
+        const apiUrl = `https://malvin-api.vercel.app/search/playstore?q=${encodeURIComponent(q)}`;
         const response = await axios.get(apiUrl);
 
-        if (!response.data || !response.data.results || response.data.results.length === 0) {
+        if (!response.data || !response.data.result || response.data.result.length === 0) {
             await conn.sendMessage(from, { react: { text: '❌', key: m.key } });
             return reply("❌ No results found for that app name.");
         }
 
-        const apps = response.data.results.slice(0, 5); // Limit to top 5 apps
+        const apps = response.data.result.slice(0, 5); // Limit to top 5 apps
 
         for (const app of apps) {
             const caption = `
