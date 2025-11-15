@@ -481,7 +481,7 @@ cmd({
     let data = movieCache.get(cacheKey);
 
     if (!data) {
-      const url = `https://darkyasiya-new-movie-api.vercel.app/api/movie/sinhalasub/search?q=${encodeURIComponent(q)}`;
+      const url = `https://darkyasiya-new-movie-api.vercel.app//api/movie/sinhalasub/search?q=${encodeURIComponent(q)}`;
       const res = await axios.get(url);
       data = res.data;
 
@@ -531,7 +531,7 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
-        const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/sinhalasub/movie?url=${encodeURIComponent(selected.link)}`;
+        const movieUrl = `https://darkyasiya-new-movie-api.vercel.app//api/movie/sinhalasub/movie?url=${encodeURIComponent(selected.link)}`;
         const movieRes = await axios.get(movieUrl);
         const movie = movieRes.data.data;
 
