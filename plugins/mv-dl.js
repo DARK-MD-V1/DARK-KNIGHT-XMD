@@ -485,14 +485,14 @@ cmd({
       const res = await axios.get(url);
       data = res.data;
 
-      if (!data.success || !data.data?.all?.length) {
+      if (!data.success || !data.data?.length) {
         throw new Error("No results found for your query.");
       }
 
       movieCache.set(cacheKey, data);
     }
     
-    const movieList = data.data.all.map((m, i) => ({
+    const movieList = data.data.map((m, i) => ({
       number: i + 1,
       title: m.title,
       link: m.link
@@ -531,7 +531,7 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
-        const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/sublk/movie?url=${encodeURIComponent(selected.link)}`;
+        const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/sinhalasub/movie?url=${encodeURIComponent(selected.link)}`;
         const movieRes = await axios.get(movieUrl);
         const movie = movieRes.data.data;
 
@@ -542,12 +542,13 @@ cmd({
         let info =
           `🎬 *${movie.title}*\n\n` +
           `⭐ *IMDb:* ${movie.imdb?.value}\n` +
-          `📅 *Released:* ${movie.dateCreate}\n` +
+          `📅 *Released:* ${movie.date}\n` +
           `🌍 *Country:* ${movie.country}\n` +
           `🕐 *Runtime:* ${movie.runtime}\n` +
           `🎭 *Category:* ${movie.category?.join(", ")}\n` +
-          `🕵️ *Director:* ${movie.director?.name}\n` +
-          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
+          `✍️ Subtitle Author: ${movie.subtitle_author}\n` +
+          `🕵️ *Director:* ${movie.director}\n` +
+          `👷‍♂️ *Cast:* ${movie.cast.slice(0, 20).join(", ")}\n\n` +
           `🎥 *𝑫𝒐𝒘𝒏𝒍𝒐𝒂𝒅 𝑳𝒊𝒏𝒌𝒔:* 📥\n\n`;
 
         movie.downloadUrl.forEach((d, i) => {
