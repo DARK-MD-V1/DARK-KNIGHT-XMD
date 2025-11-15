@@ -61,7 +61,7 @@ cmd({
   }
 
   try {
-    const cacheKey = `sublk_${q.toLowerCase()}`;
+    const cacheKey = `sinhalasubs_${q.toLowerCase()}`;
     let data = movieCache.get(cacheKey);
 
     if (!data) {
@@ -477,7 +477,7 @@ cmd({
   }
 
   try {
-    const cacheKey = `sublk_${q.toLowerCase()}`;
+    const cacheKey = `sinhalasub_${q.toLowerCase()}`;
     let data = movieCache.get(cacheKey);
 
     if (!data) {
