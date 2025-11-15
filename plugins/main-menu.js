@@ -194,6 +194,7 @@ cmd({
 ┃★│ • ig2
 ┃★│ • mediafire
 ┃★│ • mfire2
+┃★│ • mega
 ┃★│ • pinterest
 ┃★│ • pindl2
 ┃★│ • pins
@@ -206,6 +207,7 @@ cmd({
 ┃★│ • tiks
 ┃★│ • twitter
 ┃★│ • twitt2
+┃★│ • movie
 ┃★│ • xnxx
 ┃★│ • xvideo
 ┃★│ • play
