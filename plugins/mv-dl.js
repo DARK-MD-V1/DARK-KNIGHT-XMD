@@ -464,147 +464,137 @@ cmd({
 cmd({
   pattern: "sinhalasub",
   alias: ["ssub"],
-  desc: "🎥 Search Sinhala Subbed Movies from Sub.lk",
+  desc: "🎥 Search Sinhala subbed movies from Sub.lk",
   category: "media",
   react: "🎬",
   filename: __filename
 }, async (conn, mek, m, { from, q }) => {
 
   if (!q) {
-    return conn.sendMessage(from, { text: "Use: .sinhalasub <movie name>" }, { quoted: mek });
+    return await conn.sendMessage(from, {
+      text: "Use: .sinhalasub<movie name>"
+    }, { quoted: mek });
   }
 
   try {
+    const cacheKey = `sinhalasub_${q.toLowerCase()}`;
+    let data = movieCache.get(cacheKey);
 
-    // =======================
-    // SEARCH API
-    // =======================
-    const searchUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/sinhalasub/search?q=${encodeURIComponent(q)}`;
-    const res = await axios.get(searchUrl);
+    if (!data) {
+      const url = `https://darkyasiya-new-movie-api.vercel.app/api/movie/sinhalasub/search?q=${encodeURIComponent(q)}`;
+      const res = await axios.get(url);
+      data = res.data;
 
-    if (!res.data.success || !res.data.data?.data?.length) {
-      return conn.sendMessage(from, { text: "❌ No movies found." }, { quoted: mek });
+      if (!data.success || !data.data?.all?.length) {
+        throw new Error("No results found for your query.");
+      }
+
+      movieCache.set(cacheKey, data);
     }
-
-    const movies = res.data.data.data.map((m, i) => ({
+    
+    const movieList = data.data.all.map((m, i) => ({
       number: i + 1,
       title: m.title,
-      year: m.year,
-      lang: m.language,
-      link: m.link,
-      image: m.image
+      link: m.link
     }));
 
-    let menu = `🎬 *SINHALA SUB MOVIE SEARCH*\n\n`;
-    menu += `🔍 Results for: *${q}*\n\n`;
-    movies.forEach(m => {
-      menu += `► *${m.number}. ${m.title}*\n`;
+    let textList = "🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━━━\n\n";
+    movieList.forEach((m) => {
+      textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
-    menu += `\n💬 Reply with movie number to view details.`;
+    textList += "\n💬 *Reply with movie number to view details.*";
 
-    const sent = await conn.sendMessage(from, { text: menu }, { quoted: mek });
+    const sentMsg = await conn.sendMessage(from, {
+      text: `*🔍 𝐒𝐈𝐍𝐇𝐀𝐋𝐀𝐒𝐔𝐁 𝑪𝑰𝑵𝑬𝑴𝑨 𝑺𝑬𝑨𝑹𝑪𝑯 🎥*\n\n${textList}\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+    }, { quoted: mek });
 
+    const movieMap = new Map();
 
-    // Store movie list for reply listener  
-    const listeners = new Map();
-
-
-    // =======================
-    // LISTENER
-    // =======================
     const listener = async (update) => {
       const msg = update.messages?.[0];
       if (!msg?.message?.extendedTextMessage) return;
 
-      const reply = msg.message.extendedTextMessage.text.trim();
-      const replyId = msg.message.extendedTextMessage.contextInfo?.stanzaId;
+      const replyText = msg.message.extendedTextMessage.text.trim();
+      const repliedId = msg.message.extendedTextMessage.contextInfo?.stanzaId;
 
-      // ---------------------
-      // User selected movie
-      // ---------------------
-      if (replyId === sent.key.id) {
+      if (replyText.toLowerCase() === "done") {
+        conn.ev.off("messages.upsert", listener);
+        return conn.sendMessage(from, { text: "✅ *Cancelled.*" }, { quoted: msg });
+      }
 
-        const selected = movies.find(v => v.number === parseInt(reply));
+      if (repliedId === sentMsg.key.id) {
+        const num = parseInt(replyText);
+        const selected = movieList.find(m => m.number === num);
         if (!selected) {
-          return conn.sendMessage(from, { text: "❌ Invalid number." }, { quoted: msg });
+          return conn.sendMessage(from, { text: "*Invalid Movie Number.*" }, { quoted: msg });
         }
 
-        // =======================
-        // MOVIE DETAILS API
-        // =======================
-        const detailUrl =
-          `https://darkyasiya-new-movie-api.vercel.app/api/movie/sinhalasub/movie?url=${encodeURIComponent(selected.link)}`;
+        await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
-        const movieRes = await axios.get(detailUrl);
+        const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/sublk/movie?url=${encodeURIComponent(selected.link)}`;
+        const movieRes = await axios.get(movieUrl);
         const movie = movieRes.data.data;
 
-        let caption =
+        if (!movie.downloadUrl?.length) {
+          return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
+        }
+
+        let info =
           `🎬 *${movie.title}*\n\n` +
-          `⭐ IMDb: ${movie.imdb?.value}\n` +
-          `📅 Year: ${movie.date}\n` +
-          `🌍 Country: ${movie.country}\n` +
-          `🕒 Runtime: ${movie.runtime}\n` +
-          `🎭 Genre: ${movie.category.join(", ")}\n` +
-          `✍️ Subtitle: ${movie.subtitle_author}\n` +
-          `🎬 Director: ${movie.director}\n` +
-          `👥 Cast: ${movie.cast.slice(0, 20).join(", ")}\n\n` +
-          `📥 *Download Links:*\n\n`;
+          `⭐ *IMDb:* ${movie.imdb?.value}\n` +
+          `📅 *Released:* ${movie.dateCreate}\n` +
+          `🌍 *Country:* ${movie.country}\n` +
+          `🕐 *Runtime:* ${movie.runtime}\n` +
+          `🎭 *Category:* ${movie.category?.join(", ")}\n` +
+          `🕵️ *Director:* ${movie.director?.name}\n` +
+          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
+          `🎥 *𝑫𝒐𝒘𝒏𝒍𝒐𝒂𝒅 𝑳𝒊𝒏𝒌𝒔:* 📥\n\n`;
 
         movie.downloadUrl.forEach((d, i) => {
-          caption += `• *${i + 1}.* ${d.quality} — ${d.size}\n`;
+          info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
-
-        caption += `\n💬 Reply with number to download.`;
+        info += "\n🔢 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
           image: { url: movie.mainImage },
-          caption
+          caption: info
         }, { quoted: msg });
 
-        listeners.set(downloadMsg.key.id, {
-          title: movie.title,
-          downloads: movie.downloadUrl
-        });
+        movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
       }
 
-
-      // ---------------------
-      // User selected download link
-      // ---------------------
-      else if (listeners.has(replyId)) {
-        const { title, downloads } = listeners.get(replyId);
-        const choice = downloads[parseInt(reply) - 1];
-
-        if (!choice) {
-          return conn.sendMessage(from, { text: "❌ Invalid number." }, { quoted: msg });
+      else if (movieMap.has(repliedId)) {
+        const { selected, downloads } = movieMap.get(repliedId);
+        const num = parseInt(replyText);
+        const chosen = downloads[num - 1];
+        if (!chosen) {
+          return conn.sendMessage(from, { text: "*Invalid number.*" }, { quoted: msg });
         }
 
-        let url = choice.link;
+        await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
 
-        // PixelDrain convert
-        if (url.includes("pixeldrain.com")) {
-          const id = url.split("/").pop();
-          url = `https://pixeldrain.com/api/file/${id}`;
+        let directLink = chosen.link;
+
+        if (directLink.includes("pixeldrain.com")) {
+          const match = directLink.match(/\/([A-Za-z0-9]+)$/);
+          if (match) directLink = `https://pixeldrain.com/api/file/${match[1]}`;
+        } else if (directLink.includes("drive.google.com/file/d/")) {
+          const match = directLink.match(/\/d\/([A-Za-z0-9_-]+)\//);
+          if (match) directLink = `https://drive.google.com/uc?export=download&id=${match[1]}`;
         }
 
-        // Google Drive convert
-        if (url.includes("drive.google.com/file/d/")) {
-          const id = url.match(/\/d\/(.+?)\//)[1];
-          url = `https://drive.google.com/uc?export=download&id=${id}`;
-        }
+        const size = chosen.size.toLowerCase();
+        const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
 
-        // Telegram / not downloadable  
-        if (url.includes("telegram.me")) {
-          return conn.sendMessage(from, {
-            text: "⚠️ This download is via Telegram Bot. Click link manually:\n\n" + url
-          }, { quoted: msg });
+        if (sizeGB > 2) {
+          return conn.sendMessage(from, { text: `⚠️ *Large File (${chosen.size})*` }, { quoted: msg });
         }
 
         await conn.sendMessage(from, {
-          document: { url },
+          document: { url: directLink },
           mimetype: "video/mp4",
-          fileName: `${selected.title} - ${choice.quality}.mp4`,
-          caption: `🎬 ${selected.title}\n📥 ${choice.quality}`
+          fileName: `${selected.title} - ${chosen.quality}.mp4`,
+          caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
@@ -612,7 +602,7 @@ cmd({
     conn.ev.on("messages.upsert", listener);
 
   } catch (err) {
-    conn.sendMessage(from, { text: `❌ Error: ${err.message}` }, { quoted: mek });
+    await conn.sendMessage(from, { text: `*Error:* ${err.message}` }, { quoted: mek });
   }
 });
 
