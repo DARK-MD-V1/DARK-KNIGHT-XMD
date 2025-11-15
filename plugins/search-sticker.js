@@ -25,24 +25,25 @@ cmd({
             return reply("❌ No stickers found. Try different keywords.");
         }
 
-        // Raw sticker list
-        const stickerList = response.data.result.sticker_url;
+        let stickers = response.data.result.sticker_url;
 
-        // ⭐ ADD WEBP Filter Here (requested)
-        const webpResults = stickerList.filter(url => url.endsWith(".webp"));
+        // ⭐ Remove query parameters & keep only ".webp" part
+        stickers = stickers.map(url => url.split(".webp")[0] + ".webp");
 
-        if (!webpResults.length) {
-            return reply("❌ No .webp stickers found in this pack.");
+        // ⭐ Only .webp stickers
+        const webpOnly = stickers.filter(url => url.endsWith(".webp"));
+
+        if (!webpOnly.length) {
+            return reply("❌ No valid .webp stickers found.");
         }
 
         await reply(
-            `📦 Total Webp Stickers: *${webpResults.length}*\n\n` +
-            `🧚‍♀️ Sending top 10 stickers...`
+            `📦 Valid Webp Stickers: *${webpOnly.length}*\n` +
+            `🧚 Sending top 10...`
         );
 
-        // Random 10
-        const selected = webpResults
-            .sort(() => Math.random() - 0.5)
+        const selected = webpOnly
+            .sort(() => 0.5 - Math.random())
             .slice(0, 10);
 
         for (const url of selected) {
@@ -58,11 +59,11 @@ cmd({
                 console.warn("⚠️ Failed to send sticker:", url);
             }
 
-            await new Promise(resolve => setTimeout(resolve, 800));
+            await new Promise(res => setTimeout(res, 800));
         }
 
     } catch (error) {
-        console.error("Sticker Search Error:", error);
-        reply(`❌ Error: ${error.message || "Something went wrong."}`);
+        console.error("Sticker Error:", error);
+        reply(`❌ Error: ${error.message}`);
     }
 });
