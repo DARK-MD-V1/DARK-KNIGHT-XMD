@@ -485,14 +485,14 @@ cmd({
       const res = await axios.get(url);
       data = res.data;
 
-      if (!data.success || !data.data?.length) {
+      if (!data.success || !data.data?.data?.length) {
         throw new Error("No results found for your query.");
       }
 
       movieCache.set(cacheKey, data);
     }
     
-    const movieList = data.data.map((m, i) => ({
+    const movieList = data.data.data.map((m, i) => ({
       number: i + 1,
       title: m.title,
       link: m.link
