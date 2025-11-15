@@ -98,6 +98,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • ig2
 ┃★│ • mediafire
 ┃★│ • mfire2
+┃★│ • mega
 ┃★│ • pinterest
 ┃★│ • pindl2
 ┃★│ • pins
@@ -110,6 +111,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ • tiks
 ┃★│ • twitter
 ┃★│ • twitt2
+┃★│ • movie
 ┃★│ • xnxx
 ┃★│ • xvideo
 ┃★│ • play
