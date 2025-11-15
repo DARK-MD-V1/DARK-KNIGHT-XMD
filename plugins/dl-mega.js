@@ -12,10 +12,10 @@ cmd({
 }, async (conn, mek, m, {from, reply, q}) => {
     
     if (!q || !q.includes('mega.nz')) {
-        await reply("Please enter meganz file url !!")
+        await reply("Please enter mega.nz file url !!")
     }
     try {
-        await reply('☁️ start downloading meganz file...')
+        await reply('☁️ start downloading mega.nz file...')
         
         const file = File.fromURL(megaUrl);
         await file.loadAttributes();
