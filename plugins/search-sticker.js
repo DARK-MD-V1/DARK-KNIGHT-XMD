@@ -18,25 +18,30 @@ cmd({
 
         await reply(`🔍 Searching Stickers for *"${query}"*...`);
 
-        // Vajira API Link
         const api = `https://vajira-api.vercel.app/search/sticker?q=${encodeURIComponent(query)}`;
         const response = await axios.get(api);
 
-        // Validate JSON structure
         if (!response.data?.status || !response.data.result?.sticker_url?.length) {
             return reply("❌ No stickers found. Try different keywords.");
         }
 
+        // Raw sticker list
         const stickerList = response.data.result.sticker_url;
 
+        // ⭐ ADD WEBP Filter Here (requested)
+        const webpResults = stickerList.filter(url => url.endsWith(".webp"));
+
+        if (!webpResults.length) {
+            return reply("❌ No .webp stickers found in this pack.");
+        }
+
         await reply(
-            `✨ *${response.data.result.title}* Pack Found!\n` +
-            `📦 Total Stickers: *${stickerList.length}*\n\n` +
+            `📦 Total Webp Stickers: *${webpResults.length}*\n\n` +
             `🧚‍♀️ Sending top 10 stickers...`
         );
 
-        // Randomize & Slice first 10
-        const selected = stickerList
+        // Random 10
+        const selected = webpResults
             .sort(() => Math.random() - 0.5)
             .slice(0, 10);
 
@@ -45,11 +50,11 @@ cmd({
                 await conn.sendMessage(
                     from,
                     {
-                        sticker: { url: url }
+                        sticker: { url }
                     },
                     { quoted: mek }
                 );
-            } catch (error) {
+            } catch (err) {
                 console.warn("⚠️ Failed to send sticker:", url);
             }
 
