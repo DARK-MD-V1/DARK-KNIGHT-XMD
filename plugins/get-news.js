@@ -62,7 +62,7 @@ async (conn, mek, m, { from, reply }) => {
         // All news sources
         const sources = [
             { name: "Lankadeepa News", url: "https://vajira-api.vercel.app/news/lankadeepa" },
-            { name: "Lnw News", url: "https://vajira-api.vercel.app/news/lnw" },
+            { name: "Lanka News", url: "https://vajira-api.vercel.app/news/lnw" },
             { name: "Gossip Lanka News", url: "https://vajira-api.vercel.app/news/gossiplankanews" },
             { name: "Hiru News", url: "https://tharuzz-news-api.vercel.app/api/news/hiru" }
         ];
