@@ -572,19 +572,19 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
 
-        const apiUrl = `https://cinesubz-store.vercel.app/api/get/?url=${encodeURIComponent(chosen.link)}`;
-        const apiRes = await axios.get(DlUrl);
-        const direct = apiRes.data?.downloadUrls?.direct;
-
-        if (!direct) {
-            return conn.sendMessage(from, { text: "*download link not found.*" }, { quoted: msg });
-        }
-        
         const size = chosen.size.toLowerCase();
         const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
 
         if (sizeGB > 2) {
           return conn.sendMessage(from, { text: `⚠️ *Large File (${chosen.size})*` }, { quoted: msg });
+        }
+        
+        const apiUrl = `https://cinesubz-store.vercel.app/api/get/?url=${encodeURIComponent(chosen.link)}`;
+        const apiRes = await axios.get(apiUrl);
+        const direct = apiRes.data?.downloadUrls?.direct;
+
+        if (!direct) {
+            return conn.sendMessage(from, { text: "*download link not found.*" }, { quoted: msg });
         }
 
         await conn.sendMessage(from, {
