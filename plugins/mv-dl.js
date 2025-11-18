@@ -80,6 +80,8 @@ cmd({
       number: i + 1,
       title: m.title,
       published: m.published,
+      author: m.author,
+      tag: m.tag,
       link: m.link
     }));
 
@@ -138,10 +140,16 @@ cmd({
         info += "\n🔢 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
-          image: movie.image && movie.image.startsWith("http") ? { url: movie.image } : undefined,
+          image: { url: movie.image },
           caption: info
         }, { quoted: msg });
-
+        
+      } else {
+        downloadMsg = await conn.sendMessage(from, {
+          text: info
+        }, { quoted: msg });
+      }
+        
         movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadLink });
       }
 
