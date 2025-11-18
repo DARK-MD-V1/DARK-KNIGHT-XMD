@@ -126,8 +126,10 @@ cmd({
 
         let info =
           `🎬 *${movie.title}*\n\n` +
+          `⭐ *Tag:* ${selected.tag}\n` +
           `📅 *Published:* ${selected.published}\n` +
-          `👷‍♂️ *Cast:* ${movie.cast.slice(0, 20).join(", ")}\n\n` +
+          `✍️ *Author:* ${selected.author}\n` +
+          `👷‍♂️ *Cast:*\n${movie.cast.slice(0, 20).join(", ")}\n\n` +
           `🎥 *𝑫𝒐𝒘𝒏𝒍𝒐𝒂𝒅 𝑳𝒊𝒏𝒌𝒔:* 📥\n\n`;
 
         movie.downloadLink.forEach((d, i) => {
@@ -136,7 +138,7 @@ cmd({
         info += "\n🔢 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
-          image: { url: movie.image },
+          image: movie.image && movie.image.startsWith("http") ? { url: movie.image } : undefined,
           caption: info
         }, { quoted: msg });
 
