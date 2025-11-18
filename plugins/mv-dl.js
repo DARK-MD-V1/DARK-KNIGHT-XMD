@@ -35,6 +35,7 @@ cmd({
 ✏️ .𝑺𝑰𝑵𝑯𝑨𝑳𝑨𝑺𝑼𝑩𝑺 𝑆𝐸𝐴𝐑𝐶𝐻  
 ✏️ .𝑺𝑼𝑩𝑳𝑲  𝑆𝐸𝐴𝐑𝐶𝐻  
 ✏️ .𝑷𝑰𝑹𝑨𝑻𝑬  𝑆𝐸𝐴𝐑𝐶𝐻
+✏️ .𝐏𝐔𝐏𝐈𝐋𝐕𝐈𝐃𝐄𝐎 𝑆𝐸𝐴𝐑𝐶𝐻
 
 📌 EX: .cmd & <query> 
 
@@ -142,7 +143,7 @@ cmd({
         info += "\n🔢 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
-          image: { url: defaultImage || movie.image },
+          image: { url: defaultImage || movie.image},
           caption: info
         }, { quoted: msg });
         
