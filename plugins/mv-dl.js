@@ -122,6 +122,8 @@ cmd({
         const movieRes = await axios.get(movieUrl);
         const movie = movieRes.data.data;
 
+        const defaultImage = "https://files.catbox.moe/hspst7.jpg";
+        
         if (!movie.downloadLink?.length) {
           return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
         }
@@ -140,7 +142,8 @@ cmd({
         info += "\n🔢 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
-          text: info
+          image: { url:  movie.image || defaultImage },
+          caption: info
         }, { quoted: msg });
         
         movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadLink });
