@@ -572,6 +572,10 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
 
+        const DlUrl = `https://cinesubz-store.vercel.app/api/get/?url=${encodeURIComponent(chosen.link)}`;
+        const DlRes = await axios.get(DlUrl);
+        const Dlurl = DlRes.data.downloadUrls;
+
         const size = chosen.size.toLowerCase();
         const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
 
@@ -579,12 +583,8 @@ cmd({
           return conn.sendMessage(from, { text: `⚠️ *Large File (${chosen.size})*` }, { quoted: msg });
         }
 
-        const dlUrl = chosen.link.includes("cscloud") || chosen.link.includes("cine")
-          ? chosen.link + (chosen.link.includes("?") ? "&download=true" : "?download=true")
-          : chosen.link;
-
         await conn.sendMessage(from, {
-          document: { url: dlUrl },
+          document: { url: direct },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
           caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
