@@ -170,7 +170,6 @@ cmd({
         await conn.sendMessage(from, {
           document: { url: chosen.link },
           mimetype: "video/mp4",
-          jpegThumbnail: await (await fetch(movie.image)).buffer(),
           fileName: `${selected.title} - ${chosen.size}.mp4`,
           caption: `🎬 *${selected.title}*\n🎥 *${chosen.size}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
@@ -313,11 +312,14 @@ cmd({
           return conn.sendMessage(from, { text: `⚠️ *Large File (${chosen.size})*` }, { quoted: msg });
         }
 
+       const thumbnailUrl = movie.images?.[0];
+       
         await conn.sendMessage(from, {
           document: { url: directLink },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
+          caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`,
+          jpegThumbnail: await (await fetch(thumbnailUrl)).buffer()
         }, { quoted: msg });
       }
     };
