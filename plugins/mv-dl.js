@@ -170,6 +170,7 @@ cmd({
         await conn.sendMessage(from, {
           document: { url: chosen.link },
           mimetype: "video/mp4",
+          jpegThumbnail: await (await fetch(movie.image)).buffer(),
           fileName: `${selected.title} - ${chosen.size}.mp4`,
           caption: `🎬 *${selected.title}*\n🎥 *${chosen.size}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
