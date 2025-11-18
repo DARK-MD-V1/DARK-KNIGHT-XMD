@@ -124,7 +124,6 @@ cmd({
         const movie = movieRes.data.data;
 
         const defaultImage = "https://files.catbox.moe/ajfxoo.jpg";
-        const image = movie.image || defaultImage;
         
         if (!movie.downloadLink?.length) {
           return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
@@ -144,7 +143,7 @@ cmd({
         info += "\n🔢 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
-          image: { url: image },
+          image: { url: defaultImage || movie.image },
           caption: info
         }, { quoted: msg });
         
