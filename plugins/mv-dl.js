@@ -581,7 +581,7 @@ cmd({
         
         const apiUrl = `https://cinesubz-store.vercel.app/api/get/?url=${encodeURIComponent(chosen.link)}`;
         const apiRes = await axios.get(apiUrl);
-        const direct = apiRes.data?.downloadUrls?.direct;
+        const direct = apiRes.data?.downloadUrls?.pix1;
 
         if (!direct) {
             return conn.sendMessage(from, { text: "*download link not found.*" }, { quoted: msg });
