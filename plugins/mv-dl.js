@@ -69,14 +69,14 @@ cmd({
       const res = await axios.get(url);
       data = res.data;
 
-      if (!data.success || !data.data?.data?.length) {
+      if (!data.success || !data.data?.length) {
         throw new Error("No results found for your query.");
       }
 
       movieCache.set(cacheKey, data);
     }
     
-    const movieList = data.data.data.map((m, i) => ({
+    const movieList = data.data.map((m, i) => ({
       number: i + 1,
       title: m.title,
       published: m.published,
@@ -126,7 +126,7 @@ cmd({
 
         let info =
           `🎬 *${movie.title}*\n\n` +
-          `📅 *Published:* ${m.published}\n` +
+          `📅 *Published:* ${selected.published}\n` +
           `👷‍♂️ *Cast:* ${movie.cast.slice(0, 20).join(", ")}\n\n` +
           `🎥 *𝑫𝒐𝒘𝒏𝒍𝒐𝒂𝒅 𝑳𝒊𝒏𝒌𝒔:* 📥\n\n`;
 
