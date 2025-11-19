@@ -7,6 +7,83 @@ const movieCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
 
 cmd({
+  pattern: "movie2",
+  alias: ["mv", "film"],
+  desc: "Search Sinhala movies",
+  category: "Search",
+  react: "🔍",
+  filename: __filename
+}, async (conn, mek, m, { from, q, prefix }) => {
+
+  //==============================
+  // 1. NUMBER REPLY HANDLER
+  //==============================
+
+  if (m.quoted && /^[1-7]$/.test(m.text.trim())) {
+
+    let num = m.text.trim();
+
+    // Extract original movie name from previous message
+    let match = m.quoted.text.match(/YOUR SEARCH ?: (.*)/i);
+    if (!match) {
+      return conn.sendMessage(from, { text: "❌ Could not detect movie name." }, { quoted: mek });
+    }
+
+    let query = match[1].trim();
+    let finalCommand;
+
+    switch (num) {
+      case "1": finalCommand = `${prefix}bais ${query}`; break;
+      case "2": finalCommand = `${prefix}cine ${query}`; break;
+      case "3": finalCommand = `${prefix}ssub ${query}`; break;
+      case "4": finalCommand = `${prefix}ssubs ${query}`; break;
+      case "5": finalCommand = `${prefix}sub ${query}`; break;
+      case "6": finalCommand = `${prefix}pira ${query}`; break;
+      case "7": finalCommand = `${prefix}pupil ${query}`; break;
+    }
+
+    // BOT SENDS THE COMMAND TO ITSELF TO EXECUTE
+    await conn.sendMessage(from, { text: finalCommand }, { quoted: mek });
+
+    return;
+  }
+
+  //==============================
+  // 2. NO QUERY
+  //==============================
+
+  if (!q) {
+    return conn.sendMessage(from, { text: `🔍 .movie <movie name>` }, { quoted: mek });
+  }
+
+  //==============================
+  // 3. MAIN SEARCH MENU
+  //==============================
+
+  let caption = `
+🔍 𝐀𝐋𝐋 𝐂𝐈𝐍𝐄𝐌𝐀 𝐒𝐄𝐀𝐑𝐂𝐇 🎬
+
+✏️ YOUR SEARCH : ${q}
+
+1  BAISCOPE SEARCH     → ${prefix}bais ${q}
+2  CINESUBZ SEARCH     → ${prefix}cine ${q}
+3  SINHALASUB SEARCH   → ${prefix}ssub ${q}
+4  SINHALASUBS SEARCH  → ${prefix}ssubs ${q}
+5  SUBLK SEARCH        → ${prefix}sub ${q}
+6  PIRATE SEARCH       → ${prefix}pira ${q}
+7  PUPILVIDEO SEARCH   → ${prefix}pupil ${q}
+
+➡️ *Reply with a number (1–7) to continue.*
+
+> Powered by DARK-KNIGHT-XMD`;
+
+  await conn.sendMessage(from, { text: caption }, { quoted: mek });
+
+});
+
+
+
+cmd({
   pattern: "movie",
   alias: ["mv", "film"],
   desc: "Search Sinhala movies",
