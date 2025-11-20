@@ -47,6 +47,124 @@ cmd({
 
 
 cmd({
+  pattern: "movieapi",
+  alias: ["mapi"],
+  desc: "🎥 Search movies from GiftedTech MovieAPI",
+  category: "media",
+  react: "🎬",
+  filename: __filename
+}, async (conn, mek, m, { from, q }) => {
+
+  if (!q) return await conn.sendMessage(from, { text: "Use: .movieapi <movie name>" }, { quoted: mek });
+
+  try {
+    const cacheKey = `movieapi_${q.toLowerCase()}`;
+    let data = movieCache.get(cacheKey);
+
+    if (!data) {
+      const url = `https://movieapi.giftedtech.co.ke/api/search/new?q=${encodeURIComponent(q)}`;
+      const res = await axios.get(url);
+      data = res.data;
+
+      if (!data.results?.items?.length) throw new Error("No results found.");
+
+      movieCache.set(cacheKey, data);
+    }
+
+    const movieList = data.results.items.map((m, i) => ({
+      number: i + 1,
+      id: m.subjectId,
+      title: m.title,
+      year: m.releaseDate.split("-")[0],
+      genre: m.genre || "N/A",
+      thumbnail: m.cover?.url || m.thumbnail
+    }));
+
+    let textList = "🔢 Reply with the movie number\n━━━━━━━━━━━━━━━━━\n\n";
+    movieList.forEach(m => {
+      textList += `🔸 *${m.number}. ${m.title}* (${m.year}) — ${m.genre}\n`;
+    });
+
+    const sentMsg = await conn.sendMessage(from, {
+      text: `*🎬 Movie Search Results*\n\n${textList}\n💬 Reply with number to view download links.`,
+    }, { quoted: mek });
+
+    const movieMap = new Map();
+
+    const listener = async (update) => {
+      const msg = update.messages?.[0];
+      if (!msg?.message?.extendedTextMessage) return;
+
+      const replyText = msg.message.extendedTextMessage.text.trim();
+      const repliedId = msg.message.extendedTextMessage.contextInfo?.stanzaId;
+
+      if (replyText.toLowerCase() === "done") {
+        conn.ev.off("messages.upsert", listener);
+        return conn.sendMessage(from, { text: "✅ Cancelled." }, { quoted: msg });
+      }
+
+      // User selected a movie
+      if (repliedId === sentMsg.key.id) {
+        const num = parseInt(replyText);
+        const selected = movieList.find(m => m.number === num);
+        if (!selected) return conn.sendMessage(from, { text: "*Invalid movie number.*" }, { quoted: msg });
+
+        await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
+
+        // Fetch movie download links
+        const movieUrl = `https://movieapi.giftedtech.co.ke/api/sources/${selected.id}`;
+        const movieRes = await axios.get(movieUrl);
+        const downloads = movieRes.data.results;
+
+        if (!downloads?.length) return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
+
+        let info = `
+        🎬 *${selected.title} (${selected.year})*\n\n🎥 *Download Links:*\n\n`;
+        downloads.forEach((d, i) => {
+          const sizeMB = (parseInt(d.size)/1024/1024).toFixed(2);
+          info += `♦️ ${i + 1}. *${d.quality}* — ${sizeMB} MB\n`;
+        });
+        info += "\n🔢 Reply with number to download.";
+
+        const downloadMsg = await conn.sendMessage(from, {
+          image: { url: selected.thumbnail },
+          caption: info
+        }, { quoted: msg });
+
+        movieMap.set(downloadMsg.key.id, { selected, downloads });
+      }
+
+      // User selected a download link
+      else if (movieMap.has(repliedId)) {
+        const { selected, downloads } = movieMap.get(repliedId);
+        const num = parseInt(replyText);
+        const chosen = downloads[num - 1];
+        if (!chosen) return conn.sendMessage(from, { text: "*Invalid number.*" }, { quoted: msg });
+
+        await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
+
+        const sizeGB = parseInt(chosen.size)/1024/1024/1024;
+        if (sizeGB > 2) return conn.sendMessage(from, { text: `⚠️ Large file (${(sizeGB).toFixed(2)} GB)` }, { quoted: msg });
+
+        await conn.sendMessage(from, {
+          document: { url: chosen.download_url },
+          mimetype: "video/mp4",
+          fileName: `${selected.title} - ${chosen.quality}.mp4`,
+          caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by GiftedTech MovieAPI`
+        }, { quoted: msg });
+      }
+    };
+
+    conn.ev.on("messages.upsert", listener);
+
+  } catch (err) {
+    await conn.sendMessage(from, { text: `*Error:* ${err.message}` }, { quoted: mek });
+  }
+});
+
+
+
+cmd({
   pattern: "pupilvideo",
   alias: ["pupil"],
   desc: "🎥 Search Sinhala subbed movies from Sub.lk",
