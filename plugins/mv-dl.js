@@ -123,12 +123,12 @@ cmd({
 
         let info = 
           `🎬 *${selected.title}*\n\n` +
-          `⭐ *IMDb:* ${selected.imdbRatingValue}\n` +
-          `📅 *Released:* ${selected.releaseDate}\n` +
-          `🌍 *Country:* ${selected.countryName}\n` +
-          `🕐 *Runtime:* ${selected.duration}\n` +
+          `⭐ *IMDb:* ${selected.imdb}\n` +
+          `📅 *Released:* ${selected.year}\n` +
+          `🌍 *Country:* ${selected.country}\n` +
+          `🕐 *Runtime:* ${selected.time}\n` +
           `🎭 *Category:* ${selected.genre}\n` +
-          `📝 *Posttitle:*\n${selected.postTitle}\n\n` +
+          `📝 *Posttitle:*\n${selected.post}\n\n` +
           `🎥 *𝑫𝒐𝒘𝒏𝒍𝒐𝒂𝒅 𝑳𝒊𝒏𝒌𝒔:* 📥\n\n`;
         
         downloads.forEach((d, i) => {
