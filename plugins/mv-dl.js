@@ -173,7 +173,6 @@ cmd({
 });
 
 
-
 cmd({
   pattern: "pupilvideo",
   alias: ["pupil"],
