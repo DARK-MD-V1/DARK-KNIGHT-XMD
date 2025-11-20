@@ -63,7 +63,7 @@ cmd({
     let data = movieCache.get(cacheKey);
 
     if (!data) {
-      const url = `https://movieapi.giftedtech.co.ke/api/search/new?q=${encodeURIComponent(q)}`;
+      const url = `https://movieapi.giftedtech.co.ke/api/search/${encodeURIComponent(q)}`;
       const res = await axios.get(url);
       data = res.data;
 
