@@ -36,6 +36,7 @@ cmd({
 ✏️ .𝑺𝑼𝑩𝑳𝑲  𝑆𝐸𝐴𝐑𝐶𝐻  
 ✏️ .𝑷𝑰𝑹𝑨𝑻𝑬  𝑆𝐸𝐴𝐑𝐶𝐻
 ✏️ .𝐏𝐔𝐏𝐈𝐋𝐕𝐈𝐃𝐄𝐎 𝑆𝐸𝐴𝐑𝐶𝐻
+✏️ .𝐌𝐎𝐕𝐈𝐄𝐏𝐑𝐎 𝑆𝐸𝐴𝐑𝐶𝐻
 
 📌 EX: .cmd & <query> 
 
@@ -47,8 +48,8 @@ cmd({
 
 
 cmd({
-  pattern: "movieapi",
-  alias: ["mapi"],
+  pattern: "moviepro",
+  alias: ["mapro"],
   desc: "🎥 Search movies from GiftedTech MovieAPI",
   category: "media",
   react: "🎬",
@@ -75,18 +76,22 @@ cmd({
       number: i + 1,
       id: m.subjectId,
       title: m.title,
-      year: m.releaseDate.split("-")[0],
-      genre: m.genre || "N/A",
-      thumbnail: m.cover?.url || m.thumbnail
+      year: m.releaseDate,
+      time: m.duration,
+      genre: m.genre,
+      thumbnail: m.cover?.url || m.thumbnail,
+      country: m.countryName,
+      imdb: m.imdbRatingValue,
+      post: m.postTitle
     }));
 
-    let textList = "🔢 Reply with the movie number\n━━━━━━━━━━━━━━━━━\n\n";
+    let textList = "🔢 𝑅𝑒𝑝𝑙𝑦 𝐵𝑒𝑙𝑜𝑤 𝑁𝑢𝑚𝑏𝑒𝑟\n━━━━━━━━━━━━━━━━━\n\n";
     movieList.forEach(m => {
-      textList += `🔸 *${m.number}. ${m.title}* (${m.year}) — ${m.genre}\n`;
+      textList += `🔸 *${m.number}. ${m.title}*\n`;
     });
 
     const sentMsg = await conn.sendMessage(from, {
-      text: `*🎬 Movie Search Results*\n\n${textList}\n💬 Reply with number to view download links.`,
+      text: `*🔍 𝐌𝐎𝐕𝐈𝐄𝐏𝐑𝐎 𝑪𝑰𝑵𝑬𝑴𝑨 𝑺𝑬𝑨𝑹𝑪𝑯 🎥*\n\n${textList}\n💬 Reply with movie number to view details.\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`,
     }, { quoted: mek });
 
     const movieMap = new Map();
@@ -103,7 +108,6 @@ cmd({
         return conn.sendMessage(from, { text: "✅ Cancelled." }, { quoted: msg });
       }
 
-      // User selected a movie
       if (repliedId === sentMsg.key.id) {
         const num = parseInt(replyText);
         const selected = movieList.find(m => m.number === num);
@@ -111,15 +115,22 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
-        // Fetch movie download links
         const movieUrl = `https://movieapi.giftedtech.co.ke/api/sources/${selected.id}`;
         const movieRes = await axios.get(movieUrl);
         const downloads = movieRes.data.results;
 
         if (!downloads?.length) return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
 
-        let info = `
-        🎬 *${selected.title} (${selected.year})*\n\n🎥 *Download Links:*\n\n`;
+        let info = 
+          `🎬 *${selected.title}*\n\n` +
+          `⭐ *IMDb:* ${selected.imdbRatingValue}\n` +
+          `📅 *Released:* ${selected.releaseDate}\n` +
+          `🌍 *Country:* ${selected.countryName}\n` +
+          `🕐 *Runtime:* ${selected.duration}\n` +
+          `🎭 *Category:* ${selected.genre}\n` +
+          `📝 *Posttitle:*\n${selected.postTitle}\n\n` +
+          `🎥 *𝑫𝒐𝒘𝒏𝒍𝒐𝒂𝒅 𝑳𝒊𝒏𝒌𝒔:* 📥\n\n`;
+        
         downloads.forEach((d, i) => {
           const sizeMB = (parseInt(d.size)/1024/1024).toFixed(2);
           info += `♦️ ${i + 1}. *${d.quality}* — ${sizeMB} MB\n`;
@@ -134,7 +145,6 @@ cmd({
         movieMap.set(downloadMsg.key.id, { selected, downloads });
       }
 
-      // User selected a download link
       else if (movieMap.has(repliedId)) {
         const { selected, downloads } = movieMap.get(repliedId);
         const num = parseInt(replyText);
@@ -150,7 +160,7 @@ cmd({
           document: { url: chosen.download_url },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
-          caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by GiftedTech MovieAPI`
+          caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
         }, { quoted: msg });
       }
     };
