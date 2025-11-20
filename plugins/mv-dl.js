@@ -49,7 +49,7 @@ cmd({
 
 cmd({
   pattern: "moviepro",
-  alias: ["mapro"],
+  alias: ["mpro"],
   desc: "🎥 Search movies from GiftedTech MovieAPI",
   category: "media",
   react: "🎬",
