@@ -63,8 +63,8 @@ async (conn, mek, m, { from, reply }) => {
         const sources = [
             { name: "Lankadeepa News", url: "https://vajira-api.vercel.app/news/lankadeepa" },
             { name: "Lanka News", url: "https://vajira-api.vercel.app/news/lnw" },
-            { name: "Gossip Lanka News", url: "https://vajira-api.vercel.app/news/gossiplankanews" },
-            { name: "Siyatha News", url: "https://vajira-api.vercel.app/news/siyatha" }
+            { name: "Siyatha News", url: "https://vajira-api.vercel.app/news/siyatha" },
+            { name: "Gossip Lanka News", url: "https://vajira-api.vercel.app/news/gossiplankanews" }
         ];
 
         const defaultImage = "https://files.catbox.moe/hspst7.jpg";
