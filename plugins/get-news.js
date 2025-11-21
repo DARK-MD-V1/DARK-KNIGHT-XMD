@@ -64,7 +64,7 @@ async (conn, mek, m, { from, reply }) => {
             { name: "Lankadeepa News", url: "https://vajira-api.vercel.app/news/lankadeepa" },
             { name: "Lanka News", url: "https://vajira-api.vercel.app/news/lnw" },
             { name: "Gossip Lanka News", url: "https://vajira-api.vercel.app/news/gossiplankanews" },
-            { name: "Hiru News", url: "https://tharuzz-news-api.vercel.app/api/news/hiru" }
+            { name: "Siyatha News", url: "https://vajira-api.vercel.app/news/siyatha" }
         ];
 
         const defaultImage = "https://files.catbox.moe/hspst7.jpg";
