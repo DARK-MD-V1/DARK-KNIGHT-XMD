@@ -713,7 +713,9 @@ cmd({
 
         if (direct.includes("pixeldrain.com")) {
           const match = direct.match(/\/([A-Za-z0-9]+)$/);
-          if (match) direct = `https://pixeldrain.com/api/file/${match[1]}`;
+          if (match) {
+            direct = `https://pixeldrain.com/api/file/${match[1]}`;
+          }
         }
         
         await conn.sendMessage(from, {
