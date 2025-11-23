@@ -427,9 +427,6 @@ cmd({
         if (directLink.includes("pixeldrain.com")) {
           const match = directLink.match(/\/([A-Za-z0-9]+)$/);
           if (match) directLink = `https://pixeldrain.com/api/file/${match[1]}`;
-        } else if (directLink.includes("drive.google.com/file/d/")) {
-          const match = directLink.match(/\/d\/([A-Za-z0-9_-]+)\//);
-          if (match) directLink = `https://drive.google.com/uc?export=download&id=${match[1]}`;
         }
 
         const size = chosen.size.toLowerCase();
@@ -714,6 +711,11 @@ cmd({
             return conn.sendMessage(from, { text: "*download link not found.*" }, { quoted: msg });
         }
 
+        if (direct.includes("pixeldrain.com")) {
+          const match = direct.match(/\/([A-Za-z0-9]+)$/);
+          if (match) direct = `https://pixeldrain.com/api/file/${match[1]}`;
+        }
+        
         await conn.sendMessage(from, {
           document: { url: direct },
           mimetype: "video/mp4",
@@ -849,9 +851,6 @@ cmd({
         if (directLink.includes("pixeldrain.com")) {
           const match = directLink.match(/\/([A-Za-z0-9]+)$/);
           if (match) directLink = `https://pixeldrain.com/api/file/${match[1]}`;
-        } else if (directLink.includes("drive.google.com/file/d/")) {
-          const match = directLink.match(/\/d\/([A-Za-z0-9_-]+)\//);
-          if (match) directLink = `https://drive.google.com/uc?export=download&id=${match[1]}`;
         }
 
         const size = chosen.size.toLowerCase();
@@ -995,9 +994,6 @@ cmd({
         if (directLink.includes("pixeldrain.com")) {
           const match = directLink.match(/\/([A-Za-z0-9]+)$/);
           if (match) directLink = `https://pixeldrain.com/api/file/${match[1]}`;
-        } else if (directLink.includes("drive.google.com/file/d/")) {
-          const match = directLink.match(/\/d\/([A-Za-z0-9_-]+)\//);
-          if (match) directLink = `https://drive.google.com/uc?export=download&id=${match[1]}`;
         }
 
         const size = chosen.size.toLowerCase();
@@ -1141,9 +1137,6 @@ cmd({
         if (directLink.includes("pixeldrain.com")) {
           const match = directLink.match(/\/([A-Za-z0-9]+)$/);
           if (match) directLink = `https://pixeldrain.com/api/file/${match[1]}`;
-        } else if (directLink.includes("drive.google.com/file/d/")) {
-          const match = directLink.match(/\/d\/([A-Za-z0-9_-]+)\//);
-          if (match) directLink = `https://drive.google.com/uc?export=download&id=${match[1]}`;
         }
 
         const size = chosen.size.toLowerCase();
