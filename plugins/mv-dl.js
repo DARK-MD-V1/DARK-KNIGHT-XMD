@@ -949,7 +949,7 @@ cmd({
         const dlUrl = `https://my-api-3emc.vercel.app/movie/sub/movie?url=${encodeURIComponent(selected.link)}&apikey=charuka-key-666`;
         const dlRes = await axios.get(dlUrl);
         const dllink = dlRes.data.result;
-        dllink.dl_links = dllink.dl_links.filter(d => d.link.includes("pixeldrain.com"));
+        dllink.dl_links = dllink.dl_links.filter(d => d.final_link.includes("pixeldrain.com"));
         
         if (!dllink.dl_links?.length) {
           return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
