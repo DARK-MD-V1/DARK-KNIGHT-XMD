@@ -946,7 +946,12 @@ cmd({
         const movieRes = await axios.get(movieUrl);
         const movie = movieRes.data.data;
 
-        if (!movie.downloadUrl?.length) {
+        const dlUrl = `https://my-api-3emc.vercel.app/movie/sub/movie?url=${encodeURIComponent(selected.link)}&apikey=charuka-key-666`;
+        const dlRes = await axios.get(dlUrl);
+        const dllink = dlRes.data.result;
+        dllink.dl_links = dllink.dl_links.filter(d => d.link.includes("pixeldrain.com"));
+        
+        if (!dllink.dl_links?.length) {
           return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
         }
 
@@ -961,7 +966,7 @@ cmd({
           `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
           `🎥 *𝑫𝒐𝒘𝒏𝒍𝒐𝒂𝒅 𝑳𝒊𝒏𝒌𝒔:* 📥\n\n`;
 
-        movie.downloadUrl.forEach((d, i) => {
+        dllink.dl_links.forEach((d, i) => {
           info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
         info += "\n🔢 *Reply with number to download.*";
@@ -971,7 +976,7 @@ cmd({
           caption: info
         }, { quoted: msg });
 
-        movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
+        movieMap.set(downloadMsg.key.id, { selected, downloads: dllink.dl_links });
       }
 
       else if (movieMap.has(repliedId)) {
@@ -984,13 +989,6 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "📥", key: msg.key } });
 
-        let directLink = chosen.link;
-
-        if (directLink.includes("pixeldrain.com")) {
-          const match = directLink.match(/\/([A-Za-z0-9]+)$/);
-          if (match) directLink = `https://pixeldrain.com/api/file/${match[1]}`;
-        }
-
         const size = chosen.size.toLowerCase();
         const sizeGB = size.includes("gb") ? parseFloat(size) : parseFloat(size) / 1024;
 
@@ -999,7 +997,7 @@ cmd({
         }
 
         await conn.sendMessage(from, {
-          document: { url: directLink },
+          document: { url: chosen.final_link },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
           caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
