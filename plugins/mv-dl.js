@@ -705,17 +705,10 @@ cmd({
         
         const apiUrl = `https://cinesubz-store.vercel.app/api/get/?url=${encodeURIComponent(chosen.link)}`;
         const apiRes = await axios.get(apiUrl);
-        const direct = apiRes.data?.downloadUrls?.pix2;
+        const direct = apiRes.data?.downloadUrls?.direct;
 
         if (!direct) {
             return conn.sendMessage(from, { text: "*download link not found.*" }, { quoted: msg });
-        }
-
-        if (direct.includes("pixeldrain.com")) {
-          const match = direct.match(/\/([A-Za-z0-9]+)$/);
-          if (match) {
-            direct = `https://pixeldrain.com/api/file/${match[1]}`;
-          }
         }
         
         await conn.sendMessage(from, {
