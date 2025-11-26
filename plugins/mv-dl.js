@@ -56,15 +56,21 @@ cmd({
   filename: __filename
 }, async (conn, mek, m, { from, q }) => {
 
-  if (!q) return await conn.sendMessage(from, { text: "Use: .movieapi <movie name>" }, { quoted: mek });
+  if (!q) return await conn.sendMessage(from, { text: "Use: .moviepro <movie name>" }, { quoted: mek });
 
   try {
-    const cacheKey = `movieapi_${q.toLowerCase()}`;
+    const cacheKey = `moviepro_${q.toLowerCase()}`;
     let data = movieCache.get(cacheKey);
 
     if (!data) {
       const url = `https://movieapi.giftedtech.co.ke/api/search/${encodeURIComponent(q)}`;
-      const res = await axios.get(url);
+      const res = await axios.get(url, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Linux; Android 10; Mobile) Chrome/120.0.0.0 Safari/537.36",
+          "Accept": "application/json"
+        }
+      });
+      
       data = res.data;
 
       if (!data.results?.items?.length) throw new Error("No results found.");
@@ -116,7 +122,13 @@ cmd({
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
         const movieUrl = `https://movieapi.giftedtech.co.ke/api/sources/${selected.id}`;
-        const movieRes = await axios.get(movieUrl);
+        const movieRes = await axios.get(movieUrl, {
+          headers: {
+            "User-Agent": "Mozilla/5.0 (Linux; Android 10; Mobile) Chrome/120.0.0.0 Safari/537.36",
+            "Accept": "application/json"
+          }
+        });
+        
         const downloads = movieRes.data.results;
 
         if (!downloads?.length) return conn.sendMessage(from, { text: "*No download links available.*" }, { quoted: msg });
