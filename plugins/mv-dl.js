@@ -169,17 +169,14 @@ cmd({
         if (sizeGB > 2) return conn.sendMessage(from, { text: `⚠️ Large file (${(sizeGB).toFixed(2)} GB)` }, { quoted: msg });
 
         const fileRes = await axios.get(chosen.download_url, {
-            responseType: "arraybuffer",
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-                'Accept': 'application/octet-stream'
+                'Accept': 'application/json, text/plain, */*'
             }
         });
 
-        const buffer = Buffer.from(fileRes.data);
-
         await conn.sendMessage(from, {
-          document: buffer,
+          document: { url: chosen.download_url },
           mimetype: "video/mp4",
           fileName: `${selected.title} - ${chosen.quality}.mp4`,
           caption: `🎬 *${selected.title}*\n🎥 *${chosen.quality}*\n\n> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`
