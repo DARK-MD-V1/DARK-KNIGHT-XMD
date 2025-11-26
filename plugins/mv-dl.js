@@ -66,8 +66,8 @@ cmd({
       const url = `https://movieapi.giftedtech.co.ke/api/search/${encodeURIComponent(q)}`;
       const res = await axios.get(url, {
         headers: {
-          "User-Agent": "Mozilla/5.0 (Linux; Android 10; Mobile) Chrome/120.0.0.0 Safari/537.36",
-          "Accept": "application/json"
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+          'Accept': 'application/json, text/plain, */*'
         }
       });
       
@@ -124,8 +124,8 @@ cmd({
         const movieUrl = `https://movieapi.giftedtech.co.ke/api/sources/${selected.id}`;
         const movieRes = await axios.get(movieUrl, {
           headers: {
-            "User-Agent": "Mozilla/5.0 (Linux; Android 10; Mobile) Chrome/120.0.0.0 Safari/537.36",
-            "Accept": "application/json"
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+            'Accept': 'application/json, text/plain, */*'
           }
         });
         
