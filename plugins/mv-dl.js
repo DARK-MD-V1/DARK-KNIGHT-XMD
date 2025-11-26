@@ -168,13 +168,6 @@ cmd({
         const sizeGB = parseInt(chosen.size)/1024/1024/1024;
         if (sizeGB > 2) return conn.sendMessage(from, { text: `⚠️ Large file (${(sizeGB).toFixed(2)} GB)` }, { quoted: msg });
 
-        const fileRes = await axios.get(chosen.download_url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-                'Accept': 'application/json, text/plain, */*'
-            }
-        });
-
         await conn.sendMessage(from, {
           document: { url: chosen.download_url },
           mimetype: "video/mp4",
