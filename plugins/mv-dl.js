@@ -666,36 +666,36 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
-        const movieUrl = `https://darkyasiya-new-movie-api.vercel.app/api/movie/cinesubz/movie?url=${encodeURIComponent(selected.link)}`;
+        const movieUrl = `https://my-api-3emc.vercel.app/movie/cinesubz/movie?url=${encodeURIComponent(selected.link)}&apikey=charuka-key-666`;
         const movieRes = await axios.get(movieUrl);
-        const movie = movieRes.data.data;
+        const movie = movieRes.data.result;
 
-        if (!movie.downloadUrl?.length) {
+        if (!movie.dl_links?.length) {
           return conn.sendMessage(from, { text: "*No download links available.*"}, { quoted: msg });
         }
 
         let info =
           `🎬 *${movie.title}*\n\n` +
-          `⭐ *IMDb:* ${movie.imdb.value}\n` +
-          `📅 *Released:* ${movie.dateCreate}\n` +
-          `🌍 *Country:* ${movie.country}\n` +
-          `🕐 *Runtime:* ${movie.runtime}\n` +
-          `🎭 *Category:* ${movie.category.join(", ")}\n` +
-          `🕵️ *Director:* ${movie.director?.name}\n` +
-          `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
+          `⭐ *IMDb:* ${movie.imdb}\n` +
+          `📅 *Released:* ${movie.dateCreate || "null" }\n` +
+          `🌍 *Country:* ${movie.country || "N/A" }\n` +
+          `🕐 *Runtime:* ${movie.duration}\n` +
+          `🎭 *Category:* ${movie.genres.join(", ")}\n` +
+          `🕵️ *Director:* ${movie.directors.join(", ")}\n` +
+          `👷‍♂️ *Cast:* ${movie.stars.slice(0, 20).join(", ")}\n\n` +
           `🎥 *𝑫𝒐𝒘𝒏𝒍𝒐𝒂𝒅 𝑳𝒊𝒏𝒌𝒔:* 📥\n\n`;
 
-        movie.downloadUrl.forEach((d, i) => {
+        movie.dl_links.forEach((d, i) => {
           info += `♦️ ${i + 1}. *${d.quality}* — ${d.size}\n`;
         });
         info += "\n🔢 *Reply with number to download.*";
 
         const downloadMsg = await conn.sendMessage(from, {
-          image: { url: movie.mainImage },
+          image: { url: movie.poster },
           caption: info
         }, { quoted: msg });
 
-        movieMap.set(downloadMsg.key.id, { selected, downloads: movie.downloadUrl });
+        movieMap.set(downloadMsg.key.id, { selected, downloads: movie.dl_links });
       }
 
       else if (movieMap.has(repliedId)) {
@@ -715,7 +715,7 @@ cmd({
           return conn.sendMessage(from, { text: `⚠️ *Large File (${chosen.size})*` }, { quoted: msg });
         }
         
-        const apiUrl = `https://cinesubz-store.vercel.app/api/get/?url=${encodeURIComponent(chosen.link)}`;
+        const apiUrl = `https://cinesubz-store.vercel.app/api/get/?url=${encodeURIComponent(chosen.finalUrl)}`;
         const apiRes = await axios.get(apiUrl);
         const direct = apiRes.data?.downloadUrls?.direct;
 
