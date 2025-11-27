@@ -61,6 +61,10 @@ async (conn, mek, m, { from, reply }) => {
     try {
         // All news sources
         const sources = [
+            { name: "Lankadeepalk News", url: "https://saviya-kolla-api.koyeb.app/news/lankadeepa" },
+            { name: "Ada News", url: "https://saviya-kolla-api.koyeb.app/news/ada" },
+            { name: "Sirasa News", url: "https://saviya-kolla-api.koyeb.app/news/sirasa" },
+            { name: "Gagana News", url: "https://saviya-kolla-api.koyeb.app/news/gagana" },
             { name: "Lankadeepa News", url: "https://vajira-api.vercel.app/news/lankadeepa" },
             { name: "Lanka News", url: "https://vajira-api.vercel.app/news/lnw" },
             { name: "Siyatha News", url: "https://vajira-api.vercel.app/news/siyatha" },
@@ -74,10 +78,7 @@ async (conn, mek, m, { from, reply }) => {
         for (const src of sources) {
             try {
                 const res = await axios.get(src.url);
-                const data = res.data;
-
-                // Handle both 'results' and 'datas' formats
-                let result = data.result || (data.datas ? data.datas[0] : null);
+                const data = res.data.result;
 
                 if (!result) {
                     await conn.sendMessage(from, { text: `❌ No news found for *${src.name}*.` });
