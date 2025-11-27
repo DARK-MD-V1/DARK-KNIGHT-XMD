@@ -681,6 +681,7 @@ cmd({
           `🌍 *Country:* ${movie.country || "N/A" }\n` +
           `🕐 *Runtime:* ${movie.runtime}\n` +
           `🎭 *Category:* ${movie.category.join(", ")}\n` +
+          `🕵️ *Director:* ${movie.director?.name.join(", ")}\n\n` +
           `🎥 *𝑫𝒐𝒘𝒏𝒍𝒐𝒂𝒅 𝑳𝒊𝒏𝒌𝒔:* 📥\n\n`;
 
         movie.downloadUrl.forEach((d, i) => {
