@@ -1,88 +1,6 @@
 const { cmd } = require('../command');
 const axios = require('axios');
 
-cmd({
-    pattern: "newss",
-    desc: "Get the latest Sri Lankan news headlines from multiple sources.",
-    category: "news",
-    react: "📰",
-    filename: __filename
-},
-async (conn, mek, m, { from, reply, text }) => {
-    try {
-        const sources = [
-            { no: 1, name: "Lankadeepalk News", url: "https://saviya-kolla-api.koyeb.app/news/lankadeepa" },
-            { no: 2, name: "Ada News", url: "https://saviya-kolla-api.koyeb.app/news/ada" },
-            { no: 3, name: "Sirasa News", url: "https://saviya-kolla-api.koyeb.app/news/sirasa" },
-            { no: 4, name: "Gagana News", url: "https://saviya-kolla-api.koyeb.app/news/gagana" },
-            { no: 5, name: "Lankadeepa News", url: "https://vajira-api.vercel.app/news/lankadeepa" },
-            { no: 6, name: "Lanka News", url: "https://vajira-api.vercel.app/news/lnw" },
-            { no: 7, name: "Siyatha News", url: "https://vajira-api.vercel.app/news/siyatha" },
-            { no: 8, name: "Gossip Lanka News", url: "https://vajira-api.vercel.app/news/gossiplankanews" }
-        ];
-
-        const defaultImage = "https://files.catbox.moe/hspst7.jpg";
-
-        // If user did not provide a number, list all sources
-        if (!text) {
-            let listMsg = "📡 *Select a news source by replying with its number:*\n\n";
-            sources.forEach(src => {
-                listMsg += `*${src.no}.* ${src.name}\n`;
-            });
-            return reply(listMsg);
-        }
-
-        // Parse the number user replied
-        const selectedNo = parseInt(text.trim());
-        if (isNaN(selectedNo) || selectedNo < 1 || selectedNo > sources.length) {
-            return reply("⚠️ Invalid number. Please reply with a number from the list.");
-        }
-
-        const src = sources.find(s => s.no === selectedNo);
-        reply(`📡 *Fetching latest news from ${src.name}...*`);
-
-        try {
-            const res = await axios.get(src.url);
-            const data = res.data;
-
-            let result = data.result;
-
-            if (!result) {
-                return reply(`❌ No news found for *${src.name}*.`);
-            }
-
-            let msg = `
-📰 *${src.no}. ${src.name} - Latest*
-
-━━━━━━━━━━━━━━━
-
-🗞️ *${result.title || "No Title"}*
-
-📆 _${result.date || "No Date"}_
-
-📝 _${result.desc || "No Description"}_
-
-🔗 _${result.url || result.link || "No Link"}_
-
-━━━━━━━━━━━━━━━
-© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
-            `;
-
-            const image = result.image || result.thumbnail || defaultImage;
-
-            await conn.sendMessage(from, { image: { url: image }, caption: msg });
-
-        } catch (err) {
-            console.error(`Error fetching from ${src.name}:`, err.message);
-            await reply(`⚠️ Error loading news from *${src.no}. ${src.name}*.`);
-        }
-
-    } catch (e) {
-        console.error("Global Error:", e);
-        reply("⚠️ Could not fetch news. Please try again later.");
-    }
-});
-
 
 cmd({
     pattern: "news",
@@ -156,7 +74,7 @@ async (conn, mek, m, { from, reply }) => {
 
         const defaultImage = "https://files.catbox.moe/hspst7.jpg";
         
-        reply("📡 *Fetching latest news from all sources...*");
+        reply("📡 *Fetching latest news from all sources...*\n\n1. Lankadeepalk News\n2. Ada News\n3. Sirasa News\n4. Gagana News\n5. Lankadeepa News\n6. Lanka News\n7. Siyatha News\n8. Gossip Lanka News");
 
         for (const src of sources) {
             try {
