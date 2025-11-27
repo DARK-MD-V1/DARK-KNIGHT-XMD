@@ -78,8 +78,10 @@ async (conn, mek, m, { from, reply }) => {
         for (const src of sources) {
             try {
                 const res = await axios.get(src.url);
-                const data = res.data.result;
+                const data = res.data;
 
+                let result = data.result;
+                
                 if (!result) {
                     await conn.sendMessage(from, { text: `❌ No news found for *${src.name}*.` });
                     continue;
