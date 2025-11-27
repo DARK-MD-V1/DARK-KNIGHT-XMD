@@ -678,10 +678,10 @@ cmd({
           `🎬 *${movie.title}*\n\n` +
           `⭐ *IMDb:* ${movie.imdb.value}\n` +
           `📅 *Released:* ${movie.dateCreate}\n` +
-          `🌍 *Country:* ${movie.country}\n` +
+          `🌍 *Country:* ${movie.country || "N/A" }\n` +
           `🕐 *Runtime:* ${movie.runtime}\n` +
           `🎭 *Category:* ${movie.category.join(", ")}\n` +
-          `🕵️ *Director:* ${movie.director?.name}\n` +
+          `🕵️ *Director:* ${movie.director?.name.join(", ")}\n` +
           `👷‍♂️ *Cast:* ${movie.cast?.map(c => c.actor.name).slice(0, 20).join(", ")}\n\n` +
           `🎥 *𝑫𝒐𝒘𝒏𝒍𝒐𝒂𝒅 𝑳𝒊𝒏𝒌𝒔:* 📥\n\n`;
 
