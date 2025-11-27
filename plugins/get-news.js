@@ -2,6 +2,86 @@ const { cmd } = require('../command');
 const axios = require('axios');
 
 cmd({
+    pattern: "newss",
+    desc: "Get the latest Sri Lankan news headlines from multiple sources.",
+    category: "news",
+    react: "📰",
+    filename: __filename
+},
+async (conn, mek, m, { from, reply }) => {
+    try {
+        const sources = [
+            { no: 1, name: "Lankadeepalk News", url: "https://saviya-kolla-api.koyeb.app/news/lankadeepa" },
+            { no: 2, name: "Ada News", url: "https://saviya-kolla-api.koyeb.app/news/ada" },
+            { no: 3, name: "Sirasa News", url: "https://saviya-kolla-api.koyeb.app/news/sirasa" },
+            { no: 4, name: "Gagana News", url: "https://saviya-kolla-api.koyeb.app/news/gagana" },
+            { no: 5, name: "Lankadeepa News", url: "https://vajira-api.vercel.app/news/lankadeepa" },
+            { no: 6, name: "Lanka News", url: "https://vajira-api.vercel.app/news/lnw" },
+            { no: 7, name: "Siyatha News", url: "https://vajira-api.vercel.app/news/siyatha" },
+            { no: 8, name: "Gossip Lanka News", url: "https://vajira-api.vercel.app/news/gossiplankanews" }
+        ];
+
+        const defaultImage = "https://files.catbox.moe/hspst7.jpg";
+        
+        // Step 1: Send all sources list
+        let listMsg = "📡 *Latest News Sources:*\n\n";
+        sources.forEach(src => {
+            listMsg += `${src.no}. ${src.name}\n`;
+        });
+        listMsg += "\n_Reply with the number of the news source you want._";
+        await reply(listMsg);
+
+        // Step 2: Wait for user reply (simple method using event listener)
+        conn.on('message', async (message) => {
+            if (message.key.remoteJid !== from) return; // Only listen to the same chat
+            if (!message.message?.conversation) return;
+
+            const num = parseInt(message.message.conversation);
+            const src = sources.find(s => s.no === num);
+            if (!src) return; // Not a valid number, ignore
+
+            try {
+                const res = await axios.get(src.url);
+                const result = res.data.result;
+
+                if (!result) {
+                    return await conn.sendMessage(from, { text: `❌ No news found for *${src.name}*.` });
+                }
+
+                let msg = `
+📰 *${src.no}. ${src.name} - Latest*
+
+━━━━━━━━━━━━━━━
+
+🗞️ *${result.title || "No Title"}*
+
+📆 _${result.date || "No Date"}_
+
+📝 _${result.desc || "No Description"}_
+
+🔗 _${result.url || result.link || "No Link"}_
+
+━━━━━━━━━━━━━━━
+© ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳
+                `;
+
+                const image = result.image || result.thumbnail || defaultImage;
+
+                await conn.sendMessage(from, { image: { url: image }, caption: msg });
+            } catch (err) {
+                console.error(`Error fetching ${src.name}:`, err.message);
+                await conn.sendMessage(from, { text: `⚠️ Error loading news from *${src.name}*.` });
+            }
+        });
+
+    } catch (e) {
+        console.error("Global Error:", e);
+        reply("⚠️ Could not fetch news. Please try again later.");
+    }
+});
+
+
+cmd({
     pattern: "news",
     desc: "Get the latest Ada Derana Sinhala news headlines (all in one message).",
     category: "news",
