@@ -666,7 +666,7 @@ cmd({
 
         await conn.sendMessage(from, { react: { text: "🎯", key: msg.key } });
 
-        const movieUrl = `https://my-apis-site.vercel.app/movie/cinesubz/movie?url=${encodeURIComponent(selected.link)}`;
+        const movieUrl = `https://my-apis-site.vercel.app/movie/cinesubz/movie?url=${encodeURIComponent(selected.link)}&apikey=charuka-key-666`;
         const movieRes = await axios.get(movieUrl);
         const movie = movieRes.data.result;
 
