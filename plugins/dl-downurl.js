@@ -25,12 +25,12 @@ async (conn, mek, m, {
 
         const urlPattern = /^(https?:\/\/[^\s]+)/i;
         if (!urlPattern.test(link)) {
-            return reply("❗ දීලා තියෙන URL එක වැරදි.\nකරුණාකර හරි link එකක් දාන්න.");
+            return reply("❗ දීලා තියෙන URL එක වැරදි.\nකරුණාකර හරි link එකක් දෙන්න.");
         }
 
         // Optional: Check link availability
         await axios.head(link).catch(() => {
-            throw "❌ Link එක open කරන්න බැහැ. Expired / private link එකක් විය හැක.";
+            throw "❌ Link එක open කරන්න බැහැ.";
         });
 
         const caption = `*Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳*`;
