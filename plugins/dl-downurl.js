@@ -39,7 +39,7 @@ async (conn, mek, m, {
         await conn.sendMessage(from, {
             document: { url: link },
             mimetype: "video/mp4",
-            fileName: "DARK-KNIGHT-XMD.mp4",
+            fileName: `DARK-KNIGHT-XMD-VIDEO.mp4`,
             caption: caption
         }, { quoted: mek });
 
