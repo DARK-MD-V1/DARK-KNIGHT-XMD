@@ -103,9 +103,9 @@ async (conn, mek, m, { from, q, reply, react }) => {
         text += `*🕵️ ArtistName:* ${song.artistName}\n`;
         text += `*💽 AlbumName:* ${song.albumName}\n`;
         text += `*⏱️ Duration:* ${song.duration}s\n\n`;
-        text += `*📃 PlainLyrics:*\n ${song.plainLyrics}\n\n`;
-        text += `*📄SyncedLyrics:*\n ${song.syncedLyrics}\n\n`;
-        text += `*📊 Timestamp:* ${song.timestamp}`;
+        text += `*📃 PlainLyrics:*\n *${song.plainLyrics}*\n\n`;
+        text += `*📊 SyncedLyrics:*\n ${song.syncedLyrics}\n\n`;
+        text += `> Powered by 𝙳𝙰𝚁𝙺-𝙺𝙽𝙸𝙶𝙷𝚃-𝚇𝙼𝙳`;
        
         await reply(text);
         await react("✅");
