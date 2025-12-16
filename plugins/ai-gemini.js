@@ -71,3 +71,46 @@ async (conn, mek, m, { from, args, q, reply, react }) => {
         reply("An error occurred while communicating with Gemini AI.");
     }
 });
+
+
+cmd({
+    pattern: "lirik",
+    desc: "Get song lyrics",
+    category: "tools",
+    react: "🎵",
+    filename: __filename
+},
+async (conn, mek, m, { from, q, reply, react }) => {
+    try {
+        if (!q) {
+            return reply(
+                "Please provide a song title.\n\nExample: .lirik Lelena"
+            );
+        }
+
+        const apiUrl = `https://api.zenzxz.my.id/api/tools/lirik?title=${encodeURIComponent(q)}`;
+        const { data } = await axios.get(apiUrl);
+
+        if (!data.success || !data.data || !data.data.result || data.data.result.length === 0) {
+            await react("❌");
+            return reply("Lyrics not found.");
+        }
+
+        const song = data.data.result[0];
+
+        let text = `🎵 *Lyrics Found*\n\n`;
+        text += `*Title:* ${song.trackName}\n`;
+        text += `*Artist:* ${song.artistName}\n`;
+        text += `*Album:* ${song.albumName}\n`;
+        text += `*Duration:* ${song.duration}s\n\n`;
+        text += `${song.plainLyrics}`;
+
+        await reply(text);
+        await react("✅");
+
+    } catch (e) {
+        console.error("Lirik Error:", e);
+        await react("❌");
+        reply("An error occurred while fetching lyrics.");
+    }
+});
