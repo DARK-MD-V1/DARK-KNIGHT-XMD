@@ -98,13 +98,15 @@ async (conn, mek, m, { from, q, reply, react }) => {
 
         const song = data.data.result[0];
 
-        let text = `🎵 *Lyrics Found*\n\n`;
-        text += `*Title:* ${song.trackName}\n`;
-        text += `*Artist:* ${song.artistName}\n`;
-        text += `*Album:* ${song.albumName}\n`;
-        text += `*Duration:* ${song.duration}s\n\n`;
-        text += `${song.plainLyrics}`;
-
+        let text = `🔍 *Lyrics Track Found* 🎵\n\n`;
+        text += `*📝 Name / TrackName:* ${song.trackName}\n`;
+        text += `*🕵️ ArtistName:* ${song.artistName}\n`;
+        text += `*💽 AlbumName:* ${song.albumName}\n`;
+        text += `*⏱️ Duration:* ${song.duration}s\n\n`;
+        text += `*📃 PlainLyrics:*\n ${song.plainLyrics}\n\n`;
+        text += `*📄SyncedLyrics:*\n ${song.syncedLyrics}\n\n`;
+        text += `*📊 Timestamp:* ${song.timestamp}`;
+       
         await reply(text);
         await react("✅");
 
